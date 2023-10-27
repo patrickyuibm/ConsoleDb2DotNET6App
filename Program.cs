@@ -5,8 +5,13 @@ using IBM.Data.Db2;
 
 Console.WriteLine("Using DB2 .NET6 provider");
 
+string uid = Environment.GetEnvironmentVariable("uid");
+string pwd = Environment.GetEnvironmentVariable("pwd");
+string server = Environment.GetEnvironmentVariable("server");
+string db = Environment.GetEnvironmentVariable("db");
+
 //Connection String
-string connstr = Environment.GetEnvironmentVariable("connstring");
+string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
 
 DB2Connection con = new DB2Connection(connstr);
 
