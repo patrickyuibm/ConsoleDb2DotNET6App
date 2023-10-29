@@ -13,12 +13,8 @@ string db = Environment.GetEnvironmentVariable("db");
 //Connection String
 string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
 
-DB2Connection con = new DB2Connection(connstr);
-
+DB2Connection con = new DB2Connection(connString);
 con.Open();
-
 Console.WriteLine("Connection Opened successfully");
-
 con.Close();
-
 Console.WriteLine("Connection Closed");
