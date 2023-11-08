@@ -17,5 +17,34 @@ string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";datab
 DB2Connection con = new DB2Connection(connString);
 con.Open();
 Console.WriteLine("Connection Opened successfully");
+
+//Run a SQL query
+Console.Read();
+
+string mySelectQuery = "SELECT * FROM SYSIBM.SYSDUMMY1";
+          
+DB2Command myCommand = new DB2Command(mySelectQuery, con);
+Console.WriteLine("Fetch data from blogs table");
+DB2DataReader myReader = myCommand.ExecuteReader();
+try
+{
+    while (myReader.Read())
+    {
+         Console.WriteLine(myReader.GetInt32(0) + ", " + myReader.GetString(1));
+    }
+}
+finally
+{
+    // always call Close when done reading.
+    myReader.Close();
+    // always call Close when done with connection.
+    con.Close();
+    Console.WriteLine("Connection Closed");  
+}
+
+
+/*
+Old code
 con.Close();
 Console.WriteLine("Connection Closed");
+*/
