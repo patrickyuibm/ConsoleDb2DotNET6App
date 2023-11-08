@@ -4,6 +4,7 @@
 using IBM.Data.Db2;
 
 Console.WriteLine("Using DB2 .NET6 provider");
+Console.WriteLine("test edit");
 
 string uid = Environment.GetEnvironmentVariable("uid");
 string pwd = Environment.GetEnvironmentVariable("pwd");
