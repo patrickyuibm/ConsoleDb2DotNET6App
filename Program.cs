@@ -24,7 +24,7 @@ Console.Read();
 string mySelectQuery = "SELECT * FROM SYSIBM.SYSDUMMY1";
           
 DB2Command myCommand = new DB2Command(mySelectQuery, con);
-Console.WriteLine("Fetch data from blogs table");
+Console.WriteLine("Fetch data from sysibm sysdummy table");
 DB2DataReader myReader = myCommand.ExecuteReader();
 try
 {
