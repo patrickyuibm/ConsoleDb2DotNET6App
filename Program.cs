@@ -22,12 +22,17 @@ cmd.CommandType = CommandType.Text;
 cmd.CommandText = procCall;
 
 // Register input-output and output parameters for the DB2Command
-cmd.Parameters.Add( new DB2Parameter("@param1", 5);
-cmd.Parameters.Add( new DB2Parameter("@param2", 6);
+//cmd.Parameters.Add( new DB2Parameter("@param1", 5);
+//cmd.Parameters.Add( new DB2Parameter("@param2", 6);
 
 // Call the stored procedure
-Console.WriteLine("  Call stored procedure named " + procName);
-cmd.ExecuteReader();
+//Console.WriteLine("Call stored procedure named " + procName);
+//DB2DataReader myReader = myCommand.ExecuteReader();
+
+//Exit everything
+//myReader.Close();
+con.Close();
+Console.WriteLine("Connection Closed");  
                    
 /*
 //Old code
