@@ -30,7 +30,7 @@ try
 {
     while (myReader.Read())
     {
-         Console.WriteLine(myReader.GetInt32(0) + ", " + myReader.GetString(1));
+         Console.WriteLine(myReader.GetString(1));
     }
 }
 finally
