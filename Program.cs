@@ -27,7 +27,7 @@ cmd.Parameters.Add( new DB2Parameter("@param2", 6));
 
 // Call the stored procedure
 Console.WriteLine("Call stored procedure named " + procName);
-DB2DataReader myReader = myCommand.ExecuteReader();
+DB2DataReader myReader = cmd.ExecuteReader();
 
 //Exit everything
 myReader.Close();
