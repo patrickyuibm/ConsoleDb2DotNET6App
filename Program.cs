@@ -29,10 +29,22 @@ cmd.Parameters.Add( new DB2Parameter("@param2", 6));
 Console.WriteLine("Call stored procedure named " + procName);
 DB2DataReader myReader = cmd.ExecuteReader();
 
-//Exit everything
-myReader.Close();
-conn.Close();
-Console.WriteLine("Connection Closed");  
+//Print then exit everything
+try
+    {
+       while (myReader.Read())
+       {
+          Console.WriteLine(myReader.GetString(0));
+       }
+    }
+  finally
+  {
+      // always call Close when done reading.
+      myReader.Close();
+      // always call Close when done with connection.
+      con.Close();
+      Console.WriteLine("Connection Closed");  
+  }
                    
 /*
 //Old code
