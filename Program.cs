@@ -29,46 +29,11 @@ cmd.Parameters.Add( new DB2Parameter("@param2", 6));
 Console.WriteLine("Call stored procedure named " + procName);
 DB2DataReader myReader = cmd.ExecuteReader();
 
-//Print then exit everything
-try
-    {
-       while (myReader.Read())
-       {
-          Console.WriteLine(myReader.GetString(0));
-       }
-    }
-  finally
-  {
-      // always call Close when done reading.
-      myReader.Close();
-      // always call Close when done with connection.
-      conn.Close();
-      Console.WriteLine("Connection Closed");  
-  }
-                   
-/*
-//Old code
-//Run a SQL query
-Console.Read();
-string mySelectQuery = "SELECT * FROM SYSIBM.SYSDUMMY1";
-          
-DB2Command myCommand = new DB2Command(mySelectQuery, con);
-Console.WriteLine("Fetch data from sysibm sysdummy table");
-DB2DataReader myReader = myCommand.ExecuteReader();
-try
-{
-    while (myReader.Read())
-    {
-         Console.WriteLine(myReader.GetString(0));
-    }
-}
-finally
-{
-    // always call Close when done reading.
-    myReader.Close();
-    // always call Close when done with connection.
-    conn.Close();
-    Console.WriteLine("Connection Closed");  
-}
+// always call Close when done reading.
+myReader.Close();
+// always call Close when done with connection.
+conn.Close();
+Console.WriteLine("Connection Closed");  
 
-*/
+
+
