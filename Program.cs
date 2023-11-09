@@ -18,7 +18,7 @@ DB2Command cmd = conn.CreateCommand();
 String procName = "DB2ADM.INSERT_AND_SELECT_TB2";
 String procCall = "CALL " + procName + " (@param1, @param2)";
 cmd.Transaction = trans;
-cmd.CommandType = CommandType.Text;
+//cmd.CommandType = CommandType.Text;
 cmd.CommandText = procCall;
 
 // Register input-output and output parameters for the DB2Command
@@ -31,7 +31,7 @@ cmd.CommandText = procCall;
 
 //Exit everything
 //myReader.Close();
-con.Close();
+conn.Close();
 Console.WriteLine("Connection Closed");  
                    
 /*
