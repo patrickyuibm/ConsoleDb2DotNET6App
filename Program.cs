@@ -67,7 +67,7 @@ finally
     // always call Close when done reading.
     myReader.Close();
     // always call Close when done with connection.
-    con.Close();
+    conn.Close();
     Console.WriteLine("Connection Closed");  
 }
 
