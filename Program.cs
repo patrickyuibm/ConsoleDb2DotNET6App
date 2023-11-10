@@ -13,6 +13,7 @@ DB2Connection conn = new DB2Connection(connString);
 conn.Open();
 Console.WriteLine("Connection Opened successfully");
 
+//Set up a stored procedure
 DB2Transaction trans = conn.BeginTransaction();
 DB2Command cmd = conn.CreateCommand();
 String procName = "DB2ADM.INSERT_AND_SELECT_TB2";
@@ -28,6 +29,11 @@ cmd.Parameters.Add( new DB2Parameter("@param2", 6));
 // Call the stored procedure
 Console.WriteLine("Call stored procedure named " + procName);
 DB2DataReader myReader = cmd.ExecuteReader();
+
+//Misc test
+public void startSelect(int iteration) {
+  Console.WriteLine("hello world");
+}
 
 // always call Close when done reading.
 myReader.Close();
