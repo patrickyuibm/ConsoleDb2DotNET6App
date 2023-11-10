@@ -31,7 +31,7 @@ Console.WriteLine("Call stored procedure named " + procName);
 DB2DataReader myReader = cmd.ExecuteReader();
 
 //Misc test
-public void startSelect(int iteration) {
+void startSelect(int iteration) {
   Console.WriteLine("hello world");
 }
 
