@@ -35,6 +35,8 @@ void startSelect(int iteration) {
   Console.WriteLine("hello world");
 }
 
+startSelect(5);
+
 // always call Close when done reading.
 myReader.Close();
 // always call Close when done with connection.
