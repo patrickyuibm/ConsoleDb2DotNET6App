@@ -13,6 +13,8 @@ DB2Connection conn = new DB2Connection(connString);
 conn.Open();
 Console.WriteLine("Connection Opened successfully");
 
+//***************************** STORED PROCEDURE *****************************
+
 //Set up a stored procedure
 DB2Transaction trans = conn.BeginTransaction();
 DB2Command cmd = conn.CreateCommand();
@@ -30,18 +32,21 @@ cmd.Parameters.Add( new DB2Parameter("@param2", 6));
 Console.WriteLine("Call stored procedure named " + procName);
 DB2DataReader myReader = cmd.ExecuteReader();
 
-//Misc test
-void startSelect(int iteration) {
-  Console.WriteLine("hello world");
-}
-
-startSelect(5);
-
 // always call Close when done reading.
 myReader.Close();
 // always call Close when done with connection.
 conn.Close();
 Console.WriteLine("Connection Closed");  
+
+//****************************************************************************
+
+//Method to run stored procedure
+void startSelect() {
+  //program to run a stored procedure
+}
+
+//Method to set up threads that run several stored procedures
+
 
 
 
