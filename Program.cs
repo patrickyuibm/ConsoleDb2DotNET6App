@@ -28,7 +28,7 @@ void main() {
   int numInsertThreads = 10;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
-    myThreads[i] = new Thread(new ThreadStart(() => startSelect(conn)));
+    myThreads[i] = new Thread(new ThreadStart(() => run_insert_and_select_tb2_SP(conn)));
   }
 
   // always call Close when done with connection.
@@ -55,10 +55,6 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   myReader.Close();
 }
 
-void startSelect(DB2Connection conn) {
-  //call running stored procedures here
-  run_insert_and_select_tb2_SP(conn);
-}
 //*******************************************************************
 
 
