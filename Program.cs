@@ -23,8 +23,36 @@ void main() {
   DB2Connection conn = new DB2Connection(connString);
   conn.Open();
   Console.WriteLine("Connection Opened successfully");
-
+  DB2Transaction trans = conn.BeginTransaction();
+  DB2Command cmd = conn.CreateCommand();
+  String spname = "DB2ADM.INSERT_AND_SELECT_TB2";
+  String procCall = "CALL " + spname + " (@param1, @param2)";
+  cmd.Transaction = trans;
+  cmd.CommandText = procCall;
+  // Register input-output and output parameters for the DB2Command
+  cmd.Parameters.Add( new DB2Parameter("@param1", 5));
+  cmd.Parameters.Add( new DB2Parameter("@param2", 6));
+  // Call the stored procedure
+  Console.WriteLine("Call stored procedure named " + spname);
+  DB2DataReader myReader = cmd.ExecuteReader();
+  try 
+    {
+       while (myReader.Read()) 
+       { 
+          Console.WriteLine(myReader.GetString(0)); 
+       } 
+    } 
+  finally 
+  { 
+      // always call Close when done reading. 
+      myReader.Close(); 
+      // always call Close when done with connection. 
+      conn.Close(); 
+      Console.WriteLine("Connection Closed");   
+  } 
+  
   //Establish multithreading
+  /*
   int numInsertThreads = 10;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
@@ -34,6 +62,7 @@ void main() {
   // always call Close when done with connection.
   conn.Close();
   Console.WriteLine("Connection Closed");  
+  */
 }
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
