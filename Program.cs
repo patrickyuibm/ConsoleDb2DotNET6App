@@ -25,6 +25,7 @@ void main() {
   Console.WriteLine("Connection Opened successfully");
 
   //Establish multithreading
+  numInsertThreads = 10;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     myThreads[i] = new Thread(new ThreadStart(() => startSelect(conn)));
@@ -35,7 +36,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   //Set up a stored procedure
   DB2Transaction trans = conn.BeginTransaction();
   DB2Command cmd = conn.CreateCommand();
-  String spname = 'DB2ADM.INSERT_AND_SELECT_TB2';
+  String spname = "DB2ADM.INSERT_AND_SELECT_TB2";
   String procCall = "CALL " + spname + " (@param1, @param2)";
   cmd.Transaction = trans;
   cmd.CommandText = procCall;
