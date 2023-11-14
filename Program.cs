@@ -23,54 +23,28 @@ void main() {
   DB2Connection conn = new DB2Connection(connString);
   conn.Open();
   Console.WriteLine("Connection Opened successfully");
-  DB2Transaction trans = conn.BeginTransaction();
-  DB2Command cmd = conn.CreateCommand();
-  String spname = "DB2ADM.INSERT_AND_SELECT_TB2";
-  String procCall = "CALL " + spname + " (@param1, @param2)";
-  cmd.Transaction = trans;
-  cmd.CommandText = procCall;
-  // Register input-output and output parameters for the DB2Command
-  cmd.Parameters.Add( new DB2Parameter("@param1", 5));
-  cmd.Parameters.Add( new DB2Parameter("@param2", 6));
-  // Call the stored procedure
-  Console.WriteLine("Call stored procedure named " + spname);
-  DB2DataReader myReader = cmd.ExecuteReader();
-  try 
-    {
-       while (myReader.Read()) 
-       { 
-          Console.WriteLine(myReader.GetString(0)); 
-       } 
-    } 
-  finally 
-  { 
-      // always call Close when done reading. 
-      myReader.Close(); 
-      // always call Close when done with connection. 
-      conn.Close(); 
-      Console.WriteLine("Connection Closed");   
-  } 
-}
+  run_insert_and_select_tb2_SP(conn);
 
-void DisplayResultSet(DB2DataReader reader) {
-  while (reader.Read()) {
-    if (debug == 1) mySyslog.Log("    ");
-    for (int k = 0; k < reader.FieldCount; k++) {
-      String str;
-      if (Equals(reader.GetFieldType(k), Type.GetType("System.Double"))) {
-        str = String.Format("{0:f2}", (Decimal)reader.GetValue(k));
-        } else {
-        str = reader.GetValue(k).ToString();
-      }  
-      if (str.Length < 8) {
-        if (debug == 1) mySyslog.Log(str.PadRight(8, ' ') + " ");
-        } else {
-        if (debug == 1) mySyslog.Log(str.Substring(0, 8) + " ");
-        }
+string getRS(DB2Command cmd)
+  {
+    string resultString = "";
+    DB2ResultSet rs = cmd.ExecuteResultSet(
+      DB2ResultSetOptions.Scrollable |
+      DB2ResultSetOptions.Sensitive |
+      DB2ResultSetOptions.SkipDeleted);
+    if (rs.Scrollable)
+    {
+      if (rs.ReadLast())
+      {
+        resultString = rs.GetDB2Date(0).ToString();
+        resultString += ", " + rs.GetDB2String(1).ToString();
+        resultString += ", " + rs.GetDB2String(2).ToString();
+        resultString += ", " + rs.GetDB2Int32(3).ToString();
       }
-      if (debug == 1) mySyslog.Log(" ");
     }
-} 
+
+    return resultString;
+  }
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
   //Set up a stored procedure
@@ -86,7 +60,8 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   // Call the stored procedure
   Console.WriteLine("Call stored procedure named " + spname);
   DB2DataReader myReader = cmd.ExecuteReader();
-  
+  // Print the result
+  Console.WriteLine(getRS(cmd));
   // always call Close when done reading.
   myReader.Close();
 }
