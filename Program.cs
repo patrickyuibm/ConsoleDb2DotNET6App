@@ -61,10 +61,11 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   // Call the stored procedure
   Console.WriteLine("Call stored procedure named " + spname);
   DB2DataReader myReader = cmd.ExecuteReader();
-  // Print the result
-  Console.WriteLine(getRS(cmd));
   // always call Close when done reading.
   myReader.Close();
+  // Print the result
+  Console.WriteLine(getRS(cmd));
+  
 }
 
 //*******************************************************************
