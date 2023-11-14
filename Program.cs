@@ -31,7 +31,7 @@ void main() {
     thread.IsBackground = true;
     thread.Name = "Thread_" + ctr.ToString();
     thread.Start();
-    thread.Sleep(1);
+    Thread.Sleep(1);
   }
   foreach (Thread thread in myThreads) {
     thread.Join();
