@@ -28,6 +28,7 @@ void main() {
 
 string getRS(DB2Command cmd)
   {
+    Console.WriteLine('1');
     string resultString = "";
     DB2ResultSet rs = cmd.ExecuteResultSet(
       DB2ResultSetOptions.Scrollable |
@@ -35,8 +36,10 @@ string getRS(DB2Command cmd)
       DB2ResultSetOptions.SkipDeleted);
     if (rs.Scrollable)
     {
+      Console.WriteLine('2');
       if (rs.ReadLast())
       {
+        Console.WriteLine('3');
         resultString = rs.GetDB2Date(0).ToString();
         resultString += ", " + rs.GetDB2String(1).ToString();
         resultString += ", " + rs.GetDB2String(2).ToString();
