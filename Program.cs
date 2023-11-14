@@ -26,6 +26,16 @@ void main() {
   for (int i = 0; i < numInsertThreads; i++) { 
     myThreads[i] = new Thread(new ThreadStart(() => startSelect(connString, i))); 
   } 
+  int ctr = 1
+  foreach (Thread thread in myThreads) {
+    thread.IsBackground = true;
+    thread.Name = "Thread_" + ctr.ToString();
+    myThread.Start();
+    Thread.Sleep(1);
+  }
+  foreach (Thread myThread in myThreads) {
+    myThread.Join();
+  }
 }
 
 void startSelect(String connectionString, int threadNumber) {
