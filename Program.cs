@@ -41,7 +41,8 @@ void main() {
 void startSelect(String connectionString, int threadNumber) {
   DB2Connection conn = new DB2Connection(connectionString);
   conn.Open();
-  Console.WriteLine("Connection #" + threadNumber.ToString() + " opened successfully");
+  Console.WriteLine("Connection opened successfully");
+  run_insert_and_select_tb2_SP(conn);
   conn.Close(); 
   Console.WriteLine("Connection Closed");   
 }
@@ -58,7 +59,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   cmd.Parameters.Add( new DB2Parameter("@param1", 5));
   cmd.Parameters.Add( new DB2Parameter("@param2", 6));
   // Call the stored procedure
-  Console.WriteLine("Call stored procedure named " + spname);
+  Console.WriteLine("Calling stored procedure " + spname);
   DB2DataReader myReader = cmd.ExecuteReader(); 
   // always call Close when done reading. 
   myReader.Close(); 
