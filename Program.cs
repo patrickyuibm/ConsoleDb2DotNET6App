@@ -50,38 +50,27 @@ void main() {
       conn.Close(); 
       Console.WriteLine("Connection Closed");   
   } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  //Establish multithreading
-  /*
-  int numInsertThreads = 10;
-  Thread[] myThreads = new Thread[numInsertThreads];
-  for (int i = 0; i < numInsertThreads; i++) {
-    myThreads[i] = new Thread(new ThreadStart(() => run_insert_and_select_tb2_SP(conn)));
-  }
-
-  // always call Close when done with connection.
-  conn.Close();
-  Console.WriteLine("Connection Closed");  
-  */
 }
+
+void DisplayResultSet(DB2DataReader reader) {
+  while (reader.Read()) {
+    if (debug == 1) mySyslog.Log("    ");
+    for (int k = 0; k < reader.FieldCount; k++) {
+      String str;
+      if (Equals(reader.GetFieldType(k), Type.GetType("System.Double"))) {
+        str = String.Format("{0:f2}", (Decimal)reader.GetValue(k));
+        } else {
+        str = reader.GetValue(k).ToString();
+      }  
+      if (str.Length < 8) {
+        if (debug == 1) mySyslog.Log(str.PadRight(8, ' ') + " ");
+        } else {
+        if (debug == 1) mySyslog.Log(str.Substring(0, 8) + " ");
+        }
+      }
+      if (debug == 1) mySyslog.Log(" ");
+    }
+} 
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
   //Set up a stored procedure
