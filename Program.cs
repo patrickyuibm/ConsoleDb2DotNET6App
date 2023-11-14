@@ -31,7 +31,7 @@ void main() {
 void startSelect(String connectionString, int threadNumber) {
   DB2Connection conn = new DB2Connection(connectionString);
   conn.Open();
-  Console.WriteLine("Connection #" + threadNumber.toString() + " opened successfully");
+  Console.WriteLine("Connection #" + threadNumber.ToString() + " opened successfully");
   conn.Close(); 
   Console.WriteLine("Connection Closed");   
 }
