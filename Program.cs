@@ -34,7 +34,7 @@ string getRS(DB2Command cmd)
       DB2ResultSetOptions.Scrollable |
       DB2ResultSetOptions.Sensitive |
       DB2ResultSetOptions.SkipDeleted);
-    resultString = rs.GetDB2Date(0).ToString();
+    //resultString = rs.GetDB2Date(0).ToString();
     resultString += ", " + rs.GetDB2String(1).ToString();
     resultString += ", " + rs.GetDB2String(2).ToString();
     resultString += ", " + rs.GetDB2Int32(3).ToString();
