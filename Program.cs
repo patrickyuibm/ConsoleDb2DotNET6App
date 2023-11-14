@@ -13,45 +13,28 @@ Note: currently, since the parameters for each SP are different, one method to r
 SP we want to run the code it in first. 
 */
 void main() {
+  //Connection String
   string uid = Environment.GetEnvironmentVariable("uid");
   string pwd = Environment.GetEnvironmentVariable("pwd");
   string server = Environment.GetEnvironmentVariable("server");
   string db = Environment.GetEnvironmentVariable("db");
-
-  //Connection String
   string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
-  DB2Connection conn = new DB2Connection(connString);
-  conn.Open();
-  Console.WriteLine("Connection Opened successfully");
-  run_insert_and_select_tb2_SP(conn);
+
+  //Multithreading
+  int numInsertThreads = 10; 
+  Thread[] myThreads = new Thread[numInsertThreads]; 
+  for (int i = 0; i < numInsertThreads; i++) { 
+    myThreads[i] = new Thread(new ThreadStart(() => startSelect(connString, i))); 
+  } 
 }
 
-string getRS(DB2Command cmd)
-  {
-    Console.WriteLine('1');
-    string resultString = "";
-    DB2ResultSet rs = cmd.ExecuteResultSet(
-      DB2ResultSetOptions.Scrollable |
-      DB2ResultSetOptions.Sensitive |
-      DB2ResultSetOptions.SkipDeleted);
-    resultString += ", " + rs.GetString(0);
-    /*
-    if (rs.Scrollable)
-    {
-      Console.WriteLine('2');
-      if (rs.ReadLast())
-      {
-        Console.WriteLine('3');
-        resultString = rs.GetDB2Date(0).ToString();
-        resultString += ", " + rs.GetDB2String(1).ToString();
-        resultString += ", " + rs.GetDB2String(2).ToString();
-        resultString += ", " + rs.GetDB2Int32(3).ToString();
-      }
-    }
-    */
-
-    return resultString;
-  }
+void startSelect(String connectionString, int threadNumber) {
+  DB2Connection conn = new DB2Connection(connectionString);
+  conn.Open();
+  Console.WriteLine("Connection #" + threadNumber.toString() + " opened successfully");
+  conn.Close(); 
+  Console.WriteLine("Connection Closed");   
+}
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
   //Set up a stored procedure
@@ -66,8 +49,9 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   cmd.Parameters.Add( new DB2Parameter("@param2", 6));
   // Call the stored procedure
   Console.WriteLine("Call stored procedure named " + spname);
-  Console.WriteLine(getRS(cmd));
-  
+  DB2DataReader myReader = cmd.ExecuteReader(); 
+  // always call Close when done reading. 
+  myReader.Close(); 
 }
 
 //*******************************************************************
