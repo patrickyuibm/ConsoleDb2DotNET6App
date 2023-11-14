@@ -24,6 +24,7 @@ void main() {
   conn.Open();
   Console.WriteLine("Connection Opened successfully");
   run_insert_and_select_tb2_SP(conn);
+}
 
 string getRS(DB2Command cmd)
   {
