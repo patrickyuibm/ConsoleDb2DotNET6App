@@ -30,11 +30,11 @@ void main() {
   foreach (Thread thread in myThreads) {
     thread.IsBackground = true;
     thread.Name = "Thread_" + ctr.ToString();
-    myThread.Start();
-    Thread.Sleep(1);
+    thread.Start();
+    thread.Sleep(1);
   }
-  foreach (Thread myThread in myThreads) {
-    myThread.Join();
+  foreach (Thread thread in myThreads) {
+    thread.Join();
   }
 }
 
