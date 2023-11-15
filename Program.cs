@@ -53,10 +53,10 @@ void main() {
 void startSelect(String connectionString, int threadNumber) {
   DB2Connection conn = new DB2Connection(connectionString);
   conn.Open();
-  Console.WriteLine("Connection opened successfully");
+  //Console.WriteLine("Connection opened successfully");
   run_insert_and_select_tb2_SP(conn);
   conn.Close(); 
-  Console.WriteLine("Connection Closed");   
+  //Console.WriteLine("Connection Closed");   
 }
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
@@ -86,22 +86,20 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   
 
   // Call the stored procedure
-  Console.WriteLine("Calling stored procedure " + spname);
+  //Console.WriteLine("Calling stored procedure " + spname);
   DB2DataReader myReader = cmd.ExecuteReader(); 
 
   
   //Retrieve the return code (output parameter in SP)
   int outParm = (int)cmd.Parameters["@param2"].Value;
-  Console.WriteLine("Output parameter = " + outParm.ToString());
+  //Console.WriteLine("Return code " + outParm.ToString());
   if (outParm != 0) {
     Console.WriteLine("Call failed");
     if (outParm == 99) {
       Console.WriteLine("Table not found");
     }
-  } else {
-    Console.WriteLine("Connection successful");
-  }
-  
+  } 
+
   
   // always call Close when done reading. 
   myReader.Close(); 
