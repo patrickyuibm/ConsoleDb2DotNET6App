@@ -49,6 +49,7 @@ void startSelect(String connectionString, int threadNumber) {
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
   //Set up a stored procedure
+  DB2Parameter parm = null;
   DB2Transaction trans = conn.BeginTransaction();
   DB2Command cmd = conn.CreateCommand();
   String spname = "DB2ADM.INSERT_AND_SELECT_TB2";
@@ -59,12 +60,17 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   // Register input-output and output parameters for the DB2Command
   //cmd.Parameters.Add(new DB2Parameter("@param1", 5));
   //cmd.Parameters.Add(new DB2Parameter("@param2", 6));
-
+  
   parm = cmd.Parameters.Add("@param1", DB2Type.Integer);
   parm.Direction = ParameterDirection.Input;
   parm = cmd.Parameters.Add("@param2", DB2Type.Integer);
   parm.Direction = ParameterDirection.Output;
+  int p1 = RandomNumber(1, 99);
+  int p2 = RandomNumber(1, 99);
+  cmd.Parameters["@param1"].Value = p1;
+  cmd.Parameters["@param2"].Value = p2;
   
+
   // Call the stored procedure
   Console.WriteLine("Calling stored procedure " + spname);
   DB2DataReader myReader = cmd.ExecuteReader(); 
@@ -72,6 +78,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   
   //Retrieve the return code (output parameter in SP)
   outParm = (int)cmd.Parameters["@param2"].Value;
+  Console.WriteLine("Output parameter = " + outParm.ToString());
   if (outParm != 0) {
     Console.WriteLine("Call failed");
   } else {
