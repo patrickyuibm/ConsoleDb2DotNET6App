@@ -91,7 +91,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 
   
   //Retrieve the return code (output parameter in SP)
-  outParm = (int)cmd.Parameters["@param2"].Value;
+  int outParm = (int)cmd.Parameters["@param2"].Value;
   Console.WriteLine("Output parameter = " + outParm.ToString());
   if (outParm != 0) {
     Console.WriteLine("Call failed");
