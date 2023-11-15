@@ -5,7 +5,7 @@ using System;
 using System.Data;
 using System.Threading;
 using System.IO;
-using IBM.Data.DB2;
+using IBM.Data.Db2;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Collections;
