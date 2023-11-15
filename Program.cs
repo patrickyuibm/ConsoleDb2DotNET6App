@@ -1,8 +1,20 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 //***************************** IMPORT DEPENDENCIES *****************************
-using IBM.Data.Db2;
+using System;
+using System.Data;
 using System.Threading;
+using System.IO;
+using IBM.Data.DB2;
+using System.Configuration;
+using System.Collections.Specialized;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Dynamic;
+using System.Xml;
+using IBM.Data.DB2Types;
+using System.Text;
 //*******************************************************************************
 
 
