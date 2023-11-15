@@ -64,13 +64,15 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   Console.WriteLine("Calling stored procedure " + spname);
   DB2DataReader myReader = cmd.ExecuteReader(); 
 
-  /*
+  
   //Retrieve the return code (output parameter in SP)
   outParm = (int)cmd.Parameters["@param2"].Value;
   if (outParm != 0) {
     Console.WriteLine("Call failed");
+  } else {
+    Console.WriteLine("Connection successful");
   }
-  */
+  
   
   // always call Close when done reading. 
   myReader.Close(); 
