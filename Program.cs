@@ -55,17 +55,23 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   String procCall = "CALL " + spname + " (@param1, @param2)";
   cmd.Transaction = trans;
   cmd.CommandText = procCall;
+  
   // Register input-output and output parameters for the DB2Command
   cmd.Parameters.Add( new DB2Parameter("@param1", 5));
   cmd.Parameters.Add( new DB2Parameter("@param2", 6));
+  
   // Call the stored procedure
   Console.WriteLine("Calling stored procedure " + spname);
   DB2DataReader myReader = cmd.ExecuteReader(); 
+
+  /*
   //Retrieve the return code (output parameter in SP)
   outParm = (int)cmd.Parameters["@param2"].Value;
   if (outParm != 0) {
     Console.WriteLine("Call failed");
   }
+  */
+  
   // always call Close when done reading. 
   myReader.Close(); 
 }
