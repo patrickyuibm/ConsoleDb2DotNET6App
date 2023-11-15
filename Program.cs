@@ -57,8 +57,13 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   cmd.CommandText = procCall;
   
   // Register input-output and output parameters for the DB2Command
-  cmd.Parameters.Add( new DB2Parameter("@param1", 5));
-  cmd.Parameters.Add( new DB2Parameter("@param2", 6));
+  //cmd.Parameters.Add(new DB2Parameter("@param1", 5));
+  //cmd.Parameters.Add(new DB2Parameter("@param2", 6));
+
+  parm = cmd.Parameters.Add("@param1", DB2Type.Integer);
+  parm.Direction = ParameterDirection.Input;
+  parm = cmd.Parameters.Add("@param2", DB2Type.Integer);
+  parm.Direction = ParameterDirection.Output;
   
   // Call the stored procedure
   Console.WriteLine("Calling stored procedure " + spname);
