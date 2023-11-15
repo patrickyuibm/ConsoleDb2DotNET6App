@@ -33,7 +33,7 @@ void main() {
   string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
 
   //Multithreading
-  int numInsertThreads = 4; 
+  int numInsertThreads = 10; 
   Thread[] myThreads = new Thread[numInsertThreads]; 
   for (int i = 0; i < numInsertThreads; i++) { 
     myThreads[i] = new Thread(new ThreadStart(() => startSelect(connString, i))); 
