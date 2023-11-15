@@ -95,6 +95,9 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   Console.WriteLine("Output parameter = " + outParm.ToString());
   if (outParm != 0) {
     Console.WriteLine("Call failed");
+    if (outParm == 99) {
+      Console.WriteLine("Table not found");
+    }
   } else {
     Console.WriteLine("Connection successful");
   }
