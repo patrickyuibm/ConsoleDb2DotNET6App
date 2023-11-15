@@ -77,8 +77,9 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   parm.Direction = ParameterDirection.Input;
   parm = cmd.Parameters.Add("@param2", DB2Type.Integer);
   parm.Direction = ParameterDirection.Output;
-  int p1 = RandomNumber(1, 99);
-  int p2 = RandomNumber(1, 99);
+  Random rnd = new Random();
+  int p1 = rnd.Next(1,99);
+  int p2 = rnd.Next(1,99);
   cmd.Parameters["@param1"].Value = p1;
   cmd.Parameters["@param2"].Value = p2;
   
