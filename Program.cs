@@ -44,7 +44,7 @@ void main() {
   t2.Join();
   t3.Join();
 
-  Console.WriteLine("All threads complete")
+  Console.WriteLine("All threads complete");
   
   /*
   //Multithreading
