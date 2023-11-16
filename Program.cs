@@ -33,7 +33,7 @@ void main() {
   string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
   
   int numInsertThreads = 3;
-  Thread[] myThreads = newThread[numInsertThreads];
+  Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 1; i <= numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect(connString)));
     t.Name = "Thread_" + i.ToString();
