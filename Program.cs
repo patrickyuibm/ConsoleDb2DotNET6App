@@ -44,25 +44,6 @@ void main() {
     t.Join();
   }
   Console.WriteLine("All threads complete");
-  
-  /*
-  //Multithreading
-  int numInsertThreads = 10; 
-  Thread[] myThreads = new Thread[numInsertThreads]; 
-  for (int i = 0; i < numInsertThreads; i++) { 
-    myThreads[i] = new Thread(new ThreadStart(() => startSelect(connString))); 
-  } 
-  int ctr = 1;
-  foreach (Thread thread in myThreads) {
-    thread.IsBackground = true;
-    thread.Name = "Thread_" + ctr.ToString();
-    thread.Start();
-    Thread.Sleep(1);
-  }
-  foreach (Thread thread in myThreads) {
-    thread.Join();
-  }
-  */
 }
 
 void startSelect(String connectionString) {
@@ -86,9 +67,6 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   cmd.CommandText = procCall;
   
   // Register input-output and output parameters for the DB2Command
-  //cmd.Parameters.Add(new DB2Parameter("@param1", 5));
-  //cmd.Parameters.Add(new DB2Parameter("@param2", 6));
-  
   parm = cmd.Parameters.Add("@param1", DB2Type.Integer);
   parm.Direction = ParameterDirection.Input;
   parm = cmd.Parameters.Add("@param2", DB2Type.Integer);
@@ -99,13 +77,11 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   int p2 = rnd2.Next(1,99);
   cmd.Parameters["@param1"].Value = p1;
   cmd.Parameters["@param2"].Value = p2;
-  
 
   // Call the stored procedure
   //Console.WriteLine("Calling stored procedure " + spname);
   DB2DataReader myReader = cmd.ExecuteReader(); 
 
-  
   //Retrieve the return code (output parameter in SP)
   int outParm = (int)cmd.Parameters["@param2"].Value;
   //Console.WriteLine("Return code " + outParm.ToString());
@@ -116,7 +92,6 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
     }
   } 
 
-  
   // always call Close when done reading. 
   myReader.Close(); 
 }
