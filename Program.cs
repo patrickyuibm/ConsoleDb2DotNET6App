@@ -37,7 +37,7 @@ void main() {
   Thread[] myThreads = new Thread[numInsertThreads]; 
   for (int i = 0; i < numInsertThreads; i++) { 
     Console.WriteLine("iteration #" + i.ToString());
-    myThreads[i] = new Thread(new ThreadStart(() => startSelect(connString, i))); 
+    myThreads[i] = new Thread(new ThreadStart(() => startSelect(connString))); 
   } 
   int ctr = 1;
   foreach (Thread thread in myThreads) {
@@ -51,15 +51,14 @@ void main() {
   }
 }
 
-void startSelect(String connectionString, int threadNumber) {
-  Console.WriteLine("Thread #" + threadNumber.ToString() + " started");
+void startSelect(String connectionString) {
   DB2Connection conn = new DB2Connection(connectionString);
+  String thname = System.Threading.Thread.CurrentThread.Name
   conn.Open();
-  //Console.WriteLine("Connection opened successfully");
+  Console.WriteLine(thname + " running");
   run_insert_and_select_tb2_SP(conn);
   conn.Close(); 
-  //Console.WriteLine("Connection Closed");   
-  Console.WriteLine("Thread #" + threadNumber.ToString() + " ended");
+  Console.WriteLine("thname + " closed");
 }
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
