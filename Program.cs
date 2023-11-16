@@ -38,6 +38,7 @@ void main() {
     Thread t = new Thread(new ThreadStart(() => startSelect(connString)));
     t.Name = "Thread_" + i.ToString();
     t.Start();
+    myThreads[i] = t;
   }
   foreach (Thread t in myThreads) {
     t.Join();
