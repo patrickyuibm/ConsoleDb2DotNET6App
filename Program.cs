@@ -31,19 +31,17 @@ void main() {
   string server = Environment.GetEnvironmentVariable("server");
   string db = Environment.GetEnvironmentVariable("db");
   string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
-  Thread t1 = new Thread(new ThreadStart(() => startSelect(connString))); 
-  t1.Name = "Thread_1";
-  t1.Start();
-  Thread t2 = new Thread(new ThreadStart(() => startSelect(connString))); 
-  t2.Name = "Thread_2";
-  t2.Start();
-  Thread t3 = new Thread(new ThreadStart(() => startSelect(connString))); 
-  t3.Name = "Thread_3";
-  t3.Start();
-  t1.Join();
-  t2.Join();
-  t3.Join();
-
+  
+  numInsertThreads = 3;
+  Thread[] myThreads = newThread[numInsertThreads];
+  for (int i = 1; i <= numInsertThreads; i++) {
+    t = newThread(new ThreadStart(() => startSelect(connString)));
+    t.Name = "Thread_" + i.ToString();
+    t.Start();
+  }
+  foreach (Thread t in myThreads) {
+    t.Join();
+  }
   Console.WriteLine("All threads complete");
   
   /*
