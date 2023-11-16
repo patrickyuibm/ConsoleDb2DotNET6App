@@ -32,10 +32,10 @@ void main() {
   string db = Environment.GetEnvironmentVariable("db");
   string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
   
-  numInsertThreads = 3;
+  int numInsertThreads = 3;
   Thread[] myThreads = newThread[numInsertThreads];
   for (int i = 1; i <= numInsertThreads; i++) {
-    t = newThread(new ThreadStart(() => startSelect(connString)));
+    Thread t = new Thread(new ThreadStart(() => startSelect(connString)));
     t.Name = "Thread_" + i.ToString();
     t.Start();
   }
