@@ -53,12 +53,12 @@ void main() {
 
 void startSelect(String connectionString) {
   DB2Connection conn = new DB2Connection(connectionString);
-  String thname = System.Threading.Thread.CurrentThread.Name
+  String thname = System.Threading.Thread.CurrentThread.Name;
   conn.Open();
   Console.WriteLine(thname + " running");
   run_insert_and_select_tb2_SP(conn);
   conn.Close(); 
-  Console.WriteLine("thname + " closed");
+  Console.WriteLine(thname + " closed");
 }
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
