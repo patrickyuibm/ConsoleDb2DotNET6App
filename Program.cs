@@ -32,7 +32,7 @@ void main() {
   string db = Environment.GetEnvironmentVariable("db");
   string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
   
-  int numInsertThreads = 100;
+  int numInsertThreads = 50;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect(connString)));
