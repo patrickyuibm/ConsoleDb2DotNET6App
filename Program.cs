@@ -34,9 +34,9 @@ void main() {
   
   int numInsertThreads = 3;
   Thread[] myThreads = new Thread[numInsertThreads];
-  for (int i = 1; i <= numInsertThreads; i++) {
+  for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect(connString)));
-    t.Name = "Thread_" + i.ToString();
+    t.Name = "Thread_" + (i+1).ToString();
     t.Start();
     myThreads[i] = t;
   }
