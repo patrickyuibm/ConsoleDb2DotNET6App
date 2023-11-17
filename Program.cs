@@ -59,8 +59,8 @@ void startSelect(String connectionString) {
 
 void run_select_queries(DB2Connection conn) {
   String query1 = "SELECT * FROM DB2ADM.TB2";
-  DB2Command cmd1 = DB2Command(query1, conn);
-  DB2ResultSet rs1 = cmd.ExecuteResultSet(
+  DB2Command cmd1 = conn.CreateCommand();
+  DB2ResultSet rs1 = cmd1.ExecuteResultSet(
       DB2ResultSetOptions.Scrollable |
       DB2ResultSetOptions.Sensitive |
       DB2ResultSetOptions.SkipDeleted);
