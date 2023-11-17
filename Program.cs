@@ -59,9 +59,13 @@ void startSelect(String connectionString) {
 
 void run_select_queries(DB2Connection conn) {
   String query1 = "SELECT * FROM DB2ADM.TB2";
+  String query2 = "SELECT * FROM DB2ADM.TB2 WHERE C1 > 3500";
   DB2Command cmd1 = new DB2Command(query1, conn);
-  DB2DataReader myReader = cmd1.ExecuteReader();
-  myReader.Close();
+  DB2Command cmd2 = new DB2Command(query2, conn);
+  DB2DataReader dr1 = cmd1.ExecuteReader();
+  DB2DataReader dr2 = cmd2.ExecuteReader();
+  dr1.Close();
+  dr2.Close();
 }
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
