@@ -32,7 +32,7 @@ void main() {
   string db = Environment.GetEnvironmentVariable("db");
   string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
   
-  int numInsertThreads = 50;
+  int numInsertThreads = 30;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect(connString)));
@@ -51,9 +51,20 @@ void startSelect(String connectionString) {
   String thname = System.Threading.Thread.CurrentThread.Name;
   conn.Open();
   Console.WriteLine(thname + " running");
-  run_insert_and_select_tb2_SP(conn);
+  //run_insert_and_select_tb2_SP(conn);
+  run_select_queries(conn);
   conn.Close(); 
   Console.WriteLine(thname + " closed");
+}
+
+void run_select_queries(DB2Connection conn) {
+  String query1 = "SELECT * FROM DB2ADM.TB2";
+  DB2Command cmd1 = DB2Command(query1, conn);
+  DB2ResultSet rs1 = cmd.ExecuteResultSet(
+      DB2ResultSetOptions.Scrollable |
+      DB2ResultSetOptions.Sensitive |
+      DB2ResultSetOptions.SkipDeleted);
+  rs1.Close();
 }
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
