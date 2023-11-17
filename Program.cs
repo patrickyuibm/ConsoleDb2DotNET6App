@@ -59,12 +59,9 @@ void startSelect(String connectionString) {
 
 void run_select_queries(DB2Connection conn) {
   String query1 = "SELECT * FROM DB2ADM.TB2";
-  DB2Command cmd1 = conn.CreateCommand();
-  DB2ResultSet rs1 = cmd1.ExecuteResultSet(
-      DB2ResultSetOptions.Scrollable |
-      DB2ResultSetOptions.Sensitive |
-      DB2ResultSetOptions.SkipDeleted);
-  rs1.Close();
+  DB2Command cmd1 = new DB2Command(query1, conn);
+  DB2DataReader myReader = cmd1.ExecuteReader();
+  myReader.Close();
 }
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
