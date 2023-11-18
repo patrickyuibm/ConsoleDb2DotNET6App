@@ -51,12 +51,13 @@ void startSelect(String connectionString) {
   connb.Pooling = true;
   connb.MinPoolSize = 0;
   connb.MaxPoolSize = 10000;
+  Console.WriteLine('cb string = ' + connb.ConnectionString);
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   String thname = System.Threading.Thread.CurrentThread.Name;
   conn.Open();
   Console.WriteLine(thname + " running");
   //run_insert_and_select_tb2_SP(conn);
-  run_select_queries(conn);
+  run_select_queries(new DB2Connection(connectionString));
   Console.WriteLine("Pooling = " + conn.IsConnectionFromPool);
   conn.Close(); 
   Console.WriteLine(thname + " closed");
