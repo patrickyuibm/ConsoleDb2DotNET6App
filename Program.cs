@@ -15,8 +15,13 @@ using System.Dynamic;
 using System.Xml;
 using IBM.Data.DB2Types;
 using System.Text;
-//*******************************************************************************
 
+//***************************** GLOBAL VARIABLES *****************************
+Dictionary<string, string> connectionDict = new Dictionary<string, string>();
+connectionDict.Add("uid", Environment.GetEnvironmentVariable("uid"));
+connectionDict.Add("pwd", Environment.GetEnvironmentVariable("pwd"));
+connectionDict.Add("server", Environment.GetEnvironmentVariable("server"));
+connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
 
 //***************************** METHODS *****************************
 //Method to run stored procedure
@@ -25,23 +30,6 @@ Note: currently, since the parameters for each SP are different, one method to r
 SP we want to run the code it in first. 
 */
 void main() {
-  //Connection String
-  string uid = Environment.GetEnvironmentVariable("uid");
-  string pwd = Environment.GetEnvironmentVariable("pwd");
-  string server = Environment.GetEnvironmentVariable("server");
-  string db = Environment.GetEnvironmentVariable("db");
-  string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
-  DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
-  connb.Database = db;
-  connb.UserID = uid;
-  connb.Password = pwd;
-  connb.Server = server;
-  connb.Pooling = true;
-  connb.MinPoolSize = 0;
-  connb.MaxPoolSize = 10000;
-  Console.WriteLine("cb string = " + connb.ConnectionString);
-
-  /*
   int numInsertThreads = 7000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
@@ -54,15 +42,18 @@ void main() {
     t.Join();
   }
   Console.WriteLine("All threads complete");
-  */
+  
 }
 
 void startSelect(String connectionString) {
-  DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder(connectionString);
+  DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
+  connb.Database = connectionDict["db"];
+  connb.UserID = connectionDict["uid"];
+  connb.Password = connectionDict["pwd"];
+  connb.Server = connectionDict["server"];
   connb.Pooling = true;
   connb.MinPoolSize = 0;
   connb.MaxPoolSize = 10000;
-  Console.WriteLine("cb string = " + connb.ConnectionString);
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   String thname = System.Threading.Thread.CurrentThread.Name;
   conn.Open();
@@ -125,13 +116,9 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   myReader.Close(); 
 }
 
-//*******************************************************************
-
-
 //***************************** RUN METHODS HERE *****************************
 //Method to set up threads that run several stored procedures
 main();
-//****************************************************************************
 
 
 
