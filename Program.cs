@@ -66,22 +66,24 @@ void startSelect() {
   run_select_queries(conn);
   if (!conn.IsConnectionFromPool) {
     Console.WriteLine("Error: Pooling failed for " + thname);
-  } else {
-    Console.WriteLine("Pooling successful for " + thname);
-  }
+  } 
   conn.Close(); 
   //Console.WriteLine(thname + " closed");
 }
 
 void run_select_queries(DB2Connection conn) {
-  String query1 = select_statements[0];
-  String query2 = select_statements[1];
-  DB2Command cmd1 = new DB2Command(query1, conn);
-  DB2Command cmd2 = new DB2Command(query2, conn);
+  DB2Command cmd1 = new DB2Command(select_statements[0], conn);
+  DB2Command cmd2 = new DB2Command(select_statements[1], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
   DB2DataReader dr2 = cmd2.ExecuteReader();
   dr1.Close();
   dr2.Close();
+}
+
+void run_update_queries(DB2Connection conn) {
+  DB2Command cmd1 = new DB2Command(update_statements[0], conn);
+  DB2DataReader dr1 = cmd1.ExecuteReader();
+  dr1.Close();
 }
 
 void run_insert_and_select_tb2_SP(DB2Connection conn) {
