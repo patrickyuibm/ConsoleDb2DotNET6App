@@ -28,6 +28,9 @@ String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10
                                       "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"};
 String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000 WHERE C2 > 40000"};
 
+int failed_connection_pools = 0;
+int successful_connection_pools = 0;
+
 //***************************** METHODS *****************************
 //Method to run stored procedure
 /*
@@ -46,8 +49,9 @@ void main() {
   foreach (Thread t in myThreads) {
     t.Join();
   }
+  Console.WriteLine("Successful connection pools: " + successful_connection_pools);
+  Console.WriteLine("Failed connection pools: " + failed_connection_pools);
   Console.WriteLine("All threads complete");
-  
 }
 
 void startSelect() {
@@ -67,6 +71,9 @@ void startSelect() {
   run_select_queries(conn);
   if (!conn.IsConnectionFromPool) {
     Console.WriteLine("Error: Pooling failed for " + thname);
+    failed_connection_pools += 1;
+  } else {
+    successful_connection_pools += 1;
   }
   conn.Close(); 
   //Console.WriteLine(thname + " closed");
