@@ -26,7 +26,7 @@ connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
 String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", "SELECT * FROM DB2ADM.TB2 WHERE C1 > 3500"};
 String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*100000)", 
                                       "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"};
-String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = 55555"};
+String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000"};
 
 //***************************** METHODS *****************************
 //Method to run stored procedure
@@ -67,8 +67,10 @@ void startSelect() {
   Console.WriteLine(thname + " running");
   
   //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement
-  //run_select_queries(conn); //select query
+  run_insert_queries(conn); //insert query
   run_update_queries(conn); //update query
+  run_select_queries(conn); //select query
+  
   
   if (!conn.IsConnectionFromPool) {
     Console.WriteLine("Error: Pooling failed for " + thname);
@@ -89,6 +91,12 @@ void run_select_queries(DB2Connection conn) {
 void run_update_queries(DB2Connection conn) {
   DB2Command cmd1 = new DB2Command(update_statements[0], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
+  dr1.Close();
+}
+
+void run_insert_queries(DB2Connection conn) {
+  DB2Command cmd1 = new DB2Command(insert_statements[0], conn);
+  DataReader dr1 = cmd1.ExecuteReader();
   dr1.Close();
 }
 
