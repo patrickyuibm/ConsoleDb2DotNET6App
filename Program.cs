@@ -66,10 +66,10 @@ void startSelect() {
   //run_insert_and_select_tb2_SP(conn);
   run_select_queries(conn);
   if (!conn.IsConnectionFromPool) {
-    Console.WriteLine("Error: Pooling failed for Thread #" + thname);
+    Console.WriteLine("Error: Pooling failed for " + thname);
   }
   conn.Close(); 
-  Console.WriteLine(thname + " closed");
+  //Console.WriteLine(thname + " closed");
 }
 
 void run_select_queries(DB2Connection conn) {
