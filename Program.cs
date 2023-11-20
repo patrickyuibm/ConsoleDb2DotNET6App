@@ -23,6 +23,11 @@ connectionDict.Add("pwd", Environment.GetEnvironmentVariable("pwd"));
 connectionDict.Add("server", Environment.GetEnvironmentVariable("server"));
 connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
 
+static String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", "SELECT * FROM DB2ADM.TB2 WHERE C1 > 3500"};
+static String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*100000)", 
+                                      "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"};
+static String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000 WHERE C2 > 40000"};
+
 //***************************** METHODS *****************************
 //Method to run stored procedure
 /*
@@ -57,17 +62,19 @@ void startSelect() {
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   String thname = System.Threading.Thread.CurrentThread.Name;
   conn.Open();
-  Console.WriteLine(thname + " running");
+  //Console.WriteLine(thname + " running");
   //run_insert_and_select_tb2_SP(conn);
   run_select_queries(conn);
-  Console.WriteLine("Pooling = " + conn.IsConnectionFromPool);
+  if (!conn.IsConnectionFromPool) {
+    Console.WriteLine("Error: Pooling failed for Thread #" + thname);
+  }
   conn.Close(); 
   Console.WriteLine(thname + " closed");
 }
 
 void run_select_queries(DB2Connection conn) {
-  String query1 = "SELECT * FROM DB2ADM.TB2";
-  String query2 = "SELECT * FROM DB2ADM.TB2 WHERE C1 > 3500";
+  String query1 = select_statements[0];
+  String query2 = select_statements[1];
   DB2Command cmd1 = new DB2Command(query1, conn);
   DB2Command cmd2 = new DB2Command(query2, conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
