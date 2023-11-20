@@ -33,7 +33,7 @@ void main() {
   int numInsertThreads = 7000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
-    Thread t = new Thread(new ThreadStart(() => startSelect(connString)));
+    Thread t = new Thread(new ThreadStart(() => startSelect()));
     t.Name = "Thread_" + (i+1).ToString();
     t.Start();
     myThreads[i] = t;
@@ -45,7 +45,7 @@ void main() {
   
 }
 
-void startSelect(String connectionString) {
+void startSelect() {
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   connb.Database = connectionDict["db"];
   connb.UserID = connectionDict["uid"];
@@ -59,7 +59,7 @@ void startSelect(String connectionString) {
   conn.Open();
   Console.WriteLine(thname + " running");
   //run_insert_and_select_tb2_SP(conn);
-  run_select_queries(new DB2Connection(connectionString));
+  run_select_queries(conn);
   Console.WriteLine("Pooling = " + conn.IsConnectionFromPool);
   conn.Close(); 
   Console.WriteLine(thname + " closed");
