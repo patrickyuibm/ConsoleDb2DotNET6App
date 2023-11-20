@@ -31,7 +31,13 @@ void main() {
   string server = Environment.GetEnvironmentVariable("server");
   string db = Environment.GetEnvironmentVariable("db");
   string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
-  
+  DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder(connString);
+  connb.Pooling = true;
+  connb.MinPoolSize = 0;
+  connb.MaxPoolSize = 10000;
+  Console.WriteLine("cb string = " + connb.ConnectionString);
+
+  /*
   int numInsertThreads = 7000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
@@ -44,6 +50,7 @@ void main() {
     t.Join();
   }
   Console.WriteLine("All threads complete");
+  */
 }
 
 void startSelect(String connectionString) {
