@@ -26,7 +26,7 @@ connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
 String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", "SELECT * FROM DB2ADM.TB2 WHERE C1 > 3500"};
 String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*100000)", 
                                       "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"};
-String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000 WHERE C2 > 40000"};
+String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000"};
 
 //***************************** METHODS *****************************
 //Method to run stored procedure
