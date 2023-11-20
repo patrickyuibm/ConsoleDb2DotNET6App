@@ -31,7 +31,11 @@ void main() {
   string server = Environment.GetEnvironmentVariable("server");
   string db = Environment.GetEnvironmentVariable("db");
   string connString = "uid=" + uid + ";pwd=" + pwd + ";server=" + server + ";database=" + db;
-  DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder(connString);
+  DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
+  connb.Database = db;
+  connb.UserID = uid;
+  connb.Password = pwd;
+  connb.Server = server;
   connb.Pooling = true;
   connb.MinPoolSize = 0;
   connb.MaxPoolSize = 10000;
