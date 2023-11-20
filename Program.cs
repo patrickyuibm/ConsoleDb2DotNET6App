@@ -67,7 +67,7 @@ void startSelect() {
   if (!conn.IsConnectionFromPool) {
     Console.WriteLine("Error: Pooling failed for " + thname);
   } else {
-    Console.WriteLine("Error: Pooling successful for " + thname);
+    Console.WriteLine("Pooling successful for " + thname);
   }
   conn.Close(); 
   //Console.WriteLine(thname + " closed");
