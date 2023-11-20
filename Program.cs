@@ -64,19 +64,21 @@ void startSelect() {
 
   //Run queries
   String thname = System.Threading.Thread.CurrentThread.Name;
-  Console.WriteLine(thname + " running");
+  //Console.WriteLine(thname + " running");
   
   //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement
   run_insert_queries(conn); //insert query
   run_update_queries(conn); //update query
   run_select_queries(conn); //select query
   
-  
+  //Check if pooling was successful
+  /*
   if (!conn.IsConnectionFromPool) {
     Console.WriteLine("Error: Pooling failed for " + thname);
   } 
+  */
   conn.Close(); 
-  Console.WriteLine(thname + " closed");
+  //Console.WriteLine(thname + " closed");
 }
 
 void run_select_queries(DB2Connection conn) {
