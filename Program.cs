@@ -96,7 +96,7 @@ void run_update_queries(DB2Connection conn) {
 
 void run_insert_queries(DB2Connection conn) {
   DB2Command cmd1 = new DB2Command(insert_statements[0], conn);
-  DataReader dr1 = cmd1.ExecuteReader();
+  DB2DataReader dr1 = cmd1.ExecuteReader();
   dr1.Close();
 }
 
