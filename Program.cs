@@ -35,7 +35,7 @@ Note: currently, since the parameters for each SP are different, one method to r
 SP we want to run the code it in first. 
 */
 void main() {
-  int numInsertThreads = 7000;
+  int numInsertThreads = 70;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -50,6 +50,7 @@ void main() {
 }
 
 void startSelect() {
+  //Build the connection
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   connb.Database = connectionDict["db"];
   connb.UserID = connectionDict["uid"];
@@ -59,16 +60,21 @@ void startSelect() {
   connb.MinPoolSize = 0;
   connb.MaxPoolSize = 10000;
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
-  String thname = System.Threading.Thread.CurrentThread.Name;
   conn.Open();
-  //Console.WriteLine(thname + " running");
-  //run_insert_and_select_tb2_SP(conn);
-  run_select_queries(conn);
+
+  //Run queries
+  String thname = System.Threading.Thread.CurrentThread.Name;
+  Console.WriteLine(thname + " running");
+  
+  //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement
+  //run_select_queries(conn); //select query
+  run_update_queries(conn); //update query
+  
   if (!conn.IsConnectionFromPool) {
     Console.WriteLine("Error: Pooling failed for " + thname);
   } 
   conn.Close(); 
-  //Console.WriteLine(thname + " closed");
+  Console.WriteLine(thname + " closed");
 }
 
 void run_select_queries(DB2Connection conn) {
