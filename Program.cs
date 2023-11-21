@@ -31,7 +31,7 @@ String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000", "UPDAT
 //***************************** METHODS *****************************
 
 void main() {
-  int numInsertThreads = 5000;
+  int numInsertThreads = 3000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -58,33 +58,16 @@ void startSelect() {
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   String thname = System.Threading.Thread.CurrentThread.Name;
   conn.Open();
-  try {
-      //Run threads
-      Console.WriteLine(thname + " running");
+  
+  //Console.WriteLine(thname + " running");
+  //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement
+  run_insert_queries(conn); //insert query
+  run_update_queries(conn); //update query
+  run_select_queries(conn); //select query
       
-      //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement
-      run_insert_queries(conn); //insert query
-      run_update_queries(conn); //update query
-      run_select_queries(conn); //select query
-      
-      //Check if pooling was successful
-      /*
-      if (!conn.IsConnectionFromPool) {
-        Console.WriteLine("Error: Pooling failed for " + thname);
-      } 
-      */
- } catch (DB2Exception myException) {
-      for (int i=0; i < myException.Errors.Count; i++) {
-         Console.WriteLine("Index #" + i + "\n" +
-             "Message: " + myException.Errors[i].Message + "\n" +
-             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" +
-             "Source: " + myException.Errors[i].Source + "\n" +
-             "SQL: " + myException.Errors[i].SQLState + "\n");
-       }
-   } finally {
-      conn.Close(); 
-      Console.WriteLine(thname + " closed");
-   }
+  conn.Close(); 
+  //Console.WriteLine(thname + " closed");
+
 }
 
 void run_select_queries(DB2Connection conn) {
