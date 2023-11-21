@@ -29,17 +29,13 @@ String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10
 String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000", "UPDATE DB2ADM.TB2 SET C1 = RAND()*20000"};
 
 //***************************** METHODS *****************************
-//Method to run stored procedure
-/*
-Note: currently, since the parameters for each SP are different, one method to run any SP is nearly impossible. We have to know what 
-SP we want to run the code it in first. 
-*/
+
 void main() {
-  int numInsertThreads = 2000;
+  int numInsertThreads = 500;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
-    t.Name = "Thread_" + (i+1).ToString();
+    t.Name = "Thread #" + (i+1).ToString();
     t.Start();
     myThreads[i] = t;
   }
@@ -60,42 +56,41 @@ void startSelect() {
   connb.MinPoolSize = 0;
   connb.MaxPoolSize = 10000;
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
-  conn.Open();
-
-  //Run queries
   String thname = System.Threading.Thread.CurrentThread.Name;
-  //Console.WriteLine(thname + " running");
-  
-  //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement
-  run_insert_queries(conn); //insert query
-  run_update_queries(conn); //update query
-  run_select_queries(conn); //select query
-  
-  //Check if pooling was successful
-  /*
-  if (!conn.IsConnectionFromPool) {
-    Console.WriteLine("Error: Pooling failed for " + thname);
-  } 
-  */
-  conn.Close(); 
-  //Console.WriteLine(thname + " closed");
-}
-
-void run_select_queries(DB2Connection conn) {
+  conn.Open();
   try {
-    DB2Command cmd1 = new DB2Command(select_statements[0], conn);
-    DB2DataReader dr1 = cmd1.ExecuteReader();
-  } catch (DB2Exception myException) {
+      //Run threads
+      Console.WriteLine(thname + " running");
+      
+      //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement
+      //run_insert_queries(conn); //insert query
+      run_update_queries(conn); //update query
+      run_select_queries(conn); //select query
+      
+      //Check if pooling was successful
+      /*
+      if (!conn.IsConnectionFromPool) {
+        Console.WriteLine("Error: Pooling failed for " + thname);
+      } 
+      */
+ } catch (DB2Exception myException) {
       for (int i=0; i < myException.Errors.Count; i++) {
-         MessageBox.Show("Index #" + i + "\n" +
+         Console.WriteLine("Index #" + i + "\n" +
              "Message: " + myException.Errors[i].Message + "\n" +
              "Native: " + myException.Errors[i].NativeError.ToString() + "\n" +
              "Source: " + myException.Errors[i].Source + "\n" +
              "SQL: " + myException.Errors[i].SQLState + "\n");
-      }
+       }
    } finally {
-    dr1.Close();
-  } 
+      conn.Close(); 
+      Console.WriteLine(thname + " closed");
+   }
+}
+
+void run_select_queries(DB2Connection conn) {
+  DB2Command cmd1 = new DB2Command(select_statements[0], conn);
+  DB2DataReader dr1 = cmd1.ExecuteReader();
+  dr1.Close();
 }
 
 void run_update_queries(DB2Connection conn) {
