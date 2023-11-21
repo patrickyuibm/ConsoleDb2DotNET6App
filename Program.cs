@@ -59,15 +59,31 @@ void startSelect() {
   String thname = System.Threading.Thread.CurrentThread.Name;
   conn.Open();
   
-  //Console.WriteLine(thname + " running");
-  //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement
-  run_insert_queries(conn); //insert query
-  run_update_queries(conn); //update query
-  run_select_queries(conn); //select query
-      
-  conn.Close(); 
-  //Console.WriteLine(thname + " closed");
-
+  try { 
+      //Run threads 
+      //Console.WriteLine(thname + " running"); 
+      //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement 
+      run_insert_queries(conn); //insert query 
+      run_update_queries(conn); //update query 
+      run_select_queries(conn); //select query
+      //Check if pooling was successful 
+      /* 
+      if (!conn.IsConnectionFromPool) { 
+        Console.WriteLine("Error: Pooling failed for " + thname); 
+      }  
+      */ 
+  } catch (DB2Exception myException) { 
+      for (int i=0; i < myException.Errors.Count; i++) { 
+         Console.WriteLine("Index #" + i + "\n" + 
+             "Message: " + myException.Errors[i].Message + "\n" + 
+             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
+             "Source: " + myException.Errors[i].Source + "\n" + 
+             "SQL: " + myException.Errors[i].SQLState + "\n"); 
+       } 
+   } finally { 
+      conn.Close();  
+      Console.WriteLine(thname + " closed"); 
+   } 
 }
 
 void run_select_queries(DB2Connection conn) {
