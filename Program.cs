@@ -35,7 +35,7 @@ Note: currently, since the parameters for each SP are different, one method to r
 SP we want to run the code it in first. 
 */
 void main() {
-  int numInsertThreads = 7000;
+  int numInsertThreads = 2000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
