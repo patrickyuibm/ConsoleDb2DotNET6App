@@ -26,7 +26,7 @@ connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
 String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", "SELECT * FROM DB2ADM.TB2 WHERE C1 > 3500"};
 String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*100000)", 
                                       "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"};
-String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000"};
+String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000", "UPDATE DB2ADM.TB2 SET C1 = RAND()*20000"};
 
 //***************************** METHODS *****************************
 //Method to run stored procedure
@@ -82,12 +82,20 @@ void startSelect() {
 }
 
 void run_select_queries(DB2Connection conn) {
-  DB2Command cmd1 = new DB2Command(select_statements[0], conn);
-  DB2Command cmd2 = new DB2Command(select_statements[1], conn);
-  DB2DataReader dr1 = cmd1.ExecuteReader();
-  DB2DataReader dr2 = cmd2.ExecuteReader();
-  dr1.Close();
-  dr2.Close();
+  try {
+    DB2Command cmd1 = new DB2Command(select_statements[0], conn);
+    DB2DataReader dr1 = cmd1.ExecuteReader();
+  } catch (DB2Exception myException) {
+      for (int i=0; i < myException.Errors.Count; i++) {
+         MessageBox.Show("Index #" + i + "\n" +
+             "Message: " + myException.Errors[i].Message + "\n" +
+             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" +
+             "Source: " + myException.Errors[i].Source + "\n" +
+             "SQL: " + myException.Errors[i].SQLState + "\n");
+      }
+   } finally {
+    dr1.Close();
+  } 
 }
 
 void run_update_queries(DB2Connection conn) {
