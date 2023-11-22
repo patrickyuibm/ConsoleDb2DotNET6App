@@ -82,7 +82,7 @@ void startSelect() {
        } 
    } finally { 
       conn.Close();  
-      Console.WriteLine(thname + " closed"); 
+      //Console.WriteLine(thname + " closed"); 
    } 
 }
 
