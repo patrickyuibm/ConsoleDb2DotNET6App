@@ -31,7 +31,7 @@ String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000", "UPDAT
 //***************************** METHODS *****************************
 
 void main() {
-  int numInsertThreads = 1000;
+  int numInsertThreads = 4000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
