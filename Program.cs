@@ -26,8 +26,8 @@ connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
 String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*5000"};
 String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*100000)", 
                                       "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"};
-String[] update_statements =  {"UPDATE DB2ADM.TB2 WITH ROWLOCK SET C2 = RAND()*20000 WHERE C1 < RAND()*20000", 
-  "UPDATE DB2ADM.TB2 WITH ROWLOCK SET C1 = RAND()*20000 WHERE C2 < RAND()*20000"};
+String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000 WHERE C1 < RAND()*20000", 
+  "UPDATE DB2ADM.TB2 SET C1 = RAND()*20000 WHERE C2 < RAND()*20000"};
 String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 3500 AND C1 > 3500", 
   "DELETE FROM DB2ADM.TB2 WHERE C1 % 2 = 0 AND C2 % 5 = 0", "DELETE FROM DB2ADM.TB2 WHERE C1 % 5 = 0 AND C2 % 2 = 0"};
 
@@ -36,10 +36,10 @@ String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 3500 AND C1 > 3
 //***************************** METHODS *****************************
 
 void main() {
-  int numInsertThreads = 30;
+  int numInsertThreads = 500;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
-    Thread t = new Thread(new ThreadStart(() => startSelect()));
+    Thread t = new Thread(new ThreadStart(() => startSelect(i+1)));
     t.Name = "Thread #" + (i+1).ToString();
     t.Start();
     myThreads[i] = t;
@@ -50,7 +50,7 @@ void main() {
   Console.WriteLine("All threads complete");
 }
 
-void startSelect() {
+void startSelect(int iteration) {
   //Build the connection
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   connb.Database = connectionDict["db"];
@@ -67,10 +67,19 @@ void startSelect() {
   try { 
       //Run threads 
       //Console.WriteLine(thname + " running"); 
+      Console.WriteLine("Thread #" + iteration.ToString() + " running");
       //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement 
-      run_insert_queries(conn); //insert query 
-      run_update_queries(conn); //update query 
-      run_select_queries(conn); //select query
+      if (iteration % 100 == 0) {
+        Console.WriteLine("update");
+        run_update_queries(conn);
+      } else if (iteration % 50 == 0) {
+        Console.WriteLine("select");
+        run_select_queries(conn);
+      } else {
+        Console.WriteLine("insert");
+        run_insert_queries(conn);
+      }
+
       //Check if pooling was successful 
       /* 
       if (!conn.IsConnectionFromPool) { 
