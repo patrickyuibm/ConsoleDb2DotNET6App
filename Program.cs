@@ -67,10 +67,10 @@ void startSelect(int iteration) {
   try { 
       //Run threads 
       //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement 
-      if (iteration % 100 == 0) {
+      if ((iteration - 1) % 3 == 0) {
         Console.WriteLine("Thread #" + iteration.ToString() + " running; action: update");
         run_update_queries(conn);
-      } else if (iteration % 50 == 0) {
+      } else if ((iteration - 2) % 3 == 0) {
         Console.WriteLine("Thread #" + iteration.ToString() + " running; action: select");
         run_select_queries(conn);
       } else {
