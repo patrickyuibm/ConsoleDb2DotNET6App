@@ -36,7 +36,7 @@ String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 3500 AND C1 > 3
 //***************************** METHODS *****************************
 
 void main() {
-  int numInsertThreads = 3000;
+  int numInsertThreads = 2000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect(i+1)));
