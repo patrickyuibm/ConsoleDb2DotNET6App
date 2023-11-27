@@ -27,6 +27,10 @@ String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", "SELECT * FROM DB2ADM
 String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*100000)", 
                                       "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"};
 String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000", "UPDATE DB2ADM.TB2 SET C1 = RAND()*20000"};
+String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 3500 AND C1 > 3500", 
+  "DELETE FROM DB2ADM.TB2 WHERE C1 % 2 = 0 AND C2 % 5 = 0", "DELETE FROM DB2ADM.TB2 WHERE C1 % 5 = 0 AND C2 % 2 = 0"};
+
+                              
 
 //***************************** METHODS *****************************
 
