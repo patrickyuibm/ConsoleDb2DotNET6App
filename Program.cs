@@ -23,10 +23,11 @@ connectionDict.Add("pwd", Environment.GetEnvironmentVariable("pwd"));
 connectionDict.Add("server", Environment.GetEnvironmentVariable("server"));
 connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
 
-String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", "SELECT * FROM DB2ADM.TB2 WHERE C1 > 3500"};
+String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*5000"};
 String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*100000)", 
                                       "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"};
-String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000", "UPDATE DB2ADM.TB2 SET C1 = RAND()*20000"};
+String[] update_statements =  {"UPDATE DB2ADM.TB2 WITH (ROWLOCK) SET C2 = RAND()*20000 WHERE C1 < RAND()*20000", 
+  "UPDATE DB2ADM.TB2 WITH (ROWLOCK) SET C1 = RAND()*20000 WHERE C2 < RAND()*20000"};
 String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 3500 AND C1 > 3500", 
   "DELETE FROM DB2ADM.TB2 WHERE C1 % 2 = 0 AND C2 % 5 = 0", "DELETE FROM DB2ADM.TB2 WHERE C1 % 5 = 0 AND C2 % 2 = 0"};
 
@@ -68,7 +69,7 @@ void startSelect() {
       //Console.WriteLine(thname + " running"); 
       //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement 
       run_insert_queries(conn); //insert query 
-      //run_update_queries(conn); //update query 
+      run_update_queries(conn); //update query 
       run_select_queries(conn); //select query
       //Check if pooling was successful 
       /* 
