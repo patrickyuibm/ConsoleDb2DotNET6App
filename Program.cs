@@ -68,7 +68,7 @@ void startSelect() {
       //Console.WriteLine(thname + " running"); 
       //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement 
       run_insert_queries(conn); //insert query 
-      run_update_queries(conn); //update query 
+      //run_update_queries(conn); //update query 
       run_select_queries(conn); //select query
       //Check if pooling was successful 
       /* 
