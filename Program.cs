@@ -36,7 +36,7 @@ String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 3500 AND C1 > 3
 //***************************** METHODS *****************************
 
 void main() {
-  int numInsertThreads = 5000;
+  int numInsertThreads = 3000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect(i+1)));
@@ -66,26 +66,24 @@ void startSelect(int iteration) {
   
   try { 
       //Run threads 
-      //Console.WriteLine(thname + " running"); 
-      Console.WriteLine("Thread #" + iteration.ToString() + " running");
       //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement 
       if (iteration % 100 == 0) {
-        Console.WriteLine("update");
+        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: update");
         run_update_queries(conn);
       } else if (iteration % 50 == 0) {
-        Console.WriteLine("select");
+        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: select");
         run_select_queries(conn);
       } else {
-        Console.WriteLine("insert");
+        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: insert");
         run_insert_queries(conn);
       }
-
       //Check if pooling was successful 
-      /* 
       if (!conn.IsConnectionFromPool) { 
-        Console.WriteLine("Error: Pooling failed for " + thname); 
-      }  
-      */ 
+        Console.WriteLine("Pooling failed for " + thname); 
+      } else {
+        Console.WriteLine("Pooling successful for " + thname);
+      }
+      
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("Index #" + i + "\n" + 
