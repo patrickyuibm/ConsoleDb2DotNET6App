@@ -67,14 +67,16 @@ void startSelect(int iteration) {
   try { 
       //Run threads 
       //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement 
-      if ((iteration - 1) % 3 == 0) {
-        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: update");
+      Random rnd = new Random();
+      int val = rnd.Next(1,9);
+      if (val < 2) {
+        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: update; random value = " + val.ToString());
         run_update_queries(conn);
-      } else if ((iteration - 2) % 3 == 0) {
-        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: select");
+      } else if (val < 3) {
+        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: select; random value = " + val.ToString());
         run_select_queries(conn);
       } else {
-        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: insert");
+        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: insert; random value = " + val.ToString());
         run_insert_queries(conn);
       }
       //Check if pooling was successful 
