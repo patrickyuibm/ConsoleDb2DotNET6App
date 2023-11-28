@@ -64,7 +64,7 @@ void main() {
     t.Join();
   }
   watch.Stop();
-  TimeSpan ts = stopWatch.Elapsed;
+  TimeSpan ts = watch.Elapsed;
   // Format and display the TimeSpan value.
   string elapsedTime = String.Format("{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
   Console.WriteLine("All threads complete, time elapsed (minutes:seconds:milliseconds): " + elapsedTime);
