@@ -98,19 +98,19 @@ void startSelect() {
       //Run threads 
       //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement 
       Random rnd = new Random();
-      int val = rnd.Next(1,19); //Frequency ratio: 1 update : 1 insert : 1 delete : 15 selects
+      int val = rnd.Next(1,36); //Frequency ratio: 20 selects : 9 inserts : 5 updates : 1 delete 
       if (val < 2) {
-        log += thname + " running; action: update; random value = " + val.ToString();
-        updates += 1;
-        run_update_queries(conn);
-      } else if (val < 3) {
-        log += thname + " running; action: insert; random value = " + val.ToString();
-        inserts += 1;
-        run_insert_queries(conn);
-      } else if (val < 4) {
         log += thname + " running; action: delete; random value = " + val.ToString();
         deletes += 1;
         run_delete_queries(conn);
+      } else if (val < 7) {
+        log += thname + " running; action: update; random value = " + val.ToString();
+        updates += 1;
+        run_update_queries(conn);
+      } else if (val < 16) {
+        log += thname + " running; action: insert; random value = " + val.ToString();
+        inserts += 1;
+        run_insert_queries(conn);
       } else {
         log += thname + " running; action: select; random value = " + val.ToString();
         selects += 1;
