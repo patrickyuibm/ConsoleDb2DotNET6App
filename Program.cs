@@ -23,13 +23,25 @@ connectionDict.Add("pwd", Environment.GetEnvironmentVariable("pwd"));
 connectionDict.Add("server", Environment.GetEnvironmentVariable("server"));
 connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
 
-String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*5000"};
+String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", 
+                               "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*5000",
+                               "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*10000",
+                               "SELECT * FROM DB2ADM.TB2 WHERE C2 > RAND()*5000",
+                               "SELECT * FROM DB2ADM.TB2 WHERE C2 > RAND()*10000"};
 String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*100000)", 
-                                      "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"};
+                               "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*100000,  RAND()*10000)",
+                               "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*5000,  RAND()*10000)",
+                               "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*5000)"};
 String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000 WHERE C1 < RAND()*20000", 
-  "UPDATE DB2ADM.TB2 SET C1 = RAND()*20000 WHERE C2 < RAND()*20000"};
-String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 3500 AND C1 > 3500", 
-  "DELETE FROM DB2ADM.TB2 WHERE C1 % 2 = 0 AND C2 % 5 = 0", "DELETE FROM DB2ADM.TB2 WHERE C1 % 5 = 0 AND C2 % 2 = 0"};
+                               "UPDATE DB2ADM.TB2 SET C1 = RAND()*20000 WHERE C2 < RAND()*20000",
+                               "UPDATE DB2ADM.TB2 SET C1 = RAND()*5000 WHERE C2 > RAND()*5000",
+                               "UPDATE DB2ADM.TB2 SET C1 = RAND()*5000 WHERE C2 > RAND()*5000"};
+String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 5000 AND C1 > 5000", 
+                              "DELETE FROM DB2ADM.TB2 WHERE C1 % 2 = 0 AND C2 % 5 = 0", 
+                              "DELETE FROM DB2ADM.TB2 WHERE C1 % 5 = 0 AND C2 % 2 = 0",
+                              "DELETE FROM DB2ADM.TB2 WHERE C2 < 5000 AND C1 < 5000",
+                              "DELETE FROM DB2ADM.TB2 WHERE C2 < 5000 AND C1 > 5000",
+                              "DELETE FROM DB2ADM.TB2 WHERE C2 > 5000 AND C1 < 5000"};
 
                               
 
@@ -39,7 +51,7 @@ void main() {
   int numInsertThreads = 1000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
-    Thread t = new Thread(new ThreadStart(() => startSelect(i+1)));
+    Thread t = new Thread(new ThreadStart(() => startSelect()));
     t.Name = "Thread #" + (i+1).ToString();
     t.Start();
     myThreads[i] = t;
@@ -50,7 +62,7 @@ void main() {
   Console.WriteLine("All threads complete");
 }
 
-void startSelect(int iteration) {
+void startSelect() {
   //Build the connection
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   connb.Database = connectionDict["db"];
@@ -62,28 +74,32 @@ void startSelect(int iteration) {
   connb.MaxPoolSize = 10000;
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   String thname = System.Threading.Thread.CurrentThread.Name;
+  String log = "";
   conn.Open();
   
   try { 
       //Run threads 
       //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement 
       Random rnd = new Random();
-      int val = rnd.Next(1,9);
+      int val = rnd.Next(1,19); //Frequency ratio: 1 update : 1 insert : 1 delete : 15 selects
       if (val < 2) {
-        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: update; random value = " + val.ToString());
+        log += thname + " running; action: update; random value = " + val.ToString();
         run_update_queries(conn);
       } else if (val < 3) {
-        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: select; random value = " + val.ToString());
-        run_select_queries(conn);
-      } else {
-        Console.WriteLine("Thread #" + iteration.ToString() + " running; action: insert; random value = " + val.ToString());
+        log += thname + " running; action: insert; random value = " + val.ToString();
         run_insert_queries(conn);
+      } else if (val < 4) {
+        log += thname + " running; action: delete; random value = " + val.ToString();
+        run_delete_queries(conn);
+      } else {
+        log += thname + " running; action: select; random value = " + val.ToString();
+        run_select_queries(conn);
       }
       //Check if pooling was successful 
       if (!conn.IsConnectionFromPool) { 
-        Console.WriteLine("Pooling failed for " + thname); 
+        log += "; Pooling failed for " + thname; 
       } else {
-        Console.WriteLine("Pooling successful for " + thname);
+        log += "; Pooling successful for " + thname;
       }
       
   } catch (DB2Exception myException) { 
@@ -96,24 +112,38 @@ void startSelect(int iteration) {
        } 
    } finally { 
       conn.Close();  
-      //Console.WriteLine(thname + " closed"); 
+      Console.WriteLine(log); 
    } 
 }
 
 void run_select_queries(DB2Connection conn) {
-  DB2Command cmd1 = new DB2Command(select_statements[0], conn);
+  Random rnd = new Random();
+  int index = rnd.Next(0, select_statements.Length);
+  DB2Command cmd1 = new DB2Command(select_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
   dr1.Close();
 }
 
 void run_update_queries(DB2Connection conn) {
-  DB2Command cmd1 = new DB2Command(update_statements[0], conn);
+  Random rnd = new Random();
+  int index = rnd.Next(0, update_statements.Length);
+  DB2Command cmd1 = new DB2Command(update_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
   dr1.Close();
 }
 
 void run_insert_queries(DB2Connection conn) {
-  DB2Command cmd1 = new DB2Command(insert_statements[0], conn);
+  Random rnd = new Random();
+  int index = rnd.Next(0, insert_statements.Length);
+  DB2Command cmd1 = new DB2Command(insert_statements[index], conn);
+  DB2DataReader dr1 = cmd1.ExecuteReader();
+  dr1.Close();
+}
+
+void run_delete_queries(DB2Connection conn) {
+  Random rnd = new Random();
+  int index = rnd.Next(0, delete_statements.Length);
+  DB2Command cmd1 = new DB2Command(delete_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
   dr1.Close();
 }
