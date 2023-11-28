@@ -36,19 +36,23 @@ String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000 WHERE C1
                                "UPDATE DB2ADM.TB2 SET C1 = RAND()*20000 WHERE C2 < RAND()*20000",
                                "UPDATE DB2ADM.TB2 SET C1 = RAND()*5000 WHERE C2 > RAND()*5000",
                                "UPDATE DB2ADM.TB2 SET C1 = RAND()*5000 WHERE C2 > RAND()*5000"};
-String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 5000 AND C1 > 5000", 
-                              "DELETE FROM DB2ADM.TB2 WHERE C1 % 2 = 0 AND C2 % 5 = 0", 
-                              "DELETE FROM DB2ADM.TB2 WHERE C1 % 5 = 0 AND C2 % 2 = 0",
-                              "DELETE FROM DB2ADM.TB2 WHERE C2 < 5000 AND C1 < 5000",
-                              "DELETE FROM DB2ADM.TB2 WHERE C2 < 5000 AND C1 > 5000",
-                              "DELETE FROM DB2ADM.TB2 WHERE C2 > 5000 AND C1 < 5000"};
+String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 > 3000", 
+                              "DELETE FROM DB2ADM.TB2 WHERE C1 > 12000", 
+                              "DELETE FROM DB2ADM.TB2 WHERE C2 > 12000",
+                              "DELETE FROM DB2ADM.TB2 WHERE C1 < 12000", 
+                              "DELETE FROM DB2ADM.TB2 WHERE C2 < 12000",
+                              "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 < 3000",
+                              "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 > 3000",
+                              "DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 < 3000"};
 
                               
 
 //***************************** METHODS *****************************
 
 void main() {
-  int numInsertThreads = 1000;
+  System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+  watch.Start();
+  int numInsertThreads = 2000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -59,7 +63,11 @@ void main() {
   foreach (Thread t in myThreads) {
     t.Join();
   }
-  Console.WriteLine("All threads complete");
+  watch.Stop();
+  TimeSpan ts = stopWatch.Elapsed;
+  // Format and display the TimeSpan value.
+  string elapsedTime = String.Format("{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
+  Console.WriteLine("All threads complete, time elapsed (minutes:seconds:milliseconds): " + elapsedTime);
 }
 
 void startSelect() {
@@ -112,7 +120,7 @@ void startSelect() {
        } 
    } finally { 
       conn.Close();  
-      Console.WriteLine(log); 
+      //Console.WriteLine(log); 
    } 
 }
 
