@@ -142,7 +142,7 @@ void run_select_queries(DB2Connection conn) {
   int index = rnd.Next(0, select_statements.Length);
   DB2Command cmd1 = new DB2Command(select_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
-  total_records_affected += dr1.RecordsAffected();
+  total_records_affected += dr1.RecordsAffected;
   dr1.Close();
 }
 
@@ -151,7 +151,7 @@ void run_update_queries(DB2Connection conn) {
   int index = rnd.Next(0, update_statements.Length);
   DB2Command cmd1 = new DB2Command(update_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
-  total_records_affected += dr1.RecordsAffected();
+  total_records_affected += dr1.RecordsAffected;
   dr1.Close();
 }
 
@@ -160,7 +160,7 @@ void run_insert_queries(DB2Connection conn) {
   int index = rnd.Next(0, insert_statements.Length);
   DB2Command cmd1 = new DB2Command(insert_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
-  total_records_affected += dr1.RecordsAffected();
+  total_records_affected += dr1.RecordsAffected;
   dr1.Close();
 }
 
@@ -169,7 +169,7 @@ void run_delete_queries(DB2Connection conn) {
   int index = rnd.Next(0, delete_statements.Length);
   DB2Command cmd1 = new DB2Command(delete_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
-  total_records_affected += dr1.RecordsAffected();
+  total_records_affected += dr1.RecordsAffected;
   dr1.Close();
 }
 
