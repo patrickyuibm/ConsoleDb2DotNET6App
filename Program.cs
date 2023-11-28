@@ -44,8 +44,11 @@ String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 > 3
                               "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 < 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 > 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 < 3000"};
-
-                              
+int selects = 0;
+int deletes = 0;
+int inserts = 0;
+int updates = 0;
+int total_records_affected = 0;
 
 //***************************** METHODS *****************************
 
@@ -67,7 +70,13 @@ void main() {
   TimeSpan ts = watch.Elapsed;
   // Format and display the TimeSpan value.
   string elapsedTime = String.Format("{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
-  Console.WriteLine("All threads complete, time elapsed (minutes:seconds:milliseconds): " + elapsedTime);
+  Console.WriteLine("All threads complete"); 
+  Console.WriteLine("Time elapsed (minutes:seconds:milliseconds): " + elapsedTime);
+  Console.WriteLine("Number of selects ran: " + selects.ToString());
+  Console.WriteLine("Number of deletes ran: " + deletes.ToString());
+  Console.WriteLine("Number of inserts ran: " + inserts.ToString());
+  Console.WriteLine("Number of updates ran: " + updates.ToString());
+  Console.WriteLine("Number of rows affected: " + total_records_affected.ToString());
 }
 
 void startSelect() {
@@ -92,15 +101,19 @@ void startSelect() {
       int val = rnd.Next(1,19); //Frequency ratio: 1 update : 1 insert : 1 delete : 15 selects
       if (val < 2) {
         log += thname + " running; action: update; random value = " + val.ToString();
+        updates += 1
         run_update_queries(conn);
       } else if (val < 3) {
         log += thname + " running; action: insert; random value = " + val.ToString();
+        inserts += 1;
         run_insert_queries(conn);
       } else if (val < 4) {
         log += thname + " running; action: delete; random value = " + val.ToString();
+        deletes += 1;
         run_delete_queries(conn);
       } else {
         log += thname + " running; action: select; random value = " + val.ToString();
+        selects += 1;
         run_select_queries(conn);
       }
       //Check if pooling was successful 
@@ -129,6 +142,7 @@ void run_select_queries(DB2Connection conn) {
   int index = rnd.Next(0, select_statements.Length);
   DB2Command cmd1 = new DB2Command(select_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
+  total_records_affected += dr1.RecordsAffected();
   dr1.Close();
 }
 
@@ -137,6 +151,7 @@ void run_update_queries(DB2Connection conn) {
   int index = rnd.Next(0, update_statements.Length);
   DB2Command cmd1 = new DB2Command(update_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
+  total_records_affected += dr1.RecordsAffected();
   dr1.Close();
 }
 
@@ -145,6 +160,7 @@ void run_insert_queries(DB2Connection conn) {
   int index = rnd.Next(0, insert_statements.Length);
   DB2Command cmd1 = new DB2Command(insert_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
+  total_records_affected += dr1.RecordsAffected();
   dr1.Close();
 }
 
@@ -153,6 +169,7 @@ void run_delete_queries(DB2Connection conn) {
   int index = rnd.Next(0, delete_statements.Length);
   DB2Command cmd1 = new DB2Command(delete_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
+  total_records_affected += dr1.RecordsAffected();
   dr1.Close();
 }
 
