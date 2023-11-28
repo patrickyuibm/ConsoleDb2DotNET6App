@@ -169,7 +169,7 @@ void run_delete_queries(DB2Connection conn) {
   int index = rnd.Next(0, delete_statements.Length);
   DB2Command cmd1 = new DB2Command(delete_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
-  total_records_affected += dr1.RecordsAffected;
+  total_records_affected += dr1.RecordsAffected * -1;
   dr1.Close();
 }
 
