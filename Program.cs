@@ -101,7 +101,7 @@ void startSelect() {
       int val = rnd.Next(1,19); //Frequency ratio: 1 update : 1 insert : 1 delete : 15 selects
       if (val < 2) {
         log += thname + " running; action: update; random value = " + val.ToString();
-        updates += 1
+        updates += 1;
         run_update_queries(conn);
       } else if (val < 3) {
         log += thname + " running; action: insert; random value = " + val.ToString();
