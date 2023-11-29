@@ -95,26 +95,28 @@ void startSelect() {
   conn.Open();
   
   try { 
-      //Run threads 
-      //run_insert_and_select_tb2_SP(conn); //stored procedure with insert and select statement 
       Random rnd = new Random();
-      int val = rnd.Next(1,36); //Frequency ratio: 20 selects : 9 inserts : 5 updates : 1 delete 
-      if (val < 2) {
-        log += thname + " running; action: delete; random value = " + val.ToString();
-        deletes += 1;
-        run_delete_queries(conn);
-      } else if (val < 7) {
-        log += thname + " running; action: update; random value = " + val.ToString();
-        updates += 1;
-        run_update_queries(conn);
-      } else if (val < 16) {
-        log += thname + " running; action: insert; random value = " + val.ToString();
-        inserts += 1;
-        run_insert_queries(conn);
-      } else {
-        log += thname + " running; action: select; random value = " + val.ToString();
-        selects += 1;
-        run_select_queries(conn);
+      int iterations = rnd.Next(1,4);
+      for (int i = 0; i < iterations; i++) {
+        Random r = new Random();
+        int val = r.Next(1,36); //Frequency ratio: 20 selects : 9 inserts : 5 updates : 1 delete 
+        if (val < 2) {
+          log += thname + " running; action: delete; random value = " + val.ToString();
+          deletes += 1;
+          run_delete_queries(conn);
+        } else if (val < 7) {
+          log += thname + " running; action: update; random value = " + val.ToString();
+          updates += 1;
+          run_update_queries(conn);
+        } else if (val < 16) {
+          log += thname + " running; action: insert; random value = " + val.ToString();
+          inserts += 1;
+          run_insert_queries(conn);
+        } else {
+          log += thname + " running; action: select; random value = " + val.ToString();
+          selects += 1;
+          run_select_queries(conn);
+        }
       }
       //Check if pooling was successful 
       if (!conn.IsConnectionFromPool) { 
@@ -122,10 +124,9 @@ void startSelect() {
       } else {
         log += "; Pooling successful for " + thname;
       }
-      
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
-         Console.WriteLine("Index #" + i + "\n" + 
+         Console.WriteLine("For " + thname + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
              "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
              "Source: " + myException.Errors[i].Source + "\n" + 
