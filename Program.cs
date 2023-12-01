@@ -59,7 +59,6 @@ void main() {
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
-    t.Name = "Thread #" + (i+1).ToString();
     t.Start();
     myThreads[i] = t;
   }
@@ -81,8 +80,8 @@ void main() {
 
 void startSelect() {
   //Name the thread
-  String thname = System.Threading.Thread.CurrentThread.Name;
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
+  String thname = "Thread_" + thid.ToString();
   //Build the connection
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   connb.Database = connectionDict["db"];
@@ -94,7 +93,7 @@ void startSelect() {
   connb.MinPoolSize = 0;
   connb.MaxPoolSize = 10000;
   //Client application naming
-  connb.ClientApplicationName = thname + " : " + thid.ToString();
+  connb.ClientApplicationName = thname;
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   
   String log = "";
