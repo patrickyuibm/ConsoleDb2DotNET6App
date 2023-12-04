@@ -98,7 +98,7 @@ void startSelect() {
   
   String log = "";
   conn.Open();
-  Console.WriteLine(connb.ClientApplicationName + " running");
+  //Console.WriteLine(connb.ClientApplicationName + " running");
 
   try { 
       Random rnd = new Random();
