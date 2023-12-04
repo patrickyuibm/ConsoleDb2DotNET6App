@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 
 //***************************** IMPORT DEPENDENCIES *****************************
 using System;
@@ -55,7 +55,7 @@ int total_records_affected = 0;
 void main() {
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
-  int numInsertThreads = 50;
+  int numInsertThreads = 15000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -101,11 +101,6 @@ void startSelect() {
   //Console.WriteLine(connb.ClientApplicationName + " running");
 
   try { 
-      DB2Command cmd1 = new DB2Command("INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 1)", conn);
-      DB2DataReader dr1 = cmd1.ExecuteReader();
-      total_records_affected += dr1.RecordsAffected;
-      dr1.Close();
-      /*
       Random rnd = new Random();
       int iterations = rnd.Next(1,4);
       for (int i = 0; i < iterations; i++) {
@@ -135,7 +130,6 @@ void startSelect() {
       } else {
         log += "; Pooling successful for " + thname;
       }
-      */
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For " + thname + ": \n" + 
@@ -229,7 +223,6 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 //***************************** RUN METHODS HERE *****************************
 //Method to set up threads that run several stored procedures
 main();
-
 
 
 
