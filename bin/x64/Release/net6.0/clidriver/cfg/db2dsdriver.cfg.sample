@@ -12,11 +12,7 @@
          <parameter name="CurrentSchema" value="OWNER1"/>
          <wlb>
             <parameter name="enableWLB" value="true"/>
-            <parameter name="maxTransports" value="50"/>
          </wlb>
-         <acr>
-            <parameter name="enableACR" value="true"/>
-         </acr>
          <specialregisters>
             <parameter name="CURRENT DEGREE" value="'ANY'"/>
          </specialregisters>
