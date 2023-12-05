@@ -137,7 +137,7 @@ void startSelect() {
       DB2Command cmd = conn.CreateCommand();
       cmd.Connection = conn;
       cmd.Transaction = trans;
-      cmd.CommandText = "SELECT CURRENT CLIENT_APPL_NAME FROM SYSIBM.SYSDUMMY1";
+      cmd.CommandText = "SELECT CURRENT CLIENT_APPLNAME FROM SYSIBM.SYSDUMMY1";
       DB2DataReader reader = cmd.ExecuteReader(); 
       while (reader.Read()) {
         Console.WriteLine("Client Application Name " + reader.GetString(0));
