@@ -8,7 +8,7 @@
       </dsn>
    </dsncollection>
    <databases>
-      <database name="name1" host="server1.net1.com" port="50001">
+      <database name="DSNL5" host="9.30.179.1" port="52500">
          <parameter name="CurrentSchema" value="OWNER1"/>
          <wlb>
             <parameter name="enableWLB" value="true"/>
