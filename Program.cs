@@ -44,6 +44,8 @@ String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 > 3
                               "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 < 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 > 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 < 3000"};
+List<int> thread_tags = new List<int>();
+
 int selects = 0;
 int deletes = 0;
 int inserts = 0;
@@ -98,7 +100,8 @@ void startSelect() {
   
   String log = "";
   conn.Open();
-  Console.WriteLine(connb.ClientApplicationName + " running");
+  //Console.WriteLine(connb.ClientApplicationName + " running");
+  thread_tags.Add(connb.ClientApplicationName);
 
   try { 
       Random rnd = new Random();
@@ -140,7 +143,10 @@ void startSelect() {
       cmd.CommandText = "SELECT CURRENT CLIENT_APPLNAME FROM SYSIBM.SYSDUMMY1";
       DB2DataReader reader = cmd.ExecuteReader(); 
       while (reader.Read()) {
-        Console.WriteLine("Client Application Name " + reader.GetString(0) + " sent to DB2");
+        //Console.WriteLine("Client Application Name " + reader.GetString(0) + " sent to DB2");
+        if (!thread_tags.Contains(reader.GetString(0))) {
+          Console.WriteLine("ERROR: Client Application Name " + reader.GetString(0) + " not a managed thread id");
+        }
       } 
       reader.Close();
     
