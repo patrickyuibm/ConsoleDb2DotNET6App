@@ -98,7 +98,7 @@ void startSelect() {
   
   String log = "";
   conn.Open();
-  //Console.WriteLine(connb.ClientApplicationName + " running");
+  Console.WriteLine(connb.ClientApplicationName + " running");
 
   try { 
       Random rnd = new Random();
@@ -140,7 +140,7 @@ void startSelect() {
       cmd.CommandText = "SELECT CURRENT CLIENT_APPLNAME FROM SYSIBM.SYSDUMMY1";
       DB2DataReader reader = cmd.ExecuteReader(); 
       while (reader.Read()) {
-        Console.WriteLine("Client Application Name " + reader.GetString(0));
+        Console.WriteLine("Client Application Name " + reader.GetString(0) + " sent to DB2");
       } 
       reader.Close();
     
