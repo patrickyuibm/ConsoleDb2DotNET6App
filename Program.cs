@@ -142,16 +142,16 @@ void startSelect() {
       //Console.WriteLine(log); 
     
       //Double check the client application name
-      trans = conn.BeginTransaction();
-      cmd = conn.CreateCommand();
+      DB2Transaction trans = conn.BeginTransaction();
+      DB2Command cmd = conn.CreateCommand();
       cmd.Connection = conn;
       cmd.Transaction = trans;
       cmd.CommandText = "SELECT CURRENT CLIENT_APPL_NAME FROM SYSIBM.SYSDUMMY1";
-      DB2DataReader myReader = cmd.ExecuteReader(); 
+      DB2DataReader reader = cmd.ExecuteReader(); 
       while (reader.Read()) {
         Console.WriteLine("Client Application Name " + reader.GetString(0));
       } 
-      myReader.Close();
+      reader.Close();
       conn.Close();
     }
 }
