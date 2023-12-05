@@ -124,22 +124,13 @@ void startSelect() {
           run_select_queries(conn);
         }
       }
+    
       //Check if pooling was successful 
       if (!conn.IsConnectionFromPool) { 
         log += "; Pooling failed for " + thname; 
       } else {
         log += "; Pooling successful for " + thname;
       }
-  } catch (DB2Exception myException) { 
-      for (int i=0; i < myException.Errors.Count; i++) { 
-         Console.WriteLine("For " + thname + ": \n" + 
-             "Message: " + myException.Errors[i].Message + "\n" + 
-             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
-             "Source: " + myException.Errors[i].Source + "\n" + 
-             "SQL: " + myException.Errors[i].SQLState + "\n"); 
-       } 
-   } finally { 
-      //Console.WriteLine(log); 
     
       //Double check the client application name
       DB2Transaction trans = conn.BeginTransaction();
@@ -152,6 +143,18 @@ void startSelect() {
         Console.WriteLine("Client Application Name " + reader.GetString(0));
       } 
       reader.Close();
+    
+  } catch (DB2Exception myException) { 
+      for (int i=0; i < myException.Errors.Count; i++) { 
+         Console.WriteLine("For " + thname + ": \n" + 
+             "Message: " + myException.Errors[i].Message + "\n" + 
+             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
+             "Source: " + myException.Errors[i].Source + "\n" + 
+             "SQL: " + myException.Errors[i].SQLState + "\n"); 
+       } 
+   } finally { 
+      //Console.WriteLine(log); 
+    
       conn.Close();
     }
 }
