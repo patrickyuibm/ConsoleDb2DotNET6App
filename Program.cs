@@ -153,6 +153,7 @@ void startSelect() {
       } 
       myReader.Close();
       conn.Close();
+    }
 }
 
 void run_select_queries(DB2Connection conn) {
