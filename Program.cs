@@ -139,9 +139,20 @@ void startSelect() {
              "SQL: " + myException.Errors[i].SQLState + "\n"); 
        } 
    } finally { 
-      conn.Close();  
       //Console.WriteLine(log); 
-   } 
+    
+      //Double check the client application name
+      trans = conn.BeginTransaction();
+      cmd = conn.CreateCommand();
+      cmd.Connection = conn;
+      cmd.Transaction = trans;
+      cmd.CommandText = "SELECT CURRENT CLIENT_APPL_NAME FROM SYSIBM.SYSDUMMY1";
+      DB2DataReader myReader = cmd.ExecuteReader(); 
+      while (reader.Read()) {
+        Console.WriteLine("Client Application Name " + reader.GetString(0));
+      } 
+      myReader.Close();
+      conn.Close();
 }
 
 void run_select_queries(DB2Connection conn) {
