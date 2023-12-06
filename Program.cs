@@ -104,6 +104,14 @@ void startSelect() {
   thread_tags.Add(connb.ClientApplicationName);
 
   try { 
+      
+      DB2Command cmd1 = new DB2Command("SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2", conn);
+      for (int i = 0; i < 100; i++) {
+        DB2DataReader dr1 = cmd1.ExecuteReader();
+        dr1.Close();
+      }
+
+      /* OLD CODE
       Random rnd = new Random();
       int iterations = rnd.Next(1,4);
       for (int i = 0; i < iterations; i++) {
@@ -127,6 +135,7 @@ void startSelect() {
           run_select_queries(conn);
         }
       }
+      */
     
       //Check if pooling was successful 
       if (!conn.IsConnectionFromPool) { 
