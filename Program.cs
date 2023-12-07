@@ -160,7 +160,7 @@ void startSelect() {
              "SQL: " + myException.Errors[i].SQLState + "\n"; 
        } 
    } finally { 
-      connb.ClientAccountingString = cas
+      connb.ClientAccountingString = cas;
       conn.Close();
     }
 }
