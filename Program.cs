@@ -107,6 +107,9 @@ void startSelect() {
       for (int i = 0; i < 100; i++) {
         DB2DataReader dr1 = cmd1.ExecuteReader();
         dr1.Close();
+        run_select_queries(conn);
+        run_insert_queries(conn);
+        run_delete_queries(conn);
       }
 
       //Check if pooling was successful 
