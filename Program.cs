@@ -44,7 +44,6 @@ String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 > 3
                               "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 < 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 > 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 < 3000"};
-List<String> thread_tags = new List<String>();
 
 int selects = 0;
 int deletes = 0;
@@ -97,21 +96,24 @@ void startSelect() {
   //Client application naming
   connb.ClientApplicationName = thname;
   //Client accounting string
-  connb.ClientAccountingString = "TEST CLIENT ACCOUNTING STRING ASDKLFJALCMAEWFASDK";
-
-  DB2Connection conn = new DB2Connection(connb.ConnectionString);
+  String cas = "";
   
-  String log = "";
+  DB2Connection conn = new DB2Connection(connb.ConnectionString);
   conn.Open();
-  //Console.WriteLine(connb.ClientApplicationName + " running");
-  thread_tags.Add(connb.ClientApplicationName);
 
   try { 
-      
+    
       DB2Command cmd1 = new DB2Command("SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2", conn);
       for (int i = 0; i < 100; i++) {
         DB2DataReader dr1 = cmd1.ExecuteReader();
         dr1.Close();
+      }
+
+      //Check if pooling was successful 
+      if (!conn.IsConnectionFromPool) { 
+        cas += "; Pooling failed for " + thname; 
+      } else {
+        cas += "; Pooling successful for " + thname;
       }
 
       /* OLD CODE
@@ -138,15 +140,7 @@ void startSelect() {
           run_select_queries(conn);
         }
       }
-      */
-    
-      //Check if pooling was successful 
-      if (!conn.IsConnectionFromPool) { 
-        log += "; Pooling failed for " + thname; 
-      } else {
-        log += "; Pooling successful for " + thname;
-      }
-    
+
       //Double check the client application name
       DB2Transaction trans = conn.BeginTransaction();
       DB2Command cmd = conn.CreateCommand();
@@ -154,25 +148,19 @@ void startSelect() {
       cmd.Transaction = trans;
       cmd.CommandText = "SELECT CURRENT CLIENT_APPLNAME FROM SYSIBM.SYSDUMMY1";
       DB2DataReader reader = cmd.ExecuteReader(); 
-      while (reader.Read()) {
-        //Console.WriteLine("Client Application Name " + reader.GetString(0) + " sent to DB2");
-        if (!thread_tags.Contains(reader.GetString(0))) {
-          Console.WriteLine("ERROR: Client Application Name " + reader.GetString(0) + " not a managed thread id");
-        }
-      } 
       reader.Close();
+      */
     
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
-         Console.WriteLine("For " + thname + ": \n" + 
+         cas += "For " + thname + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
              "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
              "Source: " + myException.Errors[i].Source + "\n" + 
-             "SQL: " + myException.Errors[i].SQLState + "\n"); 
+             "SQL: " + myException.Errors[i].SQLState + "\n"; 
        } 
    } finally { 
-      //Console.WriteLine(log); 
-    
+      connb.ClientAccountingString = cas
       conn.Close();
     }
 }
