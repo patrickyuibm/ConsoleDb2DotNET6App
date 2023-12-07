@@ -56,7 +56,7 @@ int total_records_affected = 0;
 void main() {
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
-  int numInsertThreads = 100;
+  int numInsertThreads = 1000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -96,13 +96,13 @@ void startSelect() {
   //Client application naming
   connb.ClientApplicationName = thname;
   //Client accounting string
-  String cas = "";
+  connb.ClientAccountingString = thname + " LOG: ";
   
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   conn.Open();
 
   try { 
-    
+      
       DB2Command cmd1 = new DB2Command("SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2", conn);
       for (int i = 0; i < 100; i++) {
         DB2DataReader dr1 = cmd1.ExecuteReader();
@@ -111,12 +111,13 @@ void startSelect() {
         run_insert_queries(conn);
         run_delete_queries(conn);
       }
+      
 
       //Check if pooling was successful 
       if (!conn.IsConnectionFromPool) { 
-        cas += "; Pooling failed for " + thname; 
+        connb.ClientAccountingString += "; Pooling failed for " + thname; 
       } else {
-        cas += "; Pooling successful for " + thname;
+        connb.ClientAccountingString += "; Pooling successful for " + thname;
       }
 
       /* OLD CODE
@@ -156,14 +157,13 @@ void startSelect() {
     
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
-         cas += "For " + thname + ": \n" + 
+         connb.ClientAccountingString += "For " + thname + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
              "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
              "Source: " + myException.Errors[i].Source + "\n" + 
              "SQL: " + myException.Errors[i].SQLState + "\n"; 
        } 
    } finally { 
-      connb.ClientAccountingString = cas;
       conn.Close();
     }
 }
