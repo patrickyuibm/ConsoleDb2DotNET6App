@@ -96,6 +96,9 @@ void startSelect() {
   connb.MaxPoolSize = 10000;
   //Client application naming
   connb.ClientApplicationName = thname;
+  //Client accounting string
+  connb.ClientAccountingString = "TEST CLIENT ACCOUNTING STRING ASDKLFJALCMAEWFASDK";
+
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   
   String log = "";
