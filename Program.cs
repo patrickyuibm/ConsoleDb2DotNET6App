@@ -98,7 +98,7 @@ void startSelect() {
   //Client accounting string
   connb.ClientAccountingString = thname + " LOG: ";
   
-  DB2Connection conn = new DB2Connection(connb.ConnectionString);
+  DB2Connection conn = new DB2Connection(connb.ConnectionString + ";SECURITY=SSL");
   conn.Open();
 
   try { 
