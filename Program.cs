@@ -56,7 +56,7 @@ int total_records_affected = 0;
 void main() {
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
-  int numInsertThreads = 15000;
+  int numInsertThreads = 1000;
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -108,9 +108,9 @@ void startSelect() {
       for (int i = 0; i < 100; i++) {
         DB2DataReader dr1 = cmd1.ExecuteReader();
         dr1.Close();
-        run_select_queries(conn);
-        run_insert_queries(conn);
-        run_delete_queries(conn);
+        //run_select_queries(conn);
+        //run_insert_queries(conn);
+        //run_delete_queries(conn);
       }
       
 
