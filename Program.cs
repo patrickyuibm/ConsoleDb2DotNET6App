@@ -95,8 +95,9 @@ void startSelect() {
   connb.MaxPoolSize = 10000;
   //Client application naming
   connb.ClientApplicationName = thname;
-  //Client accounting string
-  connb.ClientAccountingString = thname + " LOG: ";
+  //Logs errors
+  String log = thname;
+
   
   //DB2Connection conn = new DB2Connection(connb.ConnectionString + ";SECURITY=SSL");
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
@@ -117,9 +118,9 @@ void startSelect() {
 
       //Check if pooling was successful 
       if (!conn.IsConnectionFromPool) { 
-        connb.ClientAccountingString += "; Pooling failed for " + thname; 
+        log += "; Pooling failed for " + thname; 
       } else {
-        connb.ClientAccountingString += "; Pooling successful for " + thname;
+        log += "; Pooling successful for " + thname;
       }
       
 
@@ -160,7 +161,7 @@ void startSelect() {
     
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
-         connb.ClientAccountingString += "For " + thname + ": \n" + 
+         log += "For " + thname + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
              "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
              "Source: " + myException.Errors[i].Source + "\n" + 
