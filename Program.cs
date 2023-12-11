@@ -99,7 +99,7 @@ void startSelect() {
   connb.SSLClientKeystash = "C:\\Users\\9J4510897\\Downloads\\zosclientdb.sth";
   //connb.SSLClientKeystoredb = "C:\\Users\\9J4510897\\Downloads\\zosclientdb.kdb";
   connb.Security = "SSL";
-  connb.Authentication = "Certificate";
+  //connb.Authentication = "Certificate";
   //Logs errors
   String log = thname;
 
