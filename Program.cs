@@ -97,14 +97,15 @@ void startSelect() {
   connb.ClientApplicationName = thname;
   //SSL
   connb.SSLClientKeystash = "C:\\Users\\9J4510897\\Downloads\\zosclientdb.sth";
-  connb.ConnectionString += "SSLClientKeystash=" + connb.SSLClientKeystash + ";";
   connb.SSLClientKeystoredb = "C:\\Users\\9J4510897\\Downloads\\zosclientdb.kdb";
-  connb.ConnectionString += "SSLClientKeystoredb=" + connb.SSLClientKeystash + ";";
+  connb.Security = "SSL";
+  connb.Authentication = "Certificate";
   //Logs errors
   String log = thname;
 
+  Console.WriteLine(thname + " Connection String: " + connb.ConnectionString);
   
-  //DB2Connection conn = new DB2Connection(connb.ConnectionString + ";SECURITY=SSL;CERTIFICATE=AUTHENTICATION");
+  //DB2Connection conn = new DB2Connection(connb.ConnectionString);
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   conn.Open();
 
