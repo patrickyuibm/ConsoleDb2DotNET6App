@@ -168,7 +168,8 @@ void startSelect() {
              "SQL: " + myException.Errors[i].SQLState + "\n"; 
        } 
    } finally { 
-      conn.InfoMessage = log;
+      Console.WriteLine(thname + " Info Message: ");
+      Console.WriteLine(conn.InfoMessage);
       conn.Close();
     }
 }
