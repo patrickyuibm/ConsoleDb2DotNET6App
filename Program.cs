@@ -168,7 +168,7 @@ void startSelect() {
              "SQL: " + myException.Errors[i].SQLState + "\n"; 
        } 
    } finally { 
-      conn.InfoMessage += log;
+      conn.ClientAccountingInformation += log;
       conn.Close();
     }
 }
