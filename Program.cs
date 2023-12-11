@@ -112,7 +112,8 @@ void startSelect() {
         //run_insert_queries(conn);
         //run_delete_queries(conn);
       }
-      
+
+      connb.ClientAccountingString += "1234567890"; 
 
       //Check if pooling was successful 
       if (!conn.IsConnectionFromPool) { 
