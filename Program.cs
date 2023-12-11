@@ -96,7 +96,7 @@ void startSelect() {
   //Client application naming
   connb.ClientApplicationName = thname;
   //SSL
-  connb.SSLClientKeystash = "C:\Users\9J4510897\Downloads\zosclientdb.sth";
+  connb.SSLClientKeystash = "C:\\Users\\9J4510897\\Downloads\\zosclientdb.sth";
   //Logs errors
   String log = thname;
 
