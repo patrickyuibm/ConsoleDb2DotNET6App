@@ -96,9 +96,8 @@ void startSelect() {
   //Client application naming
   connb.ClientApplicationName = thname;
   //SSL
-  connb.SSLClientKeystash = "C:\\Users\\9J4510897\\Downloads\\zosclientdb.sth";
-  connb.SSLClientKeystoredb = "C:\\Users\\9J4510897\\Downloads\\zosclientdb.kdb";
-  connb.SSLClientKeystoreDBPassword = "password";
+  connb.SSLClientKeystash = "C:\\Program Files\\ibm\\gsk8\\bin\\zosclientdb.sth";
+  connb.SSLClientKeystoredb = "C:\\Program Files\\ibm\\gsk8\\bin\\zosclientdb.kdb";
   connb.Security = "SSL";
   //connb.Authentication = "Certificate";
   //Logs errors
