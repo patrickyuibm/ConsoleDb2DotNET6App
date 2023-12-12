@@ -111,7 +111,7 @@ void startSelect() {
 
   try { 
 
-      /*
+      
       DB2Command cmd1 = new DB2Command("SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2", conn);
       for (int i = 0; i < 100; i++) {
         DB2DataReader dr1 = cmd1.ExecuteReader();
@@ -127,9 +127,8 @@ void startSelect() {
       } else {
         log += "; Pooling successful for " + thname;
       }
-      */
-
       
+      /*
       Random rnd = new Random();
       int iterations = rnd.Next(1,4);
       for (int i = 0; i < iterations; i++) {
@@ -162,7 +161,7 @@ void startSelect() {
       cmd.CommandText = "SELECT CURRENT CLIENT_APPLNAME FROM SYSIBM.SYSDUMMY1";
       DB2DataReader reader = cmd.ExecuteReader(); 
       reader.Close();
-    
+      */
     
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
