@@ -87,7 +87,7 @@ void startSelect() {
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   connb.Database = connectionDict["db"];
   connb.UserID = connectionDict["uid"];
-  connb.Password = connectionDict["pwd"];
+  //connb.Password = connectionDict["pwd"];
   connb.Server = connectionDict["server"];
   //Pooling
   connb.Pooling = true;
@@ -98,12 +98,13 @@ void startSelect() {
   //SSL
   connb.SSLClientKeystash = "C:\\Program Files\\ibm\\gsk8\\bin\\zosclientdb.sth";
   connb.SSLClientKeystoredb = "C:\\Program Files\\ibm\\gsk8\\bin\\zosclientdb.kdb";
+  connb.SSLClientLabel = "Idfkwhattheclientlabelisijusthopeitsthis";
   connb.Security = "SSL";
-  //connb.Authentication = "Certificate";
+  connb.Authentication = "Certificate";
   //Logs errors
   String log = thname;
 
-  //Console.WriteLine(thname + " Connection String: " + connb.ConnectionString);
+  Console.WriteLine(thname + " Connection String: " + connb.ConnectionString);
   
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
