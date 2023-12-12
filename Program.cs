@@ -103,7 +103,7 @@ void startSelect() {
   //Logs errors
   String log = thname;
 
-  Console.WriteLine(thname + " Connection String: " + connb.ConnectionString);
+  //Console.WriteLine(thname + " Connection String: " + connb.ConnectionString);
   
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
@@ -111,6 +111,7 @@ void startSelect() {
 
   try { 
 
+      /*
       DB2Command cmd1 = new DB2Command("SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2", conn);
       for (int i = 0; i < 100; i++) {
         DB2DataReader dr1 = cmd1.ExecuteReader();
@@ -120,17 +121,15 @@ void startSelect() {
         //run_delete_queries(conn);
       }
 
-      connb.ClientAccountingString += "1234567890"; 
-
       //Check if pooling was successful 
       if (!conn.IsConnectionFromPool) { 
         log += "; Pooling failed for " + thname; 
       } else {
         log += "; Pooling successful for " + thname;
       }
-      
+      */
 
-      /* WL2
+      
       Random rnd = new Random();
       int iterations = rnd.Next(1,4);
       for (int i = 0; i < iterations; i++) {
@@ -163,7 +162,7 @@ void startSelect() {
       cmd.CommandText = "SELECT CURRENT CLIENT_APPLNAME FROM SYSIBM.SYSDUMMY1";
       DB2DataReader reader = cmd.ExecuteReader(); 
       reader.Close();
-      */
+    
     
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
