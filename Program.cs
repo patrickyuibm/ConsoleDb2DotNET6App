@@ -108,7 +108,7 @@ void startSelect() {
   Console.WriteLine(thname + " Connection String: " + connb.ConnectionString);
   
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
-  DB2Connection conn = new DB2Connection(connb.ConnectionString);
+  DB2Connection conn = new DB2Connection("Authentication=Certificate;DATABASE=DSNR3;HOSTNAME=9.30.179.1;PORT=51690;PROTOCOL=TCPIP;SECURITY=SSL;SSLClientKeyStoreDB=C:\Program Files\ibm\gsk8\bin\zosclientdb.kdb;SSLClientKeyStash=C:\Program Files\ibm\gsk8\bin\zosclientdb.sth;SSLClientLabel=clientcert");
   conn.Open();
 
   try { 
