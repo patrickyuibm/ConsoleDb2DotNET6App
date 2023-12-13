@@ -98,8 +98,8 @@ void startSelect() {
   //SSL
   connb.SSLClientKeystash = "C:\\Program Files\\ibm\\gsk8\\bin\\zosclientdb.sth";
   connb.SSLClientKeystoredb = "C:\\Program Files\\ibm\\gsk8\\bin\\zosclientdb.kdb";
-  //connb.SSLClientLabel = "";
-  //connb.SSLClientKeystoreDBPassword = "";
+  connb.SSLClientLabel = "clientcert";
+  connb.SSLClientKeystoreDBPassword = "PASS";
   connb.Security = "SSL";
   connb.Authentication = "Certificate";
   //Logs errors
