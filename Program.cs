@@ -105,7 +105,7 @@ void startSelect() {
   //Logs errors
   String log = thname;
 
-  //Console.WriteLine(thname + " Connection String: " + connb.ConnectionString);
+  Console.WriteLine(thname + " Connection String: " + connb.ConnectionString);
   
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   conn.Open();
