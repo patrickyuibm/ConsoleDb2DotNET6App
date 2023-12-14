@@ -191,7 +191,7 @@ void testConnection() {
   s += "Security=SSL;";
   //s += "SSLClientKeystoredb=zosclientdb.kdb;";
   //s += "SSLClientKeystash=zosclientdb.sth;";
-  //s += "AUTHENTICATION=CERTIFICATE;";
+  s += "AUTHENTICATION=CERTIFICATE;";
   //s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
   s += "SSLCLIENTLABEL=clientcert;";
 
