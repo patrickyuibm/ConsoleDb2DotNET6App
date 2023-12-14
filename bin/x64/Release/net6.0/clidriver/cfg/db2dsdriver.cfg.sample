@@ -4,7 +4,7 @@
       <dsn alias="alias1" name="name1" host="server1.net1.com" port="50001"/>
       <!-- Long aliases are supported -->
       <dsn alias="longaliasname2" name="name2" host="server2.net1.com" port="55551">
-         <parameter name="Authentication" value="SERVER_ENCRYPT
+         <parameter name="Authentication" value="Certificate"/>
          <parameter name="SSLClientLabel" value="clientcert"/>
          <parameter name="SecurityTransportMode" value="SSL"/>
          <parameter name="SSLClientKeystoredb" value="zosclientdb.kdb"/>
