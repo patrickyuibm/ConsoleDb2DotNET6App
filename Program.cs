@@ -193,7 +193,7 @@ void testConnection() {
   //s += "SSLClientKeystash=zosclientdb.sth;";
   //s += "AUTHENTICATION=CERTIFICATE;";
   s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
-  //s += "SSLCLIENTLABEL=clientcert;";
+  s += "SSLCLIENTLABEL=clientcert;";
 
   DB2Connection conn = new DB2Connection(s);
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
