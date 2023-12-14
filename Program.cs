@@ -181,7 +181,7 @@ void startSelect() {
 }
 
 void testConnection() {
-  String s = "USERID=DB2ADM;PASSWORD=FANTOM;DATABASE=DSNL5;SERVER=9.30.179.1:52500;SECURITY=SSL;PROTOCOL=TCPIP";     
+  String s = "USERID=DB2ADM;PASSWORD=FANTOM;DATABASE=DSNL5;SERVER=9.30.179.1:52500;SECURITY=SSL";     
   DB2Connection conn = new DB2Connection(s);
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
   Console.WriteLine(conn.ConnectionString);
