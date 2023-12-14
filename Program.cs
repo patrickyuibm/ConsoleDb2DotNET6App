@@ -180,6 +180,16 @@ void startSelect() {
     }
 }
 
+void testConnection() {
+  String s = "Authentication=Certificate;DATABASE=DSNL5;SERVER=9.30.179.1:52500;SECURITY=SSL;SSLClientKeyStoreDB=zosclientdb.kdb;SSLClientKeyStash=zosclientdb.sth;SSLClientLabel=clientcert";     
+  DB2Connection conn = new DB2Connection(s);
+  //DB2Connection conn = new DB2Connection(connb.ConnectionString);
+  Console.WriteLine(conn.ConnectionString);
+  conn.Open();
+  Console.WriteLine("Connection successful");
+  conn.Close();
+}
+
 void run_select_queries(DB2Connection conn) {
   Random rnd = new Random();
   int index = rnd.Next(0, select_statements.Length);
@@ -258,8 +268,8 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 
 //***************************** RUN METHODS HERE *****************************
 //Method to set up threads that run several stored procedures
-main();
-
+//main();
+testConnection();
 
 
 
