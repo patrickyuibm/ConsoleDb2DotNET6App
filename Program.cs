@@ -183,7 +183,7 @@ void startSelect() {
 void testConnection() {
   String s = "DATABASE=DSNR3;SERVER=9.30.179.1:51600;";
   s += "Userid=LGB0266;";
-  s += "Password=pilsner;";
+  //s += "Password=pilsner;";
   //s += "Pooling=true;";
   //s += "Max Pool Size=50;";
   //s += "Min Pool Size=10;";
