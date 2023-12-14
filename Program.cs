@@ -105,10 +105,10 @@ void startSelect() {
   //Logs errors
   String log = thname;
 
-  //Console.WriteLine(thname + " Connection String: " + connb.ConnectionString);
-  String s = "Authentication=Certificate;DATABASE=DSNL5;HOSTNAME=9.30.179.1;PORT=51690;SECURITY=SSL;SSLClientKeyStoreDB=zosclientdb.kdb;SSLClientKeyStash=zosclientdb.sth;SSLClientLabel=clientcert";     
+  String s = "Authentication=Certificate;DATABASE=DSNL5;SERVER=9.30.179.1:51690;SECURITY=SSL;SSLClientKeyStoreDB=zosclientdb.kdb;SSLClientKeyStash=zosclientdb.sth;SSLClientLabel=clientcert";     
   DB2Connection conn = new DB2Connection(s);
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
+  Console.WriteLine(conn.ConnectionString);
   conn.Open();
 
   try { 
