@@ -107,7 +107,7 @@ void startSelect() {
 
   //TRY THIS AS WELL: "Authentication=Certificate;DATABASE=DSNR3;HOSTNAME=9.30.179.1;PORT=51690;PROTOCOL=TCPIP;SECURITY=SSL;SSLClientKeyStoreDB=C:\work\samples\SSL\odbc\server_client_both\zosclientdb.kdb;SSLClientKeyStash=C:\work\samples\SSL\odbc\server_client_both\zosclientdb.sth;SSLClientLabel=clientcert"
 
-  String s = "Authentication=Certificate;DATABASE=DSNL5;SERVER=9.30.179.1:51690;SECURITY=SSL;SSLClientKeyStoreDB=zosclientdb.kdb;SSLClientKeyStash=zosclientdb.sth;SSLClientLabel=clientcert";     
+  String s = "Authentication=Certificate;DATABASE=DSNL5;SERVER=9.30.179.1:52500;SECURITY=SSL;SSLClientKeyStoreDB=zosclientdb.kdb;SSLClientKeyStash=zosclientdb.sth;SSLClientLabel=clientcert";     
   DB2Connection conn = new DB2Connection(s);
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
   Console.WriteLine(conn.ConnectionString);
