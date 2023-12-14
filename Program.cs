@@ -188,11 +188,11 @@ void testConnection() {
   s += "Max Pool Size=50;";
   s += "Min Pool Size=10;";
   s += "Connection Lifetime=60;";
-  s += "Security=SSL;";
-  s += "SSLClientKeystoredb=zosclientdb.kdb;";
-  s += "SSLClientKeystash=zosclientdb.sth;";
+  //s += "Security=SSL;";
+  //s += "SSLClientKeystoredb=zosclientdb.kdb;";
+  //s += "SSLClientKeystash=zosclientdb.sth;";
   //s += "AUTHENTICATION=CERTIFICATE;";
-  s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
+  //s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
   //s += "SSLCLIENTLABEL=clientcert;";
 
   DB2Connection conn = new DB2Connection(s);
