@@ -181,7 +181,7 @@ void startSelect() {
 }
 
 void testConnection() {
-  String s = "DATABASE=DSNR3;SERVER=9.30.179.1:51600;"
+  String s = "DATABASE=DSNR3;SERVER=9.30.179.1:51600;";
   s += "Userid=LGB0266;";
   s += "Password=pilsner;";
   s += "Pooling=true;";
