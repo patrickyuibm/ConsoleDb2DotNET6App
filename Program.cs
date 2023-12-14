@@ -189,12 +189,11 @@ void testConnection() {
   s += "Min Pool Size=10;";
   s += "Connection Lifetime=60;";
   s += "Security=SSL;";
-  //s += "SSLClientKeystoredb=zosclientdb.kdb;";
-  s += "SSLClientKeystash=zosclientdb.sth;";
+  s += "SSLClientKeystoredb=zosclientdb.kdb;";
+  //s += "SSLClientKeystash=zosclientdb.sth;";
   s += "AUTHENTICATION=CERTIFICATE;";
-  //s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
-  s += "SSLCLIENTLABEL=clientcert;";
-  s += "PROTOCOL=TCP/IP;";
+  s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
+  //s += "SSLCLIENTLABEL=clientcert;";
 
   DB2Connection conn = new DB2Connection(s);
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
