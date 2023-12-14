@@ -87,7 +87,7 @@ void startSelect() {
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   connb.Database = connectionDict["db"];
   connb.UserID = connectionDict["uid"];
-  //connb.Password = connectionDict["pwd"];
+  connb.Password = connectionDict["pwd"];
   connb.Server = connectionDict["server"];
   //Pooling
   connb.Pooling = true;
@@ -182,18 +182,18 @@ void startSelect() {
 
 void testConnection() {
   String s = "DATABASE=DSNL5;SERVER=9.30.179.1:52500;";
-  //s += "Userid=LGB0266;";
-  //s += "Password=pilsner;";
+  s += "Userid=LGB0266;";
+  s += "Password=pilsner;";
   //s += "Pooling=true;";
   //s += "Max Pool Size=50;";
   //s += "Min Pool Size=10;";
   //s += "Connection Lifetime=60;";
   s += "Security=SSL;";
-  s += "SSLClientKeystoredb=zosclientdb.kdb;";
-  s += "SSLClientKeystash=zosclientdb.sth;";
+  //s += "SSLClientKeystoredb=zosclientdb.kdb;";
+  //s += "SSLClientKeystash=zosclientdb.sth;";
   //s += "AUTHENTICATION=CERTIFICATE;";
   //s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
-  //s += "SSLCLIENTLABEL=clientcert;";
+  s += "SSLCLIENTLABEL=clientcert;";
 
   DB2Connection conn = new DB2Connection(s);
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
