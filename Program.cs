@@ -181,7 +181,7 @@ void startSelect() {
 }
 
 void testConnection() {
-  String s = "Authentication=Certificate;DATABASE=DSNL5;SERVER=9.30.179.1:52500;SECURITY=SSL;SSLClientKeyStoreDB=zosclientdb.kdb;SSLClientKeyStash=zosclientdb.sth;SSLClientLabel=clientcert";     
+  String s = "USERID=DB2ADM;PASSWORD=FANTOM;DATABASE=DSNL5;SERVER=9.30.179.1:52500;SECURITY=SSL;PROTOCOL=TCPIP";     
   DB2Connection conn = new DB2Connection(s);
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
   Console.WriteLine(conn.ConnectionString);
