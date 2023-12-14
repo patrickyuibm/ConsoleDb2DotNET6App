@@ -181,7 +181,20 @@ void startSelect() {
 }
 
 void testConnection() {
-  String s = "USERID=DB2ADM;PASSWORD=FANTOM;DATABASE=DSNL5;SERVER=9.30.179.1:52500";     
+  String s = "DATABASE=DSNR3;SERVER=9.30.179.1:51600;"
+  s += "Userid=LGB0266";";
+  s += "Password=pilsner;";
+  s += "Pooling=true;";
+  s += "Max Pool Size=50;";
+  s += "Min Pool Size=10;";
+  s += "Connection Lifetime=60;";
+  s += "Security=SSL;";
+  s += "SSLClientKeystoredb=zosclientdb.kdb";
+  s += "SSLClientKeystash=zosclientdb.sth;";
+  s += "AUTHENTICATION=CERTIFICATE;";
+  s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
+  s += "SSLCLIENTLABEL=clientcert;";
+
   DB2Connection conn = new DB2Connection(s);
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
   Console.WriteLine(conn.ConnectionString);
