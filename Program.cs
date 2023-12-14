@@ -188,7 +188,7 @@ void testConnection() {
   s += "Max Pool Size=50;";
   s += "Min Pool Size=10;";
   s += "Connection Lifetime=60;";
-  //s += "Security=SSL;";
+  s += "Security=SSL;";
   //s += "SSLClientKeystoredb=zosclientdb.kdb;";
   //s += "SSLClientKeystash=zosclientdb.sth;";
   //s += "AUTHENTICATION=CERTIFICATE;";
