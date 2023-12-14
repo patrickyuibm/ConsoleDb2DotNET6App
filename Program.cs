@@ -194,6 +194,7 @@ void testConnection() {
   s += "AUTHENTICATION=CERTIFICATE;";
   //s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
   s += "SSLCLIENTLABEL=clientcert;";
+  s += "PROTOCOL=TCP/IP;";
 
   DB2Connection conn = new DB2Connection(s);
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
