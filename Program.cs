@@ -191,7 +191,8 @@ void testConnection() {
   //s += "Connection Lifetime=60;";
   s += "Security=SSL;";
   s += "AUTHENTICATION=CERTIFICATE;";
-  //s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
+  s += "SSLClientKeystoreDBP=/app/zosclientdb.kdb";
+  s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
   s += "SSLCLIENTLABEL=clientcert;";
 
   DB2Connection conn = new DB2Connection(s);
