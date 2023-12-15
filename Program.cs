@@ -190,8 +190,6 @@ void testConnection() {
   //s += "Min Pool Size=10;";
   //s += "Connection Lifetime=60;";
   s += "Security=SSL;";
-  s += "SSLClientKeystoredb=" + connectionDict["sslkdb"] + ";";
-  s += "SSLClientKeystash=" + connectionDict["sslstash"] + ";";
   s += "AUTHENTICATION=CERTIFICATE;";
   //s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
   s += "SSLCLIENTLABEL=clientcert;";
