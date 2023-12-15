@@ -22,8 +22,7 @@ connectionDict.Add("uid", Environment.GetEnvironmentVariable("uid"));
 connectionDict.Add("pwd", Environment.GetEnvironmentVariable("pwd"));
 connectionDict.Add("server", Environment.GetEnvironmentVariable("server"));
 connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
-connectionDict.Add("sslstash", Environment.GetEnvironmentVariable("sslstash"));
-connectionDict.Add("sslkdb", Environment.GetEnvironmentVariable("sslkdb"));
+
 
 String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", 
                                "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*5000",
