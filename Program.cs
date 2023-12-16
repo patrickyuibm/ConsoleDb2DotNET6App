@@ -191,7 +191,7 @@ void testConnection() {
   //s += "Connection Lifetime=60;";
   s += "Security=SSL;";
   s += "AUTHENTICATION=CERTIFICATE;";
-  s += "SSLClientKeystoreDBP=/app/zosclientdb.kdb";
+  s += "SSLClientKeystoreDBP=/etc/keystore";
   s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
   s += "SSLCLIENTLABEL=clientcert;";
 
