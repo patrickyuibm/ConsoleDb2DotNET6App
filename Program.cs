@@ -185,13 +185,10 @@ void testConnection() {
   String s = "DATABASE=DSNL5;SERVER=9.30.179.1:52500;";
   //s += "Userid=DB2ADM;";
   //s += "Password=FANTOM;";
-  //s += "Pooling=true;";
-  //s += "Max Pool Size=50;";
-  //s += "Min Pool Size=10;";
-  //s += "Connection Lifetime=60;";
   s += "Security=SSL;";
   s += "AUTHENTICATION=CERTIFICATE;";
   s += "SSLClientKeystoreDB=/etc/keystore/zosclientdb.kdb;";
+  Console.WriteLine(File.Exists(@"/etc/keystore/zosclientdb.kdb") ? "File exists." : "File does not exist.");
   s += "SSLCLIENTKEYSTOREDBPASSWORD=PASS;";
   s += "SSLCLIENTLABEL=clientcert;";
 
