@@ -252,7 +252,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 
 //***************************** RUN METHODS HERE *****************************
 //Method to set up threads that run several stored procedures
-connectDb();
+connectDb(1);
 
 
 
