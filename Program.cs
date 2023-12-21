@@ -160,7 +160,6 @@ DB2Connection connectDb(int threadID) {
   
   //SSL
   connb.Security = "SSL";
-  connb.Authentication = "Certificate";
   connb.SSLClientKeystash = "/etc/stash/zosclientdb.sth";
   connb.SSLClientKeystoredb = "/etc/keystore/zosclientdb.kdb";
   //connb.SSLClientLabel = "clientcert";
