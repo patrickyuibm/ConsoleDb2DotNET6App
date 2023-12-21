@@ -82,7 +82,7 @@ void main() {
 }
 
 void startSelect() {
-  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId
+  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = connectDb(thid);
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
