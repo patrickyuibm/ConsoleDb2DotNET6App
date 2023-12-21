@@ -182,20 +182,22 @@ void startSelect() {
 }
 
 void testConnection() {
-  String s = "DATABASE=DSNL5;SERVER=9.30.179.1:52500;";
-  s += "Userid=DB2ADM;";
-  s += "Password=FANTOM;";
-  s += "Security=SSL;";
-  s += "AUTHENTICATION=CERTIFICATE;";
-  s += "SSLClientKeystoreDB=/app/keystore/zosclientdb.kdb;";
-  Console.WriteLine(File.Exists(@"/etc/keystore/zosclientdb.kdb") ? "File exists." : "File does not exist.");
-  Console.WriteLine(File.Exists(@"/app/zosclientdb.sth") ? "File exists." : "File does not exist.");
-  //s += "SSLCLIENTKEYSTOREDBPASSWORD=myServerPass;";
-  s += "SSLCLIENTKEYSTASH=/app/zosclientdb.sth";
-  //s += "SSLCLIENTLABEL=clientcert;";
+  String server = "9.30.179.152";
+  String db = "DSNL5";
+  String userId = "DB2ADM";
+  String password = "fantom";
+  int portNumber = 52590;
+  String connectString;
 
-  DB2Connection conn = new DB2Connection(s);
-  //DB2Connection conn = new DB2Connection(connb.ConnectionString);
+  connectString = "Server=" + server + ":" + portNumber + ";Database=" + alias;
+  if(userId != "") {
+    connectString += ";UID=" + userId + ";PWD=" + password + ";Pooling=true;Max Pool Size=100;Min Pool Size=10;Connection Lifetime=60;Security=SSL;SSLClientKeystoredb=/etc/keystore/zosclientdb.kdb;SSLClientKeystash=/etc/stash/zosclientdb.sth";
+  }
+  Console.WriteLine(File.Exists("/etc/keystore/zosclientdb.kdb") ? "KDB file exists." : "KDB file does not exist.");
+  Console.WriteLine(File.Exists("/etc/stash/zosclientdb.sth") ? "Stash file exists." : "Stash file does not exist.");
+  Console.WriteLine(" connectString: " + connectString);
+  DB2Connection conn = new DB2Connection(connectString);
+
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
   Console.WriteLine("Connection successful");
