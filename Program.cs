@@ -183,14 +183,16 @@ void startSelect() {
 
 void testConnection() {
   String s = "DATABASE=DSNL5;SERVER=9.30.179.1:52500;";
-  //s += "Userid=DB2ADM;";
-  //s += "Password=FANTOM;";
+  s += "Userid=DB2ADM;";
+  s += "Password=FANTOM;";
   s += "Security=SSL;";
   s += "AUTHENTICATION=CERTIFICATE;";
-  s += "SSLClientKeystoreDB=/etc/sslclientkdb/sslclient.kdb;";
-  Console.WriteLine(File.Exists(@"/etc/sslclientkdb/sslclient.kdb") ? "File exists." : "File does not exist.");
-  s += "SSLCLIENTKEYSTOREDBPASSWORD=myServerPass;";
-  s += "SSLCLIENTLABEL=clientcert;";
+  s += "SSLClientKeystoreDB=/app/keystore/zosclientdb.kdb;";
+  Console.WriteLine(File.Exists(@"/etc/keystore/zosclientdb.kdb") ? "File exists." : "File does not exist.");
+  Console.WriteLine(File.Exists(@"/app/zosclientdb.sth") ? "File exists." : "File does not exist.");
+  //s += "SSLCLIENTKEYSTOREDBPASSWORD=myServerPass;";
+  s += "SSLCLIENTKEYSTASH=/app/zosclientdb.sth";
+  //s += "SSLCLIENTLABEL=clientcert;";
 
   DB2Connection conn = new DB2Connection(s);
   //DB2Connection conn = new DB2Connection(connb.ConnectionString);
