@@ -86,6 +86,7 @@ void startSelect() {
   DB2Connection conn = connectDb(thid);
   conn.Open();
   try { 
+      /*
       DB2Command cmd1 = new DB2Command("SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2", conn);
       for (int i = 0; i < 100; i++) {
         DB2DataReader dr1 = cmd1.ExecuteReader();
@@ -95,13 +96,14 @@ void startSelect() {
         //run_delete_queries(conn);
       }
 
-      /*
+      
       //Check if pooling was successful 
       if (!conn.IsConnectionFromPool) { 
         Console.WriteLine("Pooling failed for Thread_" + System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()); 
       } else {
         Console.WriteLine("Pooling successful for Thread_" + System.Threading.Thread.CurrentThread.ManagedThreadId.ToString());
       }
+      */
       
       Random rnd = new Random();
       int iterations = rnd.Next(1,4);
@@ -126,7 +128,7 @@ void startSelect() {
           run_select_queries(conn);
         }
       }
-      */
+      
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
