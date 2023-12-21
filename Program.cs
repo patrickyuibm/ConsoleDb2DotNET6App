@@ -189,7 +189,7 @@ void testConnection() {
   int portNumber = 52590;
   String connectString;
 
-  connectString = "Server=" + server + ":" + portNumber + ";Database=" + alias;
+  connectString = "Server=" + server + ":" + portNumber + ";Database=" + db;
   if(userId != "") {
     connectString += ";UID=" + userId + ";PWD=" + password + ";Pooling=true;Max Pool Size=100;Min Pool Size=10;Connection Lifetime=60;Security=SSL;SSLClientKeystoredb=/etc/keystore/zosclientdb.kdb;SSLClientKeystash=/etc/stash/zosclientdb.sth";
   }
