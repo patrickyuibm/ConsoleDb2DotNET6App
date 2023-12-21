@@ -82,7 +82,8 @@ void main() {
 }
 
 void startSelect() {
-  DB2Connection conn = connectDb(System.Threading.Thread.CurrentThread.ManagedThreadId);
+  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId
+  DB2Connection conn = connectDb(thid);
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
   try { 
@@ -129,7 +130,7 @@ void startSelect() {
       */
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
-         Console.WriteLine("For " + thname + ": \n" + 
+         Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
              "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
              "Source: " + myException.Errors[i].Source + "\n" + 
@@ -165,7 +166,7 @@ DB2Connection connectDb(int threadID) {
   //connb.SSLClientLabel = "clientcert";
   //connb.SSLClientKeystoreDBPassword = "PASS";
 
-  DB2Connection conn = new DB2Connection(s);
+  DB2Connection conn = new DB2Connection(connb.ConnectionString);
   return conn;
 }
 
