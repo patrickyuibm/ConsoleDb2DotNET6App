@@ -22,6 +22,7 @@ connectionDict.Add("uid", Environment.GetEnvironmentVariable("uid"));
 connectionDict.Add("pwd", Environment.GetEnvironmentVariable("pwd"));
 connectionDict.Add("server", Environment.GetEnvironmentVariable("server"));
 connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
+connectionDict.Add("sslserver", Environment.GetEnvironmentVariable("sslserver"));
 
 
 String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", 
@@ -81,42 +82,10 @@ void main() {
 }
 
 void startSelect() {
-  //Name the thread
-  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
-  String thname = "Thread_" + thid.ToString();
-  //Build the connection
-  DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
-  connb.Database = connectionDict["db"];
-  connb.UserID = connectionDict["uid"];
-  connb.Password = connectionDict["pwd"];
-  connb.Server = connectionDict["server"];
-  //Pooling
-  connb.Pooling = true;
-  connb.MinPoolSize = 0;
-  connb.MaxPoolSize = 10000;
-  //Client application naming
-  connb.ClientApplicationName = thname;
-  //SSL
-  //connb.SSLClientKeystash = "C:\\Program Files\\ibm\\gsk8\\bin\\zosclientdb.sth";
-  connb.SSLClientKeystoredb = "C:\\Program Files\\ibm\\gsk8\\bin\\zosclientdb.kdb";
-  connb.SSLClientLabel = "clientcert";
-  connb.SSLClientKeystoreDBPassword = "PASS";
-  connb.Security = "SSL";
-  connb.Authentication = "Certificate";
-  //Logs errors
-  String log = thname;
-
-  //TRY THIS AS WELL: "Authentication=Certificate;DATABASE=DSNR3;HOSTNAME=9.30.179.1;PORT=51690;PROTOCOL=TCPIP;SECURITY=SSL;SSLClientKeyStoreDB=C:\work\samples\SSL\odbc\server_client_both\zosclientdb.kdb;SSLClientKeyStash=C:\work\samples\SSL\odbc\server_client_both\zosclientdb.sth;SSLClientLabel=clientcert"
-
-  String s = "Authentication=Certificate;DATABASE=DSNL5;SERVER=9.30.179.1:52500;SECURITY=SSL;SSLClientKeyStoreDB=zosclientdb.kdb;SSLClientKeyStash=zosclientdb.sth;SSLClientLabel=clientcert";     
-  DB2Connection conn = new DB2Connection(s);
-  //DB2Connection conn = new DB2Connection(connb.ConnectionString);
+  conn = connectDb(System.Threading.Thread.CurrentThread.ManagedThreadId);
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
-
   try { 
-
-      
       DB2Command cmd1 = new DB2Command("SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2", conn);
       for (int i = 0; i < 100; i++) {
         DB2DataReader dr1 = cmd1.ExecuteReader();
@@ -126,14 +95,14 @@ void startSelect() {
         //run_delete_queries(conn);
       }
 
+      /*
       //Check if pooling was successful 
       if (!conn.IsConnectionFromPool) { 
-        log += "; Pooling failed for " + thname; 
+        Console.WriteLine("Pooling failed for Thread_" + System.Threading.Thread.CurrentThread.ManagedThreadId.ToString()); 
       } else {
-        log += "; Pooling successful for " + thname;
+        Console.WriteLine("Pooling successful for Thread_" + System.Threading.Thread.CurrentThread.ManagedThreadId.ToString());
       }
       
-      /*
       Random rnd = new Random();
       int iterations = rnd.Next(1,4);
       for (int i = 0; i < iterations; i++) {
@@ -157,17 +126,7 @@ void startSelect() {
           run_select_queries(conn);
         }
       }
-
-      //Double check the client application name
-      DB2Transaction trans = conn.BeginTransaction();
-      DB2Command cmd = conn.CreateCommand();
-      cmd.Connection = conn;
-      cmd.Transaction = trans;
-      cmd.CommandText = "SELECT CURRENT CLIENT_APPLNAME FROM SYSIBM.SYSDUMMY1";
-      DB2DataReader reader = cmd.ExecuteReader(); 
-      reader.Close();
       */
-    
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          log += "For " + thname + ": \n" + 
@@ -181,27 +140,33 @@ void startSelect() {
     }
 }
 
-void testConnection() {
-  String server = "9.30.179.152";
-  String db = "DSNL5";
-  String userId = "DB2ADM";
-  String password = "fantom";
-  int portNumber = 52590;
-  String connectString;
+DB2Connection connectDb(int threadID) {
+  DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
+  
+  //Name the thread
+  connb.ClientApplicationName = "Thread_" + threadID.ToString();
 
-  connectString = "Server=" + server + ":" + portNumber + ";Database=" + db;
-  if(userId != "") {
-    connectString += ";UID=" + userId + ";PWD=" + password + ";Pooling=true;Max Pool Size=100;Min Pool Size=10;Connection Lifetime=60;Security=SSL;SSLClientKeystoredb=/etc/keystore/zosclientdb.kdb;SSLClientKeystash=/etc/stash/zosclientdb.sth";
-  }
-  Console.WriteLine(File.Exists("/etc/keystore/zosclientdb.kdb") ? "KDB file exists." : "KDB file does not exist.");
-  Console.WriteLine(File.Exists("/etc/stash/zosclientdb.sth") ? "Stash file exists." : "Stash file does not exist.");
-  Console.WriteLine(" connectString: " + connectString);
-  DB2Connection conn = new DB2Connection(connectString);
+  //Server credentials
+  connb.Database = connectionDict["db"];
+  connb.UserID = connectionDict["uid"];
+  connb.Password = connectionDict["pwd"];
+  connb.Server = connectionDict["sslserver"];
+  
+  //Pooling
+  connb.Pooling = true;
+  connb.MinPoolSize = 0;
+  connb.MaxPoolSize = 1000;
+  
+  //SSL
+  connb.Security = "SSL";
+  connb.Authentication = "Certificate";
+  connb.SSLClientKeystash = "/etc/stash/zosclientdb.sth";
+  connb.SSLClientKeystoredb = "/etc/keystore/zosclientdb.kdb";
+  //connb.SSLClientLabel = "clientcert";
+  //connb.SSLClientKeystoreDBPassword = "PASS";
 
-  Console.WriteLine(conn.ConnectionString);
-  conn.Open();
-  Console.WriteLine("Connection successful");
-  conn.Close();
+  DB2Connection conn = new DB2Connection(s);
+  return conn
 }
 
 void run_select_queries(DB2Connection conn) {
@@ -283,7 +248,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 //***************************** RUN METHODS HERE *****************************
 //Method to set up threads that run several stored procedures
 //main();
-testConnection();
+connectDb();
 
 
 
