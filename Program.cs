@@ -154,7 +154,7 @@ DB2Connection connectDb(int threadID) {
   //Pooling
   connb.Pooling = true;
   connb.MinPoolSize = 0;
-  connb.MaxPoolSize = 1000;
+  connb.MaxPoolSize = 10000;
   
   //SSL
   connb.Security = "SSL";
