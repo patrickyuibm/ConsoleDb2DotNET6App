@@ -166,7 +166,7 @@ DB2Connection connectDb(int threadID) {
   //connb.SSLClientKeystoreDBPassword = "PASS";
 
   DB2Connection conn = new DB2Connection(s);
-  return conn
+  return conn;
 }
 
 void run_select_queries(DB2Connection conn) {
