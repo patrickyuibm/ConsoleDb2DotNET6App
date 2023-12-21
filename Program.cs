@@ -82,7 +82,7 @@ void main() {
 }
 
 void startSelect() {
-  conn = connectDb(System.Threading.Thread.CurrentThread.ManagedThreadId);
+  DB2Connection conn = connectDb(System.Threading.Thread.CurrentThread.ManagedThreadId);
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
   try { 
@@ -129,11 +129,11 @@ void startSelect() {
       */
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
-         log += "For " + thname + ": \n" + 
+         Console.WriteLine("For " + thname + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
              "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
              "Source: " + myException.Errors[i].Source + "\n" + 
-             "SQL: " + myException.Errors[i].SQLState + "\n"; 
+             "SQL: " + myException.Errors[i].SQLState + "\n");
        } 
    } finally { 
       conn.Close();
