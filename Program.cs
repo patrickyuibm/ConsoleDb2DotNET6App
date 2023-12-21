@@ -84,7 +84,6 @@ void main() {
 void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = connectDb(thid);
-  Console.WriteLine(conn.ConnectionString);
   conn.Open();
   try { 
       DB2Command cmd1 = new DB2Command("SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2", conn);
@@ -166,10 +165,7 @@ DB2Connection connectDb(int threadID) {
   //connb.SSLClientKeystoreDBPassword = "PASS";
 
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
-  Console.WriteLine(conn.ConnectionString);
-  conn.Open();
-  Console.WriteLine("Connection successful");
-  conn.Close();
+  //Console.WriteLine(conn.ConnectionString);
   return conn;
 }
 
