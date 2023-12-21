@@ -141,7 +141,7 @@ void startSelect() {
     }
 }
 
-void connectDb(int threadID) {
+DB2Connection connectDb(int threadID) {
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   
   //Name the thread
@@ -171,7 +171,7 @@ void connectDb(int threadID) {
   conn.Open();
   Console.WriteLine("Connection successful");
   conn.Close();
-  //return conn;
+  return conn;
 }
 
 void run_select_queries(DB2Connection conn) {
