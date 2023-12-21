@@ -74,7 +74,7 @@ void main() {
   string elapsedTime = String.Format("{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
   Console.WriteLine("All threads complete"); 
   Console.WriteLine("Time elapsed (minutes:seconds:milliseconds): " + elapsedTime);
-  Console.WriteLine("Number of threads ran: " numInsertThreads.ToString());
+  Console.WriteLine("Number of threads ran: " + numInsertThreads.ToString());
   Console.WriteLine("Number of selects ran: " + selects.ToString());
   Console.WriteLine("Number of deletes ran: " + deletes.ToString());
   Console.WriteLine("Number of inserts ran: " + inserts.ToString());
