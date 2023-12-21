@@ -141,7 +141,7 @@ void startSelect() {
     }
 }
 
-DB2Connection connectDb(int threadID) {
+void connectDb(int threadID) {
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   
   //Name the thread
@@ -167,7 +167,11 @@ DB2Connection connectDb(int threadID) {
   //connb.SSLClientKeystoreDBPassword = "PASS";
 
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
-  return conn;
+  Console.WriteLine(conn.ConnectionString);
+  conn.Open();
+  Console.WriteLine("Connection successful");
+  conn.Close();
+  //return conn;
 }
 
 void run_select_queries(DB2Connection conn) {
@@ -248,7 +252,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 
 //***************************** RUN METHODS HERE *****************************
 //Method to set up threads that run several stored procedures
-main();
+connectDb();
 
 
 
