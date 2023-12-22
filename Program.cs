@@ -60,7 +60,8 @@ bool ssl = true;
 void main() {
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
-  int numInsertThreads = 100;
+  Console.WriteLine("Insert number of threads: ");
+  int numInsertThreads = int.Parse(Console.ReadLine());
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
