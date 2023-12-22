@@ -53,8 +53,6 @@ int inserts = 0;
 int updates = 0;
 int total_records_affected = 0;
 
-bool ssl = true;
-
 //***************************** METHODS *****************************
 
 void main() {
@@ -143,6 +141,8 @@ void startSelect() {
 }
 
 DB2Connection connectDb(int threadID) {
+  Console.WriteLine("Enable SSL? (True/False): ");
+  bool ssl = bool.Parse(Console.ReadLine());
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   
   //Name the thread
