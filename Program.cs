@@ -53,6 +53,8 @@ int inserts = 0;
 int updates = 0;
 int total_records_affected = 0;
 
+bool ssl = True;
+
 //***************************** METHODS *****************************
 
 void main() {
@@ -149,20 +151,23 @@ DB2Connection connectDb(int threadID) {
   connb.Database = connectionDict["db"];
   connb.UserID = connectionDict["uid"];
   connb.Password = connectionDict["pwd"];
-  connb.Server = connectionDict["sslserver"];
+  if (ssl) {
+    connb.Server = connectionDict["sslserver"];
+    connb.Security = "SSL";
+    connb.SSLClientKeystash = "/etc/stash/zosclientdb.sth";
+    connb.SSLClientKeystoredb = "/etc/keystore/zosclientdb.kdb";
+    //connb.SSLClientLabel = "clientcert";
+    //connb.SSLClientKeystoreDBPassword = "PASS";
+  } else {
+    connb.Server = connectionDict["server"];
+  }
+  
   
   //Pooling
   connb.Pooling = true;
   connb.MinPoolSize = 0;
   connb.MaxPoolSize = 10000;
   
-  //SSL
-  connb.Security = "SSL";
-  connb.SSLClientKeystash = "/etc/stash/zosclientdb.sth";
-  connb.SSLClientKeystoredb = "/etc/keystore/zosclientdb.kdb";
-  //connb.SSLClientLabel = "clientcert";
-  //connb.SSLClientKeystoreDBPassword = "PASS";
-
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   //Console.WriteLine(conn.ConnectionString);
   return conn;
