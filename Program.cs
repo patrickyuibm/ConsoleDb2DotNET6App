@@ -53,13 +53,19 @@ int inserts = 0;
 int updates = 0;
 int total_records_affected = 0;
 
+bool ssl;
+
 //***************************** METHODS *****************************
 
 void main() {
-  System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
-  watch.Start();
   Console.WriteLine("Insert number of threads: ");
   int numInsertThreads = int.Parse(Console.ReadLine());
+  Console.WriteLine("Enable SSL? (True/False): ");
+  ssl = bool.Parse(Console.ReadLine());
+  
+  System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+  watch.Start();
+ 
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -141,8 +147,7 @@ void startSelect() {
 }
 
 DB2Connection connectDb(int threadID) {
-  Console.WriteLine("Enable SSL? (True/False): ");
-  bool ssl = bool.Parse(Console.ReadLine());
+  
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   
   //Name the thread
