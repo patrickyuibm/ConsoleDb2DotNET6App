@@ -53,7 +53,7 @@ int inserts = 0;
 int updates = 0;
 int total_records_affected = 0;
 
-bool ssl = True;
+bool ssl = true;
 
 //***************************** METHODS *****************************
 
