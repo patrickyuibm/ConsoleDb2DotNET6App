@@ -166,7 +166,8 @@ DB2Connection connectDb(int threadID) {
   connb.MaxPoolSize = 10000;
   
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
-  //Console.WriteLine(conn.ConnectionString);
+  Console.WriteLine(conn.ConnectionString);
+  conn.Close();
   return conn;
 }
 
@@ -248,6 +249,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 
 //***************************** RUN METHODS HERE *****************************
 //Method to set up threads that run several stored procedures
+connectDb();
 testConnection();
 
 
