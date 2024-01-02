@@ -148,6 +148,7 @@ DB2Connection connectDb(int threadID) {
   connb.Database = connectionDict["db"];
   connb.UserID = connectionDict["uid"];
   connb.Password = connectionDict["pwd"];
+  bool ssl = true; 
   if (ssl) {
     connb.Server = connectionDict["sslserver"];
     connb.Security = "SSL";
@@ -249,7 +250,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 
 //***************************** RUN METHODS HERE *****************************
 //Method to set up threads that run several stored procedures
-connectDb();
+connectDb(1);
 testConnection();
 
 
