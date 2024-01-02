@@ -149,7 +149,7 @@ void startSelect() {
 
 void testConnection() {
   DB2Connection conn = new DB2Connection();
-  conn.ConnectionString = "Database=DSNR3;uid=LGB0266;server=9.30.179.1;Pooling=True;Max Pool Size = 1000; Min Pool Size=0;Security=SSL;SSLClientKeystoredb=/etc/zosclientdb.kdb;SSLClientKeystash=/etc/stash/zosclientdb.sth";
+  conn.ConnectionString = "Database=DSNR3;uid=LGB0266;pwd=pilsner;server=9.30.179.152:51690;Security=SSL;SSLClientKeystoredb=/etc/zosclientdb.kdb;SSLClientKeystash=/etc/stash/zosclientdb.sth";
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
   Console.WriteLine("Connection opened successfully");
