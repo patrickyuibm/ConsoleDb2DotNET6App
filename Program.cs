@@ -93,7 +93,7 @@ void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = connectDb(thid);
   conn.Open();
-  Console.WriteLine(conn.ConnectionString);
+  //Console.WriteLine(conn.ConnectionString);
   try { 
       /*
       DB2Command cmd1 = new DB2Command("SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2", conn);
