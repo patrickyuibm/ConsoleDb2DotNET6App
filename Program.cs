@@ -54,6 +54,7 @@ int updates = 0;
 int total_records_affected = 0;
 
 bool ssl;
+int timespan = 0;
 
 //***************************** METHODS *****************************
 
@@ -62,6 +63,8 @@ void main() {
   int numInsertThreads = int.Parse(Console.ReadLine());
   Console.WriteLine("Enable SSL? (True/False): ");
   ssl = bool.Parse(Console.ReadLine());
+  Console.WriteLine("How long for each thread to run (in seconds)?: ");
+  timespan = int.Parse(Console.ReadLine());
   
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
@@ -97,7 +100,7 @@ void startSelect() {
   try { 
     Stopwatch s = new Stopwatch();
     s.Start();
-    while (s.Elapsed < TimeSpan.FromSeconds(900)) 
+    while (s.Elapsed < TimeSpan.FromSeconds(timespan)) 
     {
         run_select_queries(conn);
     }
