@@ -97,7 +97,7 @@ void startSelect() {
   try { 
     Stopwatch s = new Stopwatch();
     s.Start();
-    while (s.Elapsed < TimeSpan.FromSeconds(1800)) 
+    while (s.Elapsed < TimeSpan.FromSeconds(900)) 
     {
         run_select_queries(conn);
     }
