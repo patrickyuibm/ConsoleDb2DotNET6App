@@ -95,27 +95,15 @@ void startSelect() {
   conn.Open();
   //Console.WriteLine(conn.ConnectionString);
   try { 
-      Random rnd = new Random();
-      int iterations = rnd.Next(1,4);
-      for (int i = 0; i < iterations; i++) {
-        Random r = new Random();
-        int val = r.Next(1,36); //Frequency ratio: 20 selects : 9 inserts : 5 updates : 1 delete 
-        if (val < 2) {
-          deletes += 1;
-          run_delete_queries(conn);
-        } else if (val < 7) {
-          updates += 1;
-          run_update_queries(conn);
-        } else if (val < 16) {
-          inserts += 1;
-          run_insert_queries(conn);
-        } else {
-          selects += 1;
-          run_select_queries(conn);
-        }
-      }
-      
-  } catch (DB2Exception myException) { 
+    Stopwatch s = new Stopwatch();
+    s.Start();
+    while (s.Elapsed < TimeSpan.FromSeconds(3600)) 
+    {
+        run_select_queries(conn);
+    }
+    s.Stop();
+  }
+  catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
