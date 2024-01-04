@@ -125,7 +125,8 @@ void startSelect() {
 
 void testConnection() {
   DB2Connection conn = new DB2Connection();
-  conn.ConnectionString = String.parse(Console.ReadLine());
+  Console.WriteLine("Type connection string here: ");
+  conn.ConnectionString = Console.ReadLine();
   conn.Open();
   Console.WriteLine("Connection opened successfully");
   conn.Close();
