@@ -102,7 +102,10 @@ void startSelect() {
     s.Start();
     while (s.Elapsed < TimeSpan.FromSeconds(timespan)) 
     {
-        run_select_queries(conn);
+        DB2Command cmd1 = new DB2Command(select_statements[0], conn);
+        DB2DataReader dr1 = cmd1.ExecuteReader();
+        dr1.Close();
+        //run_select_queries(conn);
     }
     s.Stop();
   }
