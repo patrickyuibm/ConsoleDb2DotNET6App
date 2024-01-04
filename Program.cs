@@ -148,7 +148,7 @@ DB2Connection connectDb(int threadID) {
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   
   //Name the thread
-  connb.ClientApplicationName = "Thread_" + threadID.ToString();
+  connb.ClientApplicationName = "Thread_0";
 
   //Server credentials
   connb.Database = connectionDict["db"];
