@@ -81,9 +81,9 @@ void main() {
   watch.Stop();
   TimeSpan ts = watch.Elapsed;
   // Format and display the TimeSpan value.
-  string elapsedTime = String.Format("{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
+  string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
   Console.WriteLine("All threads complete"); 
-  Console.WriteLine("Time elapsed (minutes:seconds:milliseconds): " + elapsedTime);
+  Console.WriteLine("Time elapsed (hours:minutes:seconds:milliseconds): " + elapsedTime);
   Console.WriteLine("Number of threads ran: " + numInsertThreads.ToString());
   Console.WriteLine("Number of selects ran: " + selects.ToString());
   Console.WriteLine("Number of deletes ran: " + deletes.ToString());
