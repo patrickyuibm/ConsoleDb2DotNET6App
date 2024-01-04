@@ -124,7 +124,7 @@ void startSelect() {
 
 void testConnection() {
   DB2Connection conn = new DB2Connection();
-  conn.ConnectionString = "Database=DSNR3;uid=DB2ADM;pwd=fantom;server=9.30.179.162:51690;Security=SSL;SSLClientKeystoredb=/etc/keystore/zosclientdb.kdb;SSLClientKeystash=/etc/stash/zosclientdb.sth";
+  conn.ConnectionString = "Database=DSNT7;uid=PATRICK;pwd=patty1;server=9.30.178.50:50700";
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
   Console.WriteLine("Connection opened successfully");
