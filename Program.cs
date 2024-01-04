@@ -93,8 +93,6 @@ void main() {
 }
 
 void startSelect() {
-  testConnection();
-  /*
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = connectDb(thid);
   conn.Open();
@@ -122,7 +120,7 @@ void startSelect() {
    } finally { 
       conn.Close();
     }
-*/
+
 }
 
 void testConnection() {
