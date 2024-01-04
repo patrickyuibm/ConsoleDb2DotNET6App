@@ -124,8 +124,19 @@ void startSelect() {
 }
 
 void testConnection() {
-  DB2Connection conn = new DB2Connection();
-  conn.ConnectionString = "";
+  DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
+  connb.ClientApplicationName = "Thread_" + threadID.ToString();
+  connb.Database = "DSLR3";
+  connb.UserID = "LGB0266";
+  connb.Password = "pilsner";
+  connb.Server = "9.30.179.161:51690";
+  connb.Security = "SSL";
+  connb.SSLClientKeystash = "/etc/stash/zosclientdb.sth";
+  connb.SSLClientKeystoredb = "/etc/keystore/zosclientdb.kdb";
+  connb.Pooling = true;
+  connb.MinPoolSize = 0;
+  connb.MaxPoolSize = 10000;
+  DB2Connection conn = new DB2Connection(connb.ConnectionString);
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
   Console.WriteLine("Connection opened successfully");
