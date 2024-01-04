@@ -268,7 +268,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 
 //***************************** RUN METHODS HERE *****************************
 ConsoleWriteLine("Run main workload or test connection? (1/2): ");
-int choice = int.parse(Console.ReadLine());
+int choice = int.Parse(Console.ReadLine());
 if (choice == 1) {
   main();
 } else {
