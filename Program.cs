@@ -125,7 +125,7 @@ void startSelect() {
 
 void testConnection() {
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
-  connb.ClientApplicationName = "Thread_" + threadID.ToString();
+  connb.ClientApplicationName = "Thread_0";
   connb.Database = "DSLR3";
   connb.UserID = "LGB0266";
   connb.Password = "pilsner";
@@ -148,7 +148,7 @@ DB2Connection connectDb(int threadID) {
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   
   //Name the thread
-  connb.ClientApplicationName = "Thread_0";
+  connb.ClientApplicationName = "Thread_" + threadID.ToString();
 
   //Server credentials
   connb.Database = connectionDict["db"];
