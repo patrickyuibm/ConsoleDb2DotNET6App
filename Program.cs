@@ -267,8 +267,14 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 }
 
 //***************************** RUN METHODS HERE *****************************
-//Method to set up threads that run several stored procedures
-main();
+ConsoleWriteLine("Run main workload or test connection? (1/2): ");
+int choice = int.parse(Console.ReadLine());
+if (choice == 1) {
+  main();
+} else {
+  testConnection();
+}
+
 
 
 
