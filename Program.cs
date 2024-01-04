@@ -127,7 +127,7 @@ void startSelect() {
 
 void testConnection() {
   DB2Connection conn = new DB2Connection();
-  conn.ConnectionString = "Database=DSNT7;uid=PATRICK;pwd=patty1;server=9.30.178.50:50700";
+  conn.ConnectionString = "";
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
   Console.WriteLine("Connection opened successfully");
