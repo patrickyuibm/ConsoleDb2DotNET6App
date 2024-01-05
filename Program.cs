@@ -156,8 +156,9 @@ void testConnection() {
 
   DB2Connection conn = new DB2Connection();
   Console.WriteLine("Connection string: ");
-  conn.ConnectionString = Console.ReadLine();
-  Console.WriteLine(conn.ConnectionString);
+  connstring = Console.ReadLine();
+  Console.WriteLine(connstring);
+  conn.ConnectionString = connstring;
   conn.Open();
   Console.WriteLine("Connection opened successfully");
   conn.Close();
