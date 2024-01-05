@@ -155,7 +155,8 @@ void testConnection() {
   */
 
   DB2Connection conn = new DB2Connection();
-  conn.ConnectionString = "authentication=certificate;database=DSNR3;server=9.30.179.161:51690;security=ssl;SSLCLIENTKEYSTOREDB=/etc/keystore/zosclientdb.kdb;SSLCLIENTKEYSTASH=/etc/stash/zosclientdb.sth";
+  Console.WriteLine("Connection string: ");
+  conn.ConnectionString = Console.ReadLine();
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
   Console.WriteLine("Connection opened successfully");
