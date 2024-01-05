@@ -155,7 +155,7 @@ void testConnection() {
   */
 
   DB2Connection conn = new DB2Connection();
-  conn.ConnectionString = "authentication=certificate;database=DSNR3;hostname=9.30.179.161;port=51690;protocol=tcpip;security=ssl;SSL_CLIENT_KEYSTOREDB=/etc/keystore/zosclientdb.kdb;SSLCLIENTKEYSTOREDBPASSWORD=PASS;SSLCLIENTLABEL=clientcert";
+  conn.ConnectionString = "authentication=certificate;database=DSNR3;server=9.30.179.161:51690;protocol=tcpip;security=ssl;SSLCLIENTKEYSTOREDB=/etc/keystore/zosclientdb.kdb;SSLCLIENTKEYSTOREDBPASSWORD=PASS;SSLCLIENTLABEL=clientcert";
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
   Console.WriteLine("Connection opened successfully");
