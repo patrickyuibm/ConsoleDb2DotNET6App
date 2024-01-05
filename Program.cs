@@ -124,6 +124,8 @@ void startSelect() {
 }
 
 void testConnection() {
+
+  /*
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   Console.WriteLine("Type DB: ");
   String db = Console.ReadLine();
@@ -148,7 +150,12 @@ void testConnection() {
   connb.Pooling = true;
   connb.MinPoolSize = 0;
   connb.MaxPoolSize = 10000;
+  
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
+  */
+
+  DB2Connection conn = new DB2Connection();
+  conn.ConnectionString = "authentication=certificate;database=DSNR3;hostname=9.30.179.161;port=51690;protocol=tcpip;security=ssl;SSL_CLIENT_KEYSTOREDB=/etc/keystore/zosclientdb.kdb;SSLCLIENTKEYSTOREDBPASSWORD=PASS;SSLCLIENTLABEL=clientcert"
   Console.WriteLine(conn.ConnectionString);
   conn.Open();
   Console.WriteLine("Connection opened successfully");
