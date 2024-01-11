@@ -95,8 +95,8 @@ void main() {
 void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = new DB2Connection();
-  conn.Open();
   conn.ConnectionString = "database=DSNR3;uid=db2adm;pwd=fantom;server=9.30.179.1:51600;clientuserid=patrick";
+  conn.Open();
   try {
     DB2Command cmd1 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_TABLE (CLIENT_USERID, PROFILEID, PROFILE_ENABLED) VALUES ('Patrick', 20240110, 'Y')", conn);
     DB2Command cmd2 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_ATTRIBUTES(PROFILEID,KEYWORDS,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE_TIMESTAMP) VALUES (20240110,'MONITOR THREADS', 'EXCEPTION_DIAGLEVEL3', 5, 0, CURRENT TIMESTAMP)", conn);
