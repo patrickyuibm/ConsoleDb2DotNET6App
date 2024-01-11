@@ -94,6 +94,31 @@ void main() {
 
 void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
+  DB2Connection conn = new DB2Connection;
+  conn.ConnectionString = "db=DSNR3;uid=db2adm;pwd=fantom;server=9.30.179.1:51600";
+  try {
+    DB2Command cmd1 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_TABLE (CLIENT_USERID, PROFILEID, PROFILE_ENABLED) VALUES ('Patrick', 20240110, 'Y')", conn);
+    DB2Command cmd2 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_ATTRIBUTES(PROFILEID,KEYWORDS,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE_TIMESTAMP) VALUES (20240110,'MONITOR THREADS', 'EXCEPTION_DIAGLEVEL3', 5, 0, CURRENT TIMESTAMP)", conn);
+    DB2DataReader dr1 = cmd1.ExecuteReader();
+    DB2DataReader dr2 = cmd2.ExecuteReader();
+    dr1.Close();
+    dr2.Close();
+  } 
+  catch (DB2Exception myException) { 
+    for (int i=0; i < myException.Errors.Count; i++) { 
+         Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
+             "Message: " + myException.Errors[i].Message + "\n" + 
+             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
+             "Source: " + myException.Errors[i].Source + "\n" + 
+             "SQL: " + myException.Errors[i].SQLState + "\n");
+       } 
+   } finally { 
+      conn.Close();
+  }
+}
+
+void startSelectTimed() {
+  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = connectDb(thid);
   conn.Open();
   //Console.WriteLine(conn.ConnectionString);
