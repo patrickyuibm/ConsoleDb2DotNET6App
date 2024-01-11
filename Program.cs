@@ -116,8 +116,9 @@ void startSelect() {
    } finally { 
       conn.Close();
   }
+  */
 }
-*/
+
 
 void startSelectTimed() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
