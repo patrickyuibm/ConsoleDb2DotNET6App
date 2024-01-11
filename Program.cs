@@ -97,6 +97,9 @@ void startSelect() {
   DB2Connection conn = new DB2Connection();
   conn.ConnectionString = "database=DSNR3;uid=db2adm;pwd=fantom;server=9.30.179.1:51600;clientuserid=patrick";
   conn.Open();
+  conn.Close();
+
+  /*
   try {
     DB2Command cmd1 = new DB2Command("SELECT * FROM SYSIBM.DSN_PROFILE_TABLE", conn);
     DB2DataReader dr1 = cmd1.ExecuteReader();
@@ -114,6 +117,7 @@ void startSelect() {
       conn.Close();
   }
 }
+*/
 
 void startSelectTimed() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
