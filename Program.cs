@@ -92,35 +92,6 @@ void main() {
   Console.WriteLine("Number of rows affected: " + total_records_affected.ToString());
 }
 
-void startSelect() {
-  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
-  DB2Connection conn = new DB2Connection();
-  conn.ConnectionString = "";
-  conn.Open();
-
-  try {
-    DB2Command cmd1 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_TABLE (CLIENT_USERID, PROFILEID, PROFILE_ENABLED) VALUES ('Patrick', 20240110, 'Y')", conn);
-    DB2Command cmd2 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_ATTRIBUTES(PROFILEID,KEYWORDS,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE_TIMESTAMP) VALUES (20240110,'MONITOR THREADS', 'EXCEPTION_DIAGLEVEL3', 5, 0, CURRENT TIMESTAMP)", conn);
-    DB2DataReader dr1 = cmd1.ExecuteReader();
-    DB2DataReader dr2 = cmd2.ExecuteReader();
-    dr1.Close();
-    dr2.Close();
-  } 
-  catch (DB2Exception myException) { 
-    for (int i=0; i < myException.Errors.Count; i++) { 
-         Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
-             "Message: " + myException.Errors[i].Message + "\n" + 
-             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
-             "Source: " + myException.Errors[i].Source + "\n" + 
-             "SQL: " + myException.Errors[i].SQLState + "\n");
-       } 
-   } finally { 
-      conn.Close();
-  }
-
-}
-
-
 void startSelectTimed() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = connectDb(thid);
@@ -302,6 +273,34 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 
   // always call Close when done reading. 
   myReader.Close(); 
+}
+
+void startSelect() {
+  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
+  DB2Connection conn = new DB2Connection();
+  conn.ConnectionString = "";
+  conn.Open();
+
+  try {
+    DB2Command cmd1 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_TABLE (CLIENT_USERID, PROFILEID, PROFILE_ENABLED) VALUES ('Patrick', 20240110, 'Y')", conn);
+    DB2Command cmd2 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_ATTRIBUTES(PROFILEID,KEYWORDS,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE_TIMESTAMP) VALUES (20240110,'MONITOR THREADS', 'EXCEPTION_DIAGLEVEL3', 5, 0, CURRENT TIMESTAMP)", conn);
+    DB2DataReader dr1 = cmd1.ExecuteReader();
+    DB2DataReader dr2 = cmd2.ExecuteReader();
+    dr1.Close();
+    dr2.Close();
+  } 
+  catch (DB2Exception myException) { 
+    for (int i=0; i < myException.Errors.Count; i++) { 
+         Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
+             "Message: " + myException.Errors[i].Message + "\n" + 
+             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
+             "Source: " + myException.Errors[i].Source + "\n" + 
+             "SQL: " + myException.Errors[i].SQLState + "\n");
+       } 
+   } finally { 
+      conn.Close();
+  }
+
 }
 
 //***************************** RUN METHODS HERE *****************************
