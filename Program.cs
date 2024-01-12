@@ -99,9 +99,12 @@ void startSelect() {
   conn.Open();
 
   try {
-    DB2Command cmd1 = new DB2Command("SELECT * FROM SYSIBM.DSN_PROFILE_TABLE", conn);
+    DB2Command cmd1 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_TABLE (CLIENT_USERID, PROFILEID, PROFILE_ENABLED) VALUES ('Patrick', 20240110, 'Y')", conn);
+    DB2Command cmd2 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_ATTRIBUTES(PROFILEID,KEYWORDS,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE_TIMESTAMP) VALUES (20240110,'MONITOR THREADS', 'EXCEPTION_DIAGLEVEL3', 5, 0, CURRENT TIMESTAMP)", conn);
     DB2DataReader dr1 = cmd1.ExecuteReader();
+    DB2DataReader dr2 = cmd2.ExecuteReader();
     dr1.Close();
+    dr2.Close();
   } 
   catch (DB2Exception myException) { 
     for (int i=0; i < myException.Errors.Count; i++) { 
