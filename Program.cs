@@ -71,7 +71,7 @@ void main() {
  
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
-    Thread t = new Thread(new ThreadStart(() => startSelect()));
+    Thread t = new Thread(new ThreadStart(() => startSelectTimed()));
     t.Start();
     myThreads[i] = t;
   }
@@ -95,7 +95,7 @@ void main() {
 void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = new DB2Connection();
-  conn.ConnectionString = "database=DSNR3;uid=db2adm;pwd=fantom;server=9.30.179.1:51600;clientuserid=patrick";
+  conn.ConnectionString = "";
   conn.Open();
 
   try {
