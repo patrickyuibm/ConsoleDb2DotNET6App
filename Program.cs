@@ -5,6 +5,8 @@ using System;
 using System.Data;
 using System.Threading;
 using System.IO;
+using System.Net;
+using System.Net.NetworkInformation;
 using IBM.Data.Db2;
 using System.Configuration;
 using System.Collections.Specialized;
@@ -192,8 +194,25 @@ DB2Connection connectDb(int threadID) {
   
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   //Console.WriteLine(conn.ConnectionString);
-  conn.Close();
+  ping();
   return conn;
+}
+
+void ping() {
+  Ping p1 = new Ping();
+  Console.WriteLine("Pinging " + connectionDict["sslserver"].Substring(0, 12));
+  PingReply PR = p1.Send(connectionDict["sslserver"].Substring(0, 12));
+  string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+  byte[] buffer = Encoding.ASCII.GetBytes (data);
+  int timeout = 120;
+  PingReply reply = pingSender.Send (args[0], timeout, buffer, options);
+  if (reply.Status == IPStatus.Success) {
+    Console.WriteLine ("Address: {0}", reply.Address.ToString ());
+    Console.WriteLine ("RoundTrip time: {0}", reply.RoundtripTime);
+    Console.WriteLine ("Time to live: {0}", reply.Options.Ttl);
+    Console.WriteLine ("Don't fragment: {0}", reply.Options.DontFragment);
+    Console.WriteLine ("Buffer size: {0}", reply.Buffer.Length);
+  }
 }
 
 void run_select_queries(DB2Connection conn) {
