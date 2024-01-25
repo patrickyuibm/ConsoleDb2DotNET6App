@@ -124,36 +124,6 @@ void startSelectTimed() {
 }
 
 void testConnection() {
-
-  /*
-  DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
-  Console.WriteLine("Type DB: ");
-  String db = Console.ReadLine();
-  connb.Database = db;
-  Console.WriteLine("Type uid: ");
-  String uid = Console.ReadLine();
-  connb.UserID = uid;
-  Console.WriteLine("Type pwd: ");
-  String pwd = Console.ReadLine();
-  connb.Password = pwd;
-  Console.WriteLine("Type Server:Port: ");
-  String sslserver = Console.ReadLine();
-  connb.Server = sslserver;
-  bool ssl; 
-  Console.WriteLine("SSL? (True/False): ");
-  ssl = bool.Parse(Console.ReadLine());
-  if (ssl) {
-    connb.Security = "SSL";
-    connb.SSLClientKeystash = "/etc/stash/zosclientdb.sth";
-    connb.SSLClientKeystoredb = "/etc/keystore/zosclientdb.kdb";
-  }
-  connb.Pooling = true;
-  connb.MinPoolSize = 0;
-  connb.MaxPoolSize = 10000;
-  
-  DB2Connection conn = new DB2Connection(connb.ConnectionString);
-  */
-
   DB2Connection conn = new DB2Connection();
   Console.WriteLine("Connection string: ");
   String connstring = Console.ReadLine();
