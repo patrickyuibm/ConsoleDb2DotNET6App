@@ -200,11 +200,7 @@ DB2Connection connectDb(int threadID) {
 
 void ping(int thid) {
   Ping p1 = new Ping();
-  Console.WriteLine("Pinging " + connectionDict["sslserver"].Substring(0, 12));
   PingReply reply = p1.Send(connectionDict["sslserver"].Substring(0, 12));
-  string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-  byte[] buffer = Encoding.ASCII.GetBytes (data);
-  int timeout = 120;
   if (reply.Status != IPStatus.Success) {
     Console.WriteLine("Pod Name: {0} " + Environment.MachineName + "Thread: " + thid.ToString() + " ping failed");
   }
