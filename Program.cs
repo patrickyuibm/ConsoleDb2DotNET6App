@@ -25,11 +25,12 @@ connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
 connectionDict.Add("sslserver", Environment.GetEnvironmentVariable("sslserver"));
 
 
-String[] select_statements =  {"SELECT * FROM DB2ADM.TB2", 
+String[] select_statements =  {"SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2",
+                               "SELECT * FROM DB2ADM.TB2", 
                                "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*5000",
                                "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*10000",
                                "SELECT * FROM DB2ADM.TB2 WHERE C2 > RAND()*5000",
-                               "SELECT * FROM DB2ADM.TB2 WHERE C2 > RAND()*10000"};
+                               "SELECT * FROM DB2ADM.TB2 WHERE C2 > RAND()*10000"}; //the first statement is deliberately computationally expensive
 String[] insert_statements =  {"INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*100000)", 
                                "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*100000,  RAND()*10000)",
                                "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*5000,  RAND()*10000)",
@@ -71,7 +72,7 @@ void main() {
  
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
-    Thread t = new Thread(new ThreadStart(() => startSelectTimed()));
+    Thread t = new Thread(new ThreadStart(() => startSelect()));
     t.Start();
     myThreads[i] = t;
   }
@@ -120,7 +121,29 @@ void startSelectTimed() {
    } finally { 
       conn.Close();
     }
+}
 
+void startSelect() {
+  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
+  DB2Connection conn = connectDb(thid);
+  conn.Open();
+
+  try {
+    DB2Command cmd1 = new DB2Command(select_statements[0], conn);
+    DB2DataReader dr1 = cmd1.ExecuteReader();
+    dr1.Close();
+  } 
+  catch (DB2Exception myException) { 
+    for (int i=0; i < myException.Errors.Count; i++) { 
+         Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
+             "Message: " + myException.Errors[i].Message + "\n" + 
+             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
+             "Source: " + myException.Errors[i].Source + "\n" + 
+             "SQL: " + myException.Errors[i].SQLState + "\n");
+       } 
+   } finally { 
+      conn.Close();
+  }
 }
 
 void testConnection() {
@@ -162,6 +185,10 @@ DB2Connection connectDb(int threadID) {
   connb.Pooling = true;
   connb.MinPoolSize = 0;
   connb.MaxPoolSize = 10000;
+
+  //Timeout management
+  //connb.Connect_Timeout = 3;
+  //connb.ConnectionLifeTime = 3;
   
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   Console.WriteLine(conn.ConnectionString);
@@ -245,33 +272,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
   myReader.Close(); 
 }
 
-void startSelect() {
-  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
-  DB2Connection conn = new DB2Connection();
-  conn.ConnectionString = "";
-  conn.Open();
 
-  try {
-    DB2Command cmd1 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_TABLE (CLIENT_USERID, PROFILEID, PROFILE_ENABLED) VALUES ('Patrick', 20240110, 'Y')", conn);
-    DB2Command cmd2 = new DB2Command("INSERT INTO SYSIBM.DSN_PROFILE_ATTRIBUTES(PROFILEID,KEYWORDS,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE_TIMESTAMP) VALUES (20240110,'MONITOR THREADS', 'EXCEPTION_DIAGLEVEL3', 5, 0, CURRENT TIMESTAMP)", conn);
-    DB2DataReader dr1 = cmd1.ExecuteReader();
-    DB2DataReader dr2 = cmd2.ExecuteReader();
-    dr1.Close();
-    dr2.Close();
-  } 
-  catch (DB2Exception myException) { 
-    for (int i=0; i < myException.Errors.Count; i++) { 
-         Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
-             "Message: " + myException.Errors[i].Message + "\n" + 
-             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
-             "Source: " + myException.Errors[i].Source + "\n" + 
-             "SQL: " + myException.Errors[i].SQLState + "\n");
-       } 
-   } finally { 
-      conn.Close();
-  }
-
-}
 
 //***************************** RUN METHODS HERE *****************************
 Console.WriteLine("Run main workload or test connection? (1/2): ");
