@@ -202,7 +202,7 @@ void ping(int thid) {
   Ping p1 = new Ping();
   PingReply reply = p1.Send(connectionDict["sslserver"].Substring(0, 12));
   if (reply.Status != IPStatus.Success) {
-    Console.WriteLine("Pod Name: {0} " + Environment.MachineName + "Thread: " + thid.ToString() + " ping failed");
+    Console.WriteLine("Pod Name: " + Environment.MachineName + "; Thread: " + thid.ToString() + "; ping failed");
   }
 }
 
