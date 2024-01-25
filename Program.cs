@@ -194,23 +194,19 @@ DB2Connection connectDb(int threadID) {
   
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   //Console.WriteLine(conn.ConnectionString);
-  ping();
+  ping(threadID);
   return conn;
 }
 
-void ping() {
+void ping(int thid) {
   Ping p1 = new Ping();
   Console.WriteLine("Pinging " + connectionDict["sslserver"].Substring(0, 12));
   PingReply reply = p1.Send(connectionDict["sslserver"].Substring(0, 12));
   string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   byte[] buffer = Encoding.ASCII.GetBytes (data);
   int timeout = 120;
-  if (reply.Status == IPStatus.Success) {
-    Console.WriteLine ("Address: {0}", reply.Address.ToString ());
-    Console.WriteLine ("RoundTrip time: {0}", reply.RoundtripTime);
-    Console.WriteLine ("Time to live: {0}", reply.Options.Ttl);
-    Console.WriteLine ("Don't fragment: {0}", reply.Options.DontFragment);
-    Console.WriteLine ("Buffer size: {0}", reply.Buffer.Length);
+  if (reply.Status != IPStatus.Success) {
+    Console.WriteLine("Pod Name: {0} " + Environment.MachineName + "Thread: " + thid.ToString() + " ping failed");
   }
 }
 
