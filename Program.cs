@@ -191,7 +191,7 @@ DB2Connection connectDb(int threadID) {
   //connb.ConnectionLifeTime = 3;
   
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
-  Console.WriteLine(conn.ConnectionString);
+  //Console.WriteLine(conn.ConnectionString);
   conn.Close();
   return conn;
 }
