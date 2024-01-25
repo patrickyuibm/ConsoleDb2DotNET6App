@@ -194,7 +194,7 @@ DB2Connection connectDb(int threadID) {
   
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   //Console.WriteLine(conn.ConnectionString);
-  //ping(threadID);
+  ping(threadID);
   return conn;
 }
 
