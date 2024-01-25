@@ -201,11 +201,10 @@ DB2Connection connectDb(int threadID) {
 void ping() {
   Ping p1 = new Ping();
   Console.WriteLine("Pinging " + connectionDict["sslserver"].Substring(0, 12));
-  PingReply PR = p1.Send(connectionDict["sslserver"].Substring(0, 12));
+  PingReply reply = p1.Send(connectionDict["sslserver"].Substring(0, 12));
   string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   byte[] buffer = Encoding.ASCII.GetBytes (data);
   int timeout = 120;
-  PingReply reply = pingSender.Send (args[0], timeout, buffer, options);
   if (reply.Status == IPStatus.Success) {
     Console.WriteLine ("Address: {0}", reply.Address.ToString ());
     Console.WriteLine ("RoundTrip time: {0}", reply.RoundtripTime);
