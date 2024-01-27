@@ -137,7 +137,7 @@ void startSelect() {
   conn.Open();
 
   try {
-    if (!(System.Environment.MachineName in pods)) {
+    if (!pods.Contains(System.Environment.MachineName)) {
       pods.Add(System.Environment.MachineName);
     }
     DB2Command cmd1 = new DB2Command(select_statements[1], conn);
