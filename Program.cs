@@ -132,7 +132,7 @@ void startSelect() {
   conn.Open();
 
   try {
-    Console.WriteLine("Thread #" + thid.ToString() + " Hostname " + GetComputerName());
+    Console.WriteLine("Thread #" + thid.ToString() + " Hostname " + System.Environment.MachineName);
     DB2Command cmd1 = new DB2Command(select_statements[0], conn);
     DB2DataReader dr1 = cmd1.ExecuteReader();
     dr1.Close();
