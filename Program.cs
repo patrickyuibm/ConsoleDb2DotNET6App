@@ -7,6 +7,7 @@ using System.Threading;
 using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using IBM.Data.Db2;
 using System.Configuration;
 using System.Collections.Specialized;
@@ -131,6 +132,7 @@ void startSelect() {
   conn.Open();
 
   try {
+    Console.WriteLine("Thread #" + thid.ToString() + " Hostname " + GetComputerName());
     DB2Command cmd1 = new DB2Command(select_statements[0], conn);
     DB2DataReader dr1 = cmd1.ExecuteReader();
     dr1.Close();
