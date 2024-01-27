@@ -51,6 +51,9 @@ String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 > 3
                               "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 > 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 < 3000"};
 
+ArrayList pods = new ArrayList();
+
+
 int selects = 0;
 int deletes = 0;
 int inserts = 0;
@@ -94,6 +97,10 @@ void main() {
   Console.WriteLine("Number of inserts ran: " + inserts.ToString());
   Console.WriteLine("Number of updates ran: " + updates.ToString());
   Console.WriteLine("Number of rows affected: " + total_records_affected.ToString());
+  Console.WriteLine("Pods used: ");
+  foreach(String item in pods) {
+    Console.WriteLine(item);
+  }
 }
 
 void startSelectTimed() {
@@ -132,7 +139,9 @@ void startSelect() {
   conn.Open();
 
   try {
-    Console.WriteLine("Thread #" + thid.ToString() + " Hostname " + System.Environment.MachineName);
+    if (!(System.Environment.MachineName in pods)) {
+      pods.Add(System.Environment.MachineName);
+    }
     DB2Command cmd1 = new DB2Command(select_statements[1], conn);
     DB2DataReader dr1 = cmd1.ExecuteReader();
     dr1.Close();
