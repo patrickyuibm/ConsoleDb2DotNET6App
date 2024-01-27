@@ -98,6 +98,9 @@ void main() {
   Console.WriteLine("Number of updates ran: " + updates.ToString());
   Console.WriteLine("Number of rows affected: " + total_records_affected.ToString());
   Console.WriteLine("Pods used: ");
+  foreach(String s : pods) {
+    Console.WriteLine(s);
+  }
 
 }
 
