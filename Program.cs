@@ -114,7 +114,7 @@ void startSelectTimed() {
     s.Start();
     while (s.Elapsed < TimeSpan.FromSeconds(timespan)) 
     {
-        DB2Command cmd1 = new DB2Command(select_statements[0], conn);
+        DB2Command cmd1 = new DB2Command(select_statements[1], conn);
         DB2DataReader dr1 = cmd1.ExecuteReader();
         dr1.Close();
         //run_select_queries(conn);
@@ -201,12 +201,12 @@ DB2Connection connectDb(int threadID) {
   connb.MaxPoolSize = 10000;
 
   //Timeout management
-  //connb.Connect_Timeout = 3;
-  //connb.ConnectionLifeTime = 3;
+  connb.Connect_Timeout = 3;
+  connb.ConnectionLifeTime = 3;
   
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   //Console.WriteLine(conn.ConnectionString);
-  ping(threadID);
+  //ping(threadID);
   return conn;
 }
 
