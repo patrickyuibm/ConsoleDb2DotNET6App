@@ -57,7 +57,7 @@ int inserts = 0;
 int updates = 0;
 int total_records_affected = 0;
 
-bool ssl;
+bool ssl = true;
 int timespan = 0;
 
 //***************************** METHODS *****************************
@@ -134,7 +134,7 @@ void startSelect() {
   //DB2Transaction transaction;
   //transaction = conn.BeginTransaction();
   try {
-     DB2Command cmd1 = new DB2Command(select_statements[1], conn);
+     DB2Command cmd1 = new DB2Command(insert_statements[1], conn);
      DB2DataReader dr1 = cmd1.ExecuteReader();
      dr1.Close();
   } catch (DB2Exception myException) { 
@@ -173,7 +173,7 @@ DB2Connection connectDb(int threadID) {
   connb.Database = connectionDict["db"];
   connb.UserID = connectionDict["uid"];
   connb.Password = connectionDict["pwd"];
-  bool ssl = true; 
+  Console.WriteLine(bool.ToString());
   if (ssl) {
     connb.Server = connectionDict["sslserver"];
     connb.Security = "SSL";
