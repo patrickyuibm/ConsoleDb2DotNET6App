@@ -51,9 +51,6 @@ String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 > 3
                               "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 > 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 < 3000"};
 
-ArrayList pods = new ArrayList();
-
-
 int selects = 0;
 int deletes = 0;
 int inserts = 0;
@@ -139,16 +136,22 @@ void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = connectDb(thid);
   conn.Open();
+  
+  DB2Command cmd1 = new DB2Command();
+  DB2Transaction transaction;
+  transaction = conn.BeginTransaction();
+  cmd1.Transaction = transaction;
 
   try {
-    if (!pods.Contains(System.Environment.MachineName)) {
-      pods.Add(System.Environment.MachineName);
-    }
-    DB2Command cmd1 = new DB2Command(select_statements[1], conn);
-    DB2DataReader dr1 = cmd1.ExecuteReader();
-    dr1.Close();
-  } 
-  catch (DB2Exception myException) { 
+    cmd1.CommandText = select_statements[1];
+    cmd1.ExecuteNonQuery();
+    cmd1.CommandText = select_statements[2];
+    cmd1.ExecuteNonQuery();
+    transaction.commit();
+  } catch(Exception e) {
+     myTrans.Rollback();
+     Console.WriteLine(e.ToString());
+  } catch (DB2Exception myException) { 
     for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
