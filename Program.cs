@@ -133,8 +133,7 @@ void startSelect() {
   conn.Open();
   
   DB2Command cmd1 = new DB2Command();
-  DB2Transaction transaction = new DB2Transaction();
-  transaction.Connection = conn;
+  DB2Transaction transaction;
   transaction = conn.BeginTransaction();
   cmd1.Transaction = transaction;
 
