@@ -131,14 +131,11 @@ void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = connectDb(thid);
   conn.Open();
-  
-  DB2Transaction transaction;
-  transaction = conn.BeginTransaction();
-
+  //DB2Transaction transaction;
+  //transaction = conn.BeginTransaction();
   try {
-     DB2Command cmd1 = new DB2Command(select_statements[1], conn, transaction);
-     cmd1.ExecuteNonQuery();
-     transaction.Commit();
+     DB2Command cmd1 = new DB2Command(select_statements[1], conn);
+     cmd1.ExecuteQuery();
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
@@ -149,7 +146,6 @@ void startSelect() {
              "At time: " + DateTime.Now);
       }
   } catch(Exception e) {
-     transaction.Rollback();
      Console.WriteLine(e.ToString());
   } finally { 
       conn.Close();
