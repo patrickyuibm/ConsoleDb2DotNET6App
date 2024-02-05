@@ -132,17 +132,13 @@ void startSelect() {
   DB2Connection conn = connectDb(thid);
   conn.Open();
   
-  DB2Command cmd1 = new DB2Command();
   DB2Transaction transaction;
   transaction = conn.BeginTransaction();
-  cmd1.Transaction = transaction;
 
   try {
-    cmd1.CommandText = select_statements[1];
-    cmd1.ExecuteNonQuery();
-    cmd1.CommandText = select_statements[2];
-    cmd1.ExecuteNonQuery();
-    transaction.Commit();
+     DB2Command cmd1 = new DB2Command(select_statemens[1], conn, transaction);
+     cmd1.ExecuteNonQuery();
+     transaction.Commit();
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
