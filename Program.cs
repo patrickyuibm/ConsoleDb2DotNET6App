@@ -135,7 +135,8 @@ void startSelect() {
   //transaction = conn.BeginTransaction();
   try {
      DB2Command cmd1 = new DB2Command(select_statements[1], conn);
-     cmd1.ExecuteQuery();
+     DB2DataReader dr1 = cmd1.ExecuteReader();
+     dr1.Close();
   } catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
@@ -145,9 +146,7 @@ void startSelect() {
              "SQL: " + myException.Errors[i].SQLState + "\n" + 
              "At time: " + DateTime.Now);
       }
-  } catch(Exception e) {
-     Console.WriteLine(e.ToString());
-  } finally { 
+  finally { 
       conn.Close();
   }
 }
