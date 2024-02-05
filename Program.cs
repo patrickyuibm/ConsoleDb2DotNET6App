@@ -136,7 +136,7 @@ void startSelect() {
   transaction = conn.BeginTransaction();
 
   try {
-     DB2Command cmd1 = new DB2Command(select_statemens[1], conn, transaction);
+     DB2Command cmd1 = new DB2Command(select_statements[1], conn, transaction);
      cmd1.ExecuteNonQuery();
      transaction.Commit();
   } catch (DB2Exception myException) { 
