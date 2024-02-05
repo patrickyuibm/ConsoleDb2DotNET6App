@@ -94,11 +94,6 @@ void main() {
   Console.WriteLine("Number of inserts ran: " + inserts.ToString());
   Console.WriteLine("Number of updates ran: " + updates.ToString());
   Console.WriteLine("Number of rows affected: " + total_records_affected.ToString());
-  Console.WriteLine("Pods used: ");
-  foreach (String s in pods) {
-    Console.WriteLine(s);
-  }
-
 }
 
 void startSelectTimed() {
@@ -147,11 +142,8 @@ void startSelect() {
     cmd1.ExecuteNonQuery();
     cmd1.CommandText = select_statements[2];
     cmd1.ExecuteNonQuery();
-    transaction.commit();
-  } catch(Exception e) {
-     myTrans.Rollback();
-     Console.WriteLine(e.ToString());
-  } catch (DB2Exception myException) { 
+    transaction.Commit();
+  catch (DB2Exception myException) { 
     for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
@@ -159,9 +151,12 @@ void startSelect() {
              "Source: " + myException.Errors[i].Source + "\n" + 
              "SQL: " + myException.Errors[i].SQLState + "\n" + 
              "At time: " + DateTime.Now);
-       } 
-   } finally { 
+    } catch(Exception e) {
+     transaction.Rollback();
+     Console.WriteLine(e.ToString());
+    } finally { 
       conn.Close();
+    }
   }
 }
 
