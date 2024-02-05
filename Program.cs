@@ -134,7 +134,7 @@ void startSelect() {
   //DB2Transaction transaction;
   //transaction = conn.BeginTransaction();
   try {
-     DB2Command cmd1 = new DB2Command(select_statements[1], conn);
+     DB2Command cmd1 = new DB2Command(select_statements[0], conn);
      DB2DataReader dr1 = cmd1.ExecuteReader();
      dr1.Close();
   } catch (DB2Exception myException) { 
