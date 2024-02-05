@@ -173,7 +173,6 @@ DB2Connection connectDb(int threadID) {
   connb.Database = connectionDict["db"];
   connb.UserID = connectionDict["uid"];
   connb.Password = connectionDict["pwd"];
-  Console.WriteLine(ssl.ToString());
   if (ssl) {
     connb.Server = connectionDict["sslserver"];
     connb.Security = "SSL";
