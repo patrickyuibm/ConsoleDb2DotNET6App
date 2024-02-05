@@ -143,20 +143,20 @@ void startSelect() {
     cmd1.CommandText = select_statements[2];
     cmd1.ExecuteNonQuery();
     transaction.Commit();
-  catch (DB2Exception myException) { 
-    for (int i=0; i < myException.Errors.Count; i++) { 
+  } catch (DB2Exception myException) { 
+      for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
              "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
              "Source: " + myException.Errors[i].Source + "\n" + 
              "SQL: " + myException.Errors[i].SQLState + "\n" + 
              "At time: " + DateTime.Now);
-    } catch(Exception e) {
+      }
+  } catch(Exception e) {
      transaction.Rollback();
      Console.WriteLine(e.ToString());
-    } finally { 
+  } finally { 
       conn.Close();
-    }
   }
 }
 
