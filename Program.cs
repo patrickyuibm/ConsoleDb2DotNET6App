@@ -146,7 +146,7 @@ void startSelect() {
              "SQL: " + myException.Errors[i].SQLState + "\n" + 
              "At time: " + DateTime.Now);
       }
-  finally { 
+  } finally { 
       conn.Close();
   }
 }
