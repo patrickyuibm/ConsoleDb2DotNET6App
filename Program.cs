@@ -60,11 +60,13 @@ int total_records_affected = 0;
 bool ssl = true;
 int timespan = 0;
 
+int numInsertThreads = 0;
+
 //***************************** METHODS *****************************
 
 void main() {
   Console.WriteLine("Insert number of threads: ");
-  int numInsertThreads = int.Parse(Console.ReadLine());
+  numInsertThreads = int.Parse(Console.ReadLine());
   Console.WriteLine("Enable SSL? (True/False): ");
   ssl = bool.Parse(Console.ReadLine());
   Console.WriteLine("How long for each thread to run (in seconds)?: ");
@@ -188,7 +190,7 @@ DB2Connection connectDb(int threadID) {
   //Pooling
   connb.Pooling = true;
   connb.MinPoolSize = 0;
-  connb.MaxPoolSize = 10000;
+  connb.MaxPoolSize = numInsertThreads;
 
   //Timeout management
   //connb.Connect_Timeout = 3;
