@@ -61,6 +61,7 @@ bool ssl = true;
 int timespan = 0;
 
 int numInsertThreads = 0;
+int connLT = 0;
 
 //***************************** METHODS *****************************
 
@@ -71,6 +72,8 @@ void main() {
   ssl = bool.Parse(Console.ReadLine());
   Console.WriteLine("How long for each thread to run (in seconds)?: ");
   timespan = int.Parse(Console.ReadLine());
+  Console.WriteLine("Connection lifetime (in seconds)?: ");
+  connLT = int.Parse(Console.ReadLine());
   
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
@@ -193,8 +196,8 @@ DB2Connection connectDb(int threadID) {
   connb.MaxPoolSize = numInsertThreads;
 
   //Timeout management
-  //connb.Connect_Timeout = 3;
-  //connb.ConnectionLifeTime = 3;
+  //connb.Connect_Timeout = 60;
+  connb.ConnectionLifeTime = connLT;
   
   DB2Connection conn = new DB2Connection(connb.ConnectionString);
   //Console.WriteLine(conn.ConnectionString);
