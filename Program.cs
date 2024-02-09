@@ -85,7 +85,7 @@ void main() {
     for (int j = 0; j < i; j++) {
       Thread t = new Thread(new ThreadStart(() => startSelect()));
       t.Start();
-      myThreads[i] = t;
+      myThreads[j] = t;
       counter += 1;
     }
     Console.WriteLine("c = " + counter.ToString());
