@@ -80,14 +80,15 @@ void main() {
 
   for (int i = 0; i < numInsertThreads / 500; i++) { //for each wave of 500 threads
     Thread[] myThreads = new Thread[numInsertThreads / 500];
-    Console.WriteLine("Wave " + i.ToString() + " of " + myThreads.Length.ToString() + " threads");
-    int j = 0; 
-    for (; j < i; j++) {
+    Console.WriteLine("Wave " + i.ToString() + " of " + myThreads.Length.ToString());
+    int counter = 0; 
+    for (int j = 0; j < i; j++) {
       Thread t = new Thread(new ThreadStart(() => startSelect()));
       t.Start();
       myThreads[i] = t;
+      counter += 1
     }
-    Console.WriteLine("j = " + j.ToString());
+    Console.WriteLine("c = " + counter.ToString());
     foreach (Thread t in myThreads) {
       t.Join();
     }
