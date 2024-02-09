@@ -88,7 +88,7 @@ void main() {
       myThreads[i] = t;
     }
     Console.WriteLine("j = " + j.ToString());
-    for (Thread t in myThreads) {
+    foreach (Thread t in myThreads) {
       t.Join();
     }
   }
