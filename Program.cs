@@ -78,9 +78,6 @@ void main() {
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
 
-  PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total"); 
-  PerformanceCounter memoryCounter = new PerformanceCounter("Memory", "Available MBytes");
- 
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -89,9 +86,8 @@ void main() {
   }
   foreach (Thread t in myThreads) {
     t.Join();
-    Console.WriteLine("CPU usage = " + cpuCounter.NextValue());
-    Console.WriteLine("Memory usage = " + memoryCounter.NextValue());
   }
+  
   watch.Stop();
   TimeSpan ts = watch.Elapsed;
   // Format and display the TimeSpan value.
