@@ -92,7 +92,8 @@ void main() {
       t.Join();
     }
   }
-
+  
+  /*
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -102,6 +103,7 @@ void main() {
   foreach (Thread t in myThreads) {
     t.Join();
   }
+  */
   
   watch.Stop();
   TimeSpan ts = watch.Elapsed;
