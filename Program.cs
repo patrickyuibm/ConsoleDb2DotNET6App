@@ -79,7 +79,7 @@ void main() {
   watch.Start();
 
   PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total"); 
-  PerformanceCounter memCounter = new PerformanceCounter("Memory", "Available MBytes");
+  PerformanceCounter memoryCounter = new PerformanceCounter("Memory", "Available MBytes");
  
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
