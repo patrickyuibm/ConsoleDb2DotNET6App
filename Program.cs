@@ -78,11 +78,12 @@ void main() {
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
   
-  Thread[] myThreads = new Thread[numInsertThreads / 500];
+  Thread[] myThreads;
   for (int i = 0; i < numInsertThreads / 500; i++) { //for each wave of 500 threads
-    Console.WriteLine("Wave " + i.ToString() + " of " + myThreads.Length.ToString());
+    myThreads = new Thread[500];
+    Console.WriteLine("Wave " + i.ToString() + " of " + (numInsertThreads / 500).ToString());
     int counter = 0; 
-    for (int j = 0; j < i; j++) {
+    for (int j = 0; j < 500; j++) {
       Thread t = new Thread(new ThreadStart(() => startSelect()));
       t.Start();
       myThreads[j] = t;
