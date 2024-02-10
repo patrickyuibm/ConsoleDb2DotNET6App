@@ -85,11 +85,10 @@ void main() {
     int counter = 0; 
     for (int j = 0; j < 500; j++) {
       Thread t = new Thread(new ThreadStart(() => startSelect()));
-      t.Start();
       myThreads[j] = t;
-      counter += 1;
+      myThreads[j].Start();
+      myThreads[j].Sleep(15000);
     }
-    Console.WriteLine("c = " + counter.ToString());
     foreach (Thread t in myThreads) {
       t.Join();
     }
