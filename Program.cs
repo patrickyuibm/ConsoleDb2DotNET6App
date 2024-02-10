@@ -85,9 +85,9 @@ void main() {
     int counter = 0; 
     for (int j = 0; j < 500; j++) {
       Thread t = new Thread(new ThreadStart(() => startSelect()));
+      t.Start();
       myThreads[j] = t;
-      myThreads[j].Start();
-      myThreads[j].Sleep(15000);
+      Thread.Sleep(15000);
     }
     foreach (Thread t in myThreads) {
       t.Join();
