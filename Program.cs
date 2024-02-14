@@ -77,7 +77,8 @@ void main() {
   
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
-  
+
+  /*
   Thread[] myThreads;
   for (int i = 0; i < numInsertThreads / 500; i++) { //for each wave of 500 threads
     myThreads = new Thread[500];
@@ -93,8 +94,8 @@ void main() {
       t.Join();
     }
   }
+  */
   
-  /*
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -104,7 +105,7 @@ void main() {
   foreach (Thread t in myThreads) {
     t.Join();
   }
-  */
+
   
   watch.Stop();
   TimeSpan ts = watch.Elapsed;
