@@ -77,24 +77,6 @@ void main() {
   
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
-
-  /*
-  Thread[] myThreads;
-  for (int i = 0; i < numInsertThreads / 500; i++) { //for each wave of 500 threads
-    myThreads = new Thread[500];
-    Console.WriteLine("Wave " + i.ToString() + " of " + (numInsertThreads / 500).ToString());
-    int counter = 0; 
-    for (int j = 0; j < 500; j++) {
-      Thread t = new Thread(new ThreadStart(() => startSelect()));
-      t.Start();
-      myThreads[j] = t;
-      Thread.Sleep(15000);
-    }
-    foreach (Thread t in myThreads) {
-      t.Join();
-    }
-  }
-  */
   
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
@@ -125,7 +107,7 @@ void startSelectTimed() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   DB2Connection conn = connectDb(thid);
   conn.Open();
-  //Console.WriteLine(conn.ConnectionString);
+  Console.WriteLine(conn.ConnectionString);
   try { 
     Stopwatch s = new Stopwatch();
     s.Start();
