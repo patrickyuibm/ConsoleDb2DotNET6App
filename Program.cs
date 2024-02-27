@@ -207,7 +207,7 @@ DB2Connection connectDb(int threadID) {
   connb.Database = properties["DS_DATABASE_NAME"];
   connb.UserID = properties["DS_USER"];
   connb.Password = properties["DS_PASSWORD"];
-  if (ssl) {
+  if (properties["DS_ENABLE_SSL"].ToLower().Contains("t")) {
     connb.Server = properties["DS_SSL_SERVER"];
     connb.Security = "SSL";
     connb.SSLClientKeystash = "/etc/stash/zosclientdb.sth";
