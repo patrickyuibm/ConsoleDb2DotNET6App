@@ -79,7 +79,6 @@ void main() {
   Console.WriteLine("Connection lifetime (in seconds)?: ");
   connLT = int.Parse(Console.ReadLine());
   
-  
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
   
@@ -205,18 +204,18 @@ DB2Connection connectDb(int threadID) {
   connb.ClientApplicationName = "Thread_" + threadID.ToString();
 
   //Server credentials
-  connb.Database = connectionDict["db"];
-  connb.UserID = connectionDict["uid"];
-  connb.Password = connectionDict["pwd"];
+  connb.Database = properties["DS_DATABASE_NAME"];
+  connb.UserID = properties["DS_USER"];
+  connb.Password = properties["DS_PASSWORD"];
   if (ssl) {
-    connb.Server = connectionDict["sslserver"];
+    connb.Server = properties["DS_SSL_SERVER"];
     connb.Security = "SSL";
     connb.SSLClientKeystash = "/etc/stash/zosclientdb.sth";
     connb.SSLClientKeystoredb = "/etc/keystore/zosclientdb.kdb";
     //connb.SSLClientLabel = "clientcert";
     //connb.SSLClientKeystoreDBPassword = "PASS";
   } else {
-    connb.Server = connectionDict["server"];
+    connb.Server = properties["server"];
   }
   
   
