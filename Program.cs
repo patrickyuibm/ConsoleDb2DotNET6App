@@ -63,10 +63,13 @@ int timespan = 0;
 int numInsertThreads = 0;
 int connLT = 0;
 
+Dictionary<string, string> properties;
+
 //***************************** METHODS *****************************
 
 void main() {
-  getConnectionProperties();
+  properties = getConnectionProperties();
+
   Console.WriteLine("Insert number of threads: ");
   numInsertThreads = int.Parse(Console.ReadLine());
   Console.WriteLine("Enable SSL? (True/False): ");
@@ -75,6 +78,7 @@ void main() {
   timespan = int.Parse(Console.ReadLine());
   Console.WriteLine("Connection lifetime (in seconds)?: ");
   connLT = int.Parse(Console.ReadLine());
+  
   
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
@@ -159,7 +163,7 @@ void startSelect() {
   }
 }
 
-void getConnectionProperties() {
+Dictionary<string, string> getConnectionProperties() {
   Dictionary<string, string> props = new Dictionary<string, string>();
   try {
     // Create an instance of StreamReader to read from a file.
@@ -169,7 +173,10 @@ void getConnectionProperties() {
         // Read and display lines from the file until the end of
         // the file is reached.
         while ((line = sr.ReadLine()) != null) {
-          Console.WriteLine(line);
+          int equalSignIndex = line.IndexOf("=");
+          Console.WriteLine(line.Substring(0, equalSignIndex));
+          Console.WriteLine(line.Substring(equalSignIndex + 1));
+          props.Add(line.Substring(0, equalSignIndex), line.Substring(equalSignIndex + 1));
         }
       }
   } catch (Exception e) {
