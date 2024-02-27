@@ -96,7 +96,6 @@ void startSelect() {
   
   DB2Connection conn = new DB2Connection();
   conn.ConnectionString = connectDb() + ";ClientApplicationName="+thid.ToString();
-  Console.WriteLine(conn.ConnectionString);
   conn.Open();
   
   //DB2Transaction transaction;
