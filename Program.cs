@@ -156,7 +156,7 @@ String connectDb() {
     //connb.SSLClientLabel = "clientcert";
     //connb.SSLClientKeystoreDBPassword = "PASS";
   } else {
-    connb.Server = DSConfigs_properties["server"];
+    connb.Server = DSConfigs_properties["DS_SERVER_NAME"];
   }
   
   
