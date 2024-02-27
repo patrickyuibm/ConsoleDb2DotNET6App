@@ -58,7 +58,7 @@ String connString;
 void main() {
   DSConfigs_properties = getProperties("/etc/dsconfigsproperties/DSConfigs_properties.txt");
   WrkloadConfigs_properties = getProperties("/etc/wrkloadconfigsproperties/WrkloadConfigs_properties.txt");
-  Test_properties = getProperties("/etc/test/properties/Test_properties.txt");
+  Test_properties = getProperties("/etc/testproperties/Test_properties.txt");
 
   connString = connectDb();
   
