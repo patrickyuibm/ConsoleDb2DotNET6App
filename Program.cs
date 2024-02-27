@@ -20,14 +20,6 @@ using IBM.Data.DB2Types;
 using System.Text;
 
 //***************************** GLOBAL VARIABLES *****************************
-Dictionary<string, string> connectionDict = new Dictionary<string, string>();
-connectionDict.Add("uid", Environment.GetEnvironmentVariable("uid"));
-connectionDict.Add("pwd", Environment.GetEnvironmentVariable("pwd"));
-connectionDict.Add("server", Environment.GetEnvironmentVariable("server"));
-connectionDict.Add("db", Environment.GetEnvironmentVariable("db"));
-connectionDict.Add("sslserver", Environment.GetEnvironmentVariable("sslserver"));
-
-
 String[] select_statements =  {"SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2",
                                "SELECT * FROM DB2ADM.TB2", 
                                "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*5000",
@@ -50,38 +42,29 @@ String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 > 3
                               "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 < 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 > 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 < 3000"};
-
 int selects = 0;
 int deletes = 0;
 int inserts = 0;
 int updates = 0;
 int total_records_affected = 0;
 
-bool ssl = true;
-int timespan = 0;
-
-int numInsertThreads = 0;
-int connLT = 0;
-
-Dictionary<string, string> properties;
+Dictionary<string, string> DSConfigs_properties;
+Dictionary<string, string> WrkloadConfigs_properties;
+Dictionary<string, string> Test_properties;
+String connString;
 
 //***************************** METHODS *****************************
 
 void main() {
-  properties = getConnectionProperties();
+  DSConfigs_properties = getProperties("/etc/properties/DSConfigs_properties.txt");
+  WrkloadConfigs_properties = getProperties("/etc/properties/WrkloadConfigs_properties.txt");
+  Test_properties = getProperties("/etc/properties/Test_properties.txt");
 
-  Console.WriteLine("Insert number of threads: ");
-  numInsertThreads = int.Parse(Console.ReadLine());
-  Console.WriteLine("Enable SSL? (True/False): ");
-  ssl = bool.Parse(Console.ReadLine());
-  Console.WriteLine("How long for each thread to run (in seconds)?: ");
-  timespan = int.Parse(Console.ReadLine());
-  Console.WriteLine("Connection lifetime (in seconds)?: ");
-  connLT = int.Parse(Console.ReadLine());
+  connString = connectDb();
   
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
-  
+  int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
     Thread t = new Thread(new ThreadStart(() => startSelect()));
@@ -91,9 +74,9 @@ void main() {
   foreach (Thread t in myThreads) {
     t.Join();
   }
-
   
   watch.Stop();
+  
   TimeSpan ts = watch.Elapsed;
   // Format and display the TimeSpan value.
   string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
@@ -107,45 +90,18 @@ void main() {
   Console.WriteLine("Number of rows affected: " + total_records_affected.ToString());
 }
 
-void startSelectTimed() {
-  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
-  DB2Connection conn = connectDb(thid);
-  conn.Open();
-  Console.WriteLine(conn.ConnectionString);
-  try { 
-    Stopwatch s = new Stopwatch();
-    s.Start();
-    while (s.Elapsed < TimeSpan.FromSeconds(timespan)) 
-    {
-        DB2Command cmd1 = new DB2Command(select_statements[0], conn);
-        DB2DataReader dr1 = cmd1.ExecuteReader();
-        dr1.Close();
-        //run_select_queries(conn);
-    }
-    s.Stop();
-  }
-  catch (DB2Exception myException) { 
-      for (int i=0; i < myException.Errors.Count; i++) { 
-         Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
-             "Message: " + myException.Errors[i].Message + "\n" + 
-             "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
-             "Source: " + myException.Errors[i].Source + "\n" + 
-             "SQL: " + myException.Errors[i].SQLState + "\n" + 
-             " At time: " + DateTime.Now);
-       } 
-   } finally { 
-      conn.Close();
-    }
-}
-
 void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
-  DB2Connection conn = connectDb(thid);
+  int select_statements_index = Test_properties["SELECT_STATEMENT_INDEX"];
+  
+  DB2Connection conn = DB2Connection();
+  conn.ConnectionString = connectDb(thid) + ";ClientApplicationName="+thid.ToString();
   conn.Open();
+  
   //DB2Transaction transaction;
   //transaction = conn.BeginTransaction();
   try {
-     DB2Command cmd1 = new DB2Command(select_statements[1], conn);
+     DB2Command cmd1 = new DB2Command(select_statements[select_statements_index], conn);
      DB2DataReader dr1 = cmd1.ExecuteReader();
      dr1.Close();
   } catch (DB2Exception myException) { 
@@ -162,19 +118,17 @@ void startSelect() {
   }
 }
 
-Dictionary<string, string> getConnectionProperties() {
+Dictionary<string, string> getProperties(String full_path) {
   Dictionary<string, string> props = new Dictionary<string, string>();
   try {
     // Create an instance of StreamReader to read from a file.
     // The using statement also closes the StreamReader.
-    using (StreamReader sr = new StreamReader("/etc/Properties.txt")) {
+    using (StreamReader sr = new StreamReader(full_path)) {
         String line;
         // Read and display lines from the file until the end of
         // the file is reached.
         while ((line = sr.ReadLine()) != null) {
           int equalSignIndex = line.IndexOf("=");
-          Console.WriteLine(line.Substring(0, equalSignIndex));
-          Console.WriteLine(line.Substring(equalSignIndex + 1));
           props.Add(line.Substring(0, equalSignIndex), line.Substring(equalSignIndex + 1));
         }
       }
@@ -183,55 +137,38 @@ Dictionary<string, string> getConnectionProperties() {
       Console.WriteLine("The file could not be read:");
       Console.WriteLine(e.Message);
     }
+  return props;
 }
 
-void testConnection() {
-  DB2Connection conn = new DB2Connection();
-  Console.WriteLine("Connection string: ");
-  String connstring = Console.ReadLine();
-  Console.WriteLine(connstring);
-  conn.ConnectionString = connstring;
-  conn.Open();
-  Console.WriteLine("Connection opened successfully");
-  conn.Close();
-}
-
-DB2Connection connectDb(int threadID) {
-  
+String connectDb() {
   DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
   
-  //Name the thread
-  connb.ClientApplicationName = "Thread_" + threadID.ToString();
-
   //Server credentials
-  connb.Database = properties["DS_DATABASE_NAME"];
-  connb.UserID = properties["DS_USER"];
-  connb.Password = properties["DS_PASSWORD"];
-  if (properties["DS_ENABLE_SSL"].ToLower().Contains("t")) {
-    connb.Server = properties["DS_SSL_SERVER"];
+  connb.Database = DSConfigs_properties["DS_DATABASE_NAME"];
+  connb.UserID = DSConfigs_properties["DS_USER"];
+  connb.Password = DSConfigs_properties["DS_PASSWORD"];
+  if (DSConfigs_properties["DS_ENABLE_SSL"].ToLower().Contains("t")) {
+    connb.Server = DSConfigs_properties["DS_SSL_SERVER"];
     connb.Security = "SSL";
     connb.SSLClientKeystash = "/etc/stash/zosclientdb.sth";
     connb.SSLClientKeystoredb = "/etc/keystore/zosclientdb.kdb";
     //connb.SSLClientLabel = "clientcert";
     //connb.SSLClientKeystoreDBPassword = "PASS";
   } else {
-    connb.Server = properties["server"];
+    connb.Server = DSConfigs_properties["server"];
   }
   
   
   //Pooling
   connb.Pooling = true;
   connb.MinPoolSize = 0;
-  connb.MaxPoolSize = numInsertThreads;
+  connb.MaxPoolSize = WrkloadConfigs_properties["COUNT"];
 
   //Timeout management
   //connb.Connect_Timeout = 60;
-  connb.ConnectionLifeTime = connLT;
+  connb.ConnectionLifeTime = Test_properties["CONN_LIFETIME"];
   
-  DB2Connection conn = new DB2Connection(connb.ConnectionString);
-  //Console.WriteLine(conn.ConnectionString);
-  //ping(threadID);
-  return conn;
+  return connb.ConnectionString;
 }
 
 void ping(int thid) {
@@ -321,13 +258,7 @@ void run_insert_and_select_tb2_SP(DB2Connection conn) {
 
 
 //***************************** RUN METHODS HERE *****************************
-Console.WriteLine("Run main workload or test connection? (1/2): ");
-int choice = int.Parse(Console.ReadLine());
-if (choice == 1) {
-  main();
-} else {
-  testConnection();
-}
+main();
 
 
 
