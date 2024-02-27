@@ -92,10 +92,11 @@ void main() {
 
 void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
-  int select_statements_index = Test_properties["SELECT_STATEMENT_INDEX"];
+  int select_statements_index = int.Parse(Test_properties["SELECT_STATEMENT_INDEX"]);
   
-  DB2Connection conn = DB2Connection();
-  conn.ConnectionString = connectDb(thid) + ";ClientApplicationName="+thid.ToString();
+  DB2Connection conn = new DB2Connection();
+  conn.ConnectionString = connectDb() + ";ClientApplicationName="+thid.ToString();
+  Console.WriteLine(conn.ConnectionString);
   conn.Open();
   
   //DB2Transaction transaction;
@@ -162,18 +163,18 @@ String connectDb() {
   //Pooling
   connb.Pooling = true;
   connb.MinPoolSize = 0;
-  connb.MaxPoolSize = WrkloadConfigs_properties["COUNT"];
+  connb.MaxPoolSize = int.Parse(WrkloadConfigs_properties["COUNT"]);
 
   //Timeout management
   //connb.Connect_Timeout = 60;
-  connb.ConnectionLifeTime = Test_properties["CONN_LIFETIME"];
+  connb.ConnectionLifeTime = int.Parse(Test_properties["CONN_LIFETIME"]);
   
   return connb.ConnectionString;
 }
 
 void ping(int thid) {
   Ping p1 = new Ping();
-  PingReply reply = p1.Send(connectionDict["sslserver"].Substring(0, 12));
+  PingReply reply = p1.Send(DSConfigs_properties["DS_SSL_SERVER"].Substring(0, 12));
   if (reply.Status != IPStatus.Success) {
     Console.WriteLine("Pod Name: " + Environment.MachineName + "; Thread: " + thid.ToString() + "; ping failed");
   }
