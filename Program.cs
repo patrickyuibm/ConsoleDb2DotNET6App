@@ -67,9 +67,7 @@ void main() {
 
   //display network statistics intermittently while threads run, to show active connections on clinet side. 
   System.Diagnostics.Process p = new System.Diagnostics.Process();
-  p.StartInfo.WorkingDirectory = "/etc";
-  p.StartInfo.FileName = "DisplayNetStats.sh";
-  p.StartInfo.UseShellExecute = true;
+  p.StartInfo.FileName = "../etc/DisplayNetStats.sh";
   p.Start();
 
   int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
