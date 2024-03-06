@@ -111,7 +111,7 @@ void startSelect() {
    try {  
     Stopwatch s = new Stopwatch(); 
     s.Start(); 
-    while (s.Elapsed < TimeSpan.FromMinutes(timespan))  
+    while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan))  
     { 
         DB2Command cmd1 = new DB2Command(select_statements[select_statements_index], conn); 
         DB2DataReader dr1 = cmd1.ExecuteReader(); 
