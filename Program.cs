@@ -65,10 +65,12 @@ void main() {
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
 
+  /*
   //display network statistics intermittently while threads run, to show active connections on clinet side. 
   System.Diagnostics.Process p = new System.Diagnostics.Process();
   p.StartInfo.FileName = "../etc/DisplayNetStats.sh";
   p.Start();
+  */
 
   int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
   Thread[] myThreads = new Thread[numInsertThreads];
