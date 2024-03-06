@@ -110,7 +110,7 @@ void startSelect() {
   //transaction = conn.BeginTransaction();
    try {  
     Stopwatch s = new Stopwatch(); 
-    s.Start(); =
+    s.Start(); 
     while (s.Elapsed < TimeSpan.FromMinutes(timespan))  
     { 
         DB2Command cmd1 = new DB2Command(select_statements[select_statements_index], conn); 
