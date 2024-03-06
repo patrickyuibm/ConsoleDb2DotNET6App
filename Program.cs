@@ -99,18 +99,25 @@ void main() {
 void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   int select_statements_index = int.Parse(Test_properties["SELECT_STATEMENT_INDEX"]);
-  
+  int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]);
   DB2Connection conn = new DB2Connection();
   conn.ConnectionString = connectDb() + ";ClientApplicationName="+thid.ToString();
   conn.Open();
   
   //DB2Transaction transaction;
   //transaction = conn.BeginTransaction();
-  try {
-     DB2Command cmd1 = new DB2Command(select_statements[select_statements_index], conn);
-     DB2DataReader dr1 = cmd1.ExecuteReader();
-     dr1.Close();
-  } catch (DB2Exception myException) { 
+   try {  
+    Stopwatch s = new Stopwatch(); 
+    s.Start(); =
+    while (s.Elapsed < TimeSpan.FromMinutes(timespan))  
+    { 
+        DB2Command cmd1 = new DB2Command(select_statements[select_statements_index], conn); 
+        DB2DataReader dr1 = cmd1.ExecuteReader(); 
+        dr1.Close(); 
+        //run_select_queries(conn); 
+    } 
+    s.Stop(); 
+  }  catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
              "Message: " + myException.Errors[i].Message + "\n" + 
