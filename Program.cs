@@ -102,6 +102,7 @@ void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   int select_statements_index = int.Parse(Test_properties["SELECT_STATEMENT_INDEX"]);
   int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]);
+  int proportion_of_selects = int.Parse(Test_properties["PROPORTION_OF_SELECTS"]);
   DB2Connection conn = new DB2Connection();
   conn.ConnectionString = connectDb() + ";ClientApplicationName="+thid.ToString();
   conn.Open();
@@ -113,10 +114,12 @@ void startSelect() {
     s.Start(); 
     while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan))  
     { 
-        DB2Command cmd1 = new DB2Command(select_statements[select_statements_index], conn); 
-        DB2DataReader dr1 = cmd1.ExecuteReader(); 
-        dr1.Close(); 
-        //run_select_queries(conn); 
+        int coin = rnd.Next(0, 10);
+        if (coin <= proportion_of_selects) {
+          run_select_queries(conn); 
+        } else {
+          run_update_queries(conn);
+        }
     } 
     s.Stop(); 
   }  catch (DB2Exception myException) { 
