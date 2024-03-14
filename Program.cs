@@ -109,7 +109,8 @@ void startSelect() {
   
   //DB2Transaction transaction;
   //transaction = conn.BeginTransaction();
-   try {  
+  Random rnd = new Random();
+  try {  
     Stopwatch s = new Stopwatch(); 
     s.Start(); 
     while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan))  
