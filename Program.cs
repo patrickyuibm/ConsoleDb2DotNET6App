@@ -190,12 +190,7 @@ String connectDb() {
   return connb.ConnectionString;
 }
 
-void ping(int thid) {
-  Ping p1 = new Ping();
-  PingReply reply = p1.Send(DSConfigs_properties["DS_SSL_SERVER"].Substring(0, 12));
-  if (reply.Status != IPStatus.Success) {
-    Console.WriteLine("Pod Name: " + Environment.MachineName + "; Thread: " + thid.ToString() + "; ping failed");
-  }
+void declareCursor() {
 }
 
 void run_select_queries(DB2Connection conn) {
