@@ -107,12 +107,15 @@ void startSelect() {
   conn.ConnectionString = connectDb() + ";ClientApplicationName="+thid.ToString();
   conn.Open();
   
-  //DB2Transaction transaction;
-  //transaction = conn.BeginTransaction();
-  Random rnd = new Random();
   try {  
+    //call with hold cursor SP
+    run_Cursor_WH_SP(conn);
+    
+    /*
+    //run queries <thread_timespan> minutes
     Stopwatch s = new Stopwatch(); 
     s.Start(); 
+    Random rnd = new Random();
     while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan))  
     { 
         int coin = rnd.Next(0, 10);
@@ -123,6 +126,7 @@ void startSelect() {
         }
     } 
     s.Stop(); 
+    */
   }  catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
@@ -229,12 +233,12 @@ void run_delete_queries(DB2Connection conn) {
   dr1.Close();
 }
 
-void run_insert_and_select_tb2_SP(DB2Connection conn) {
+void run_Cursor_WH_SP(DB2Connection conn) {
   //Set up a stored procedure
   DB2Parameter parm = null;
   DB2Transaction trans = conn.BeginTransaction();
   DB2Command cmd = conn.CreateCommand();
-  String spname = "DB2ADM.INSERT_AND_SELECT_TB2";
+  String spname = "DB2ADM.CURSOR_WH_TB2";
   String procCall = "CALL " + spname + " (@param1, @param2)";
   cmd.Transaction = trans;
   cmd.CommandText = procCall;
