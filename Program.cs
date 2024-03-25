@@ -233,7 +233,7 @@ void run_delete_queries(DB2Connection conn) {
 void run_Cursor_WH_SP(DB2Connection conn) {
   DB2Command cmd = conn.CreateCommand();
   String spname = "DB2ADM.CURSOR_WH_TB2";
-  String procCall = "CALL " + spname";
+  String procCall = "CALL " + spname;
   cmd.CommandText = procCall;
   DB2DataReader myReader = cmd.ExecuteReader(); 
   myReader.Close(); 
