@@ -194,9 +194,6 @@ String connectDb() {
   return connb.ConnectionString;
 }
 
-void declareCursor() {
-}
-
 void run_select_queries(DB2Connection conn) {
   Random rnd = new Random();
   int index = rnd.Next(0, select_statements.Length);
@@ -234,42 +231,11 @@ void run_delete_queries(DB2Connection conn) {
 }
 
 void run_Cursor_WH_SP(DB2Connection conn) {
-  //Set up a stored procedure
-  DB2Parameter parm = null;
-  DB2Transaction trans = conn.BeginTransaction();
   DB2Command cmd = conn.CreateCommand();
   String spname = "DB2ADM.CURSOR_WH_TB2";
-  String procCall = "CALL " + spname + " (@param1, @param2)";
-  cmd.Transaction = trans;
+  String procCall = "CALL " + spname";
   cmd.CommandText = procCall;
-  
-  // Register input-output and output parameters for the DB2Command
-  parm = cmd.Parameters.Add("@param1", DB2Type.Integer);
-  parm.Direction = ParameterDirection.Input;
-  parm = cmd.Parameters.Add("@param2", DB2Type.Integer);
-  parm.Direction = ParameterDirection.Output;
-  Random rnd = new Random();
-  Random rnd2 = new Random();
-  int p1 = rnd.Next(1,99);
-  int p2 = rnd2.Next(1,99);
-  cmd.Parameters["@param1"].Value = p1;
-  cmd.Parameters["@param2"].Value = p2;
-
-  // Call the stored procedure
-  //Console.WriteLine("Calling stored procedure " + spname);
   DB2DataReader myReader = cmd.ExecuteReader(); 
-
-  //Retrieve the return code (output parameter in SP)
-  int outParm = (int)cmd.Parameters["@param2"].Value;
-  //Console.WriteLine("Return code " + outParm.ToString());
-  if (outParm != 0) {
-    Console.WriteLine("Call failed");
-    if (outParm == 99) {
-      Console.WriteLine("Table not found");
-    }
-  } 
-
-  // always call Close when done reading. 
   myReader.Close(); 
 }
 
