@@ -197,7 +197,7 @@ String connectDb() {
 }
 
 void run_transaction(DB2Connection myConnection) {
-
+   int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]);
    DB2Command myCommand = new DB2Command();
    myCommand.Connection = myConnection; 
   
