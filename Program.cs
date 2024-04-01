@@ -206,8 +206,13 @@ void run_transaction(DB2Connection myConnection) {
    myCommand.Transaction = myTrans;
 
    try {
-     myCommand.CommandText = "SELECT * FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2;";
-     myCommand.ExecuteNonQuery();
+     Stopwatch s = new Stopwatch(); 
+     s.Start(); 
+     while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) { 
+          myCommand.CommandText = "SELECT * FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2;";
+          myCommand.ExecuteNonQuery();
+      } 
+     s.Stop(); 
      myTrans.Commit();
    } catch(Exception e) {
      myTrans.Rollback();
