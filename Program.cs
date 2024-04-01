@@ -201,18 +201,16 @@ void run_transaction(DB2Connection myConnection) {
    DB2Command myCommand = new DB2Command();
    DB2Transaction myTrans;
  
-   myTrans = myConnection.BeginTransaction();
+   myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
    myCommand.Transaction = myTrans;
 
    try {
      myCommand.CommandText = "SELECT * FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2;";
      myCommand.ExecuteNonQuery();
      myTrans.Commit();
-     Console.WriteLine("Both records are written to database.");
    } catch(Exception e) {
      myTrans.Rollback();
      Console.WriteLine(e.ToString());
-     Console.WriteLine("Neither record was written to database.");
    } finally {
      myConnection.Close();
    }
