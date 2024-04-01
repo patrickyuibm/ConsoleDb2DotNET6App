@@ -199,8 +199,9 @@ String connectDb() {
 void run_transaction(DB2Connection myConnection) {
 
    DB2Command myCommand = new DB2Command();
+   myCommand.Connection = myConnection; 
+  
    DB2Transaction myTrans;
- 
    myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
    myCommand.Transaction = myTrans;
 
