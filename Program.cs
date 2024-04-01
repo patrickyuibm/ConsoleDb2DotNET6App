@@ -109,7 +109,10 @@ void startSelect() {
   
   try {  
     //call with hold cursor SP
-    run_Cursor_WH_SP(conn);
+    //run_Cursor_WH_SP(conn);
+
+    //run transaction
+    run_transaction(conn);
     
     /*
     //run queries <thread_timespan> minutes
@@ -193,39 +196,24 @@ String connectDb() {
   return connb.ConnectionString;
 }
 
-void run_transaction(string myConnString) {
-   DB2Connection myConnection = new DB2Connection(myConnString);
-   myConnection.Open();
+void run_transaction(DB2Connection myConnection) {
 
    DB2Command myCommand = new DB2Command();
    DB2Transaction myTrans;
-
-   // Start a local transaction
-   myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
-   // Assign transaction object for a pending local transaction
+ 
+   myTrans = myConnection.BeginTransaction();
    myCommand.Transaction = myTrans;
 
-   try
-   {
-     myCommand.CommandText = "Insert into org(
-       DEPTNUMB, DEPTNAME, MANAGER, DIVISION,LOCATION) 
-       VALUES (100, 'Head Office', 160, 'Corporate', 'New York')";
-     myCommand.ExecuteNonQuery();
-     myCommand.CommandText = "Insert into org(
-       DEPTNUMB, DEPTNAME, MANAGER, DIVISION,LOCATION) 
-       VALUES (101, 'New England', 50, 'Eastern', 'Boston')";
+   try {
+     myCommand.CommandText = "SELECT * FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2;";
      myCommand.ExecuteNonQuery();
      myTrans.Commit();
      Console.WriteLine("Both records are written to database.");
-   }
-   catch(Exception e)
-   {
+   } catch(Exception e) {
      myTrans.Rollback();
      Console.WriteLine(e.ToString());
      Console.WriteLine("Neither record was written to database.");
-   }
-   finally
-   {
+   } finally {
      myConnection.Close();
    }
 }
