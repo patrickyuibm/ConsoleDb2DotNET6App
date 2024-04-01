@@ -181,7 +181,6 @@ String connectDb() {
     connb.Server = DSConfigs_properties["DS_SERVER_NAME"];
   }
   
-  
   //Pooling
   connb.Pooling = true;
   connb.MinPoolSize = 0;
@@ -192,6 +191,43 @@ String connectDb() {
   connb.ConnectionLifeTime = int.Parse(Test_properties["CONN_LIFETIME"]);
   
   return connb.ConnectionString;
+}
+
+void run_transaction(string myConnString) {
+   DB2Connection myConnection = new DB2Connection(myConnString);
+   myConnection.Open();
+
+   DB2Command myCommand = new DB2Command();
+   DB2Transaction myTrans;
+
+   // Start a local transaction
+   myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+   // Assign transaction object for a pending local transaction
+   myCommand.Transaction = myTrans;
+
+   try
+   {
+     myCommand.CommandText = "Insert into org(
+       DEPTNUMB, DEPTNAME, MANAGER, DIVISION,LOCATION) 
+       VALUES (100, 'Head Office', 160, 'Corporate', 'New York')";
+     myCommand.ExecuteNonQuery();
+     myCommand.CommandText = "Insert into org(
+       DEPTNUMB, DEPTNAME, MANAGER, DIVISION,LOCATION) 
+       VALUES (101, 'New England', 50, 'Eastern', 'Boston')";
+     myCommand.ExecuteNonQuery();
+     myTrans.Commit();
+     Console.WriteLine("Both records are written to database.");
+   }
+   catch(Exception e)
+   {
+     myTrans.Rollback();
+     Console.WriteLine(e.ToString());
+     Console.WriteLine("Neither record was written to database.");
+   }
+   finally
+   {
+     myConnection.Close();
+   }
 }
 
 void run_select_queries(DB2Connection conn) {
