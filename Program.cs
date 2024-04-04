@@ -56,9 +56,9 @@ String connString;
 //***************************** METHODS *****************************
 
 void main() {
-  DSConfigs_properties = getProperties("/etc/DSConfigs_properties.txt");
-  WrkloadConfigs_properties = getProperties("/etc/WrkloadConfigs_properties.txt");
-  Test_properties = getProperties("/etc/Test_properties.txt");
+  DSConfigs_properties = getProperties("/etc/dsconfigs/DSConfigs_properties.txt");
+  WrkloadConfigs_properties = getProperties("/etc/wrkloadconfigs/WrkloadConfigs_properties.txt");
+  Test_properties = getProperties("/etc/testprop/Test_properties.txt");
 
   connString = connectDb();
   
