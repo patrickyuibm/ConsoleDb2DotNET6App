@@ -65,13 +65,6 @@ void main() {
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
   watch.Start();
 
-  /*
-  //display network statistics intermittently while threads run, to show active connections on clinet side. 
-  System.Diagnostics.Process p = new System.Diagnostics.Process();
-  p.StartInfo.FileName = "../etc/DisplayNetStats.sh";
-  p.Start();
-  */
-
   int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
   Thread[] myThreads = new Thread[numInsertThreads];
   for (int i = 0; i < numInsertThreads; i++) {
@@ -108,28 +101,7 @@ void startSelect() {
   conn.Open();
   
   try {  
-    //call with hold cursor SP
-    //run_Cursor_WH_SP(conn);
-
-    //run transaction
     run_transaction(conn);
-    
-    /*
-    //run queries <thread_timespan> minutes
-    Stopwatch s = new Stopwatch(); 
-    s.Start(); 
-    Random rnd = new Random();
-    while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan))  
-    { 
-        int coin = rnd.Next(0, 10);
-        if (coin <= proportion_of_selects) {
-          run_select_queries(conn); 
-        } else {
-          run_update_queries(conn);
-        }
-    } 
-    s.Stop(); 
-    */
   }  catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
