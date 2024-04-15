@@ -96,17 +96,14 @@ void startSelect() {
   int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]);
 
   string connString = connectDb() + ";ClientApplicationName="+thid.ToString();
-  string query = "SELECT 1 FROM DB2ADM.TB2";
   DB2Connection conn = new DB2Connection(connString);
-  DB2Command myCommand = new DB2Command(query,conn);
   conn.Open();
   try {  
     Stopwatch s = new Stopwatch();  
     s.Start();  
     while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
-      DB2DataReader myReader;
-      myReader = myCommand.ExecuteReader(); 
-      myReader.Close();    
+      run_select_queries(conn);
+      
     } 
     s.Stop();  
   }  catch (DB2Exception myException) { 
