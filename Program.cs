@@ -99,13 +99,14 @@ void startSelect() {
   string query = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)";
   DB2Connection conn = new DB2Connection(connString);
   DB2Command myCommand = new DB2Command(query,conn);
-  DB2DataReader myReader = new DB2DataReader();
   conn.Open();
   try {  
     Stopwatch s = new Stopwatch();  
     s.Start();  
     while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
+      DB2DataReader myReader;
       myReader = myCommand.ExecuteReader(); 
+      myReader.Close();    
     } 
     s.Stop();  
   }  catch (DB2Exception myException) { 
@@ -118,7 +119,6 @@ void startSelect() {
              "At time: " + DateTime.Now);
       }
   } finally { 
-      myReader.Close();
       conn.Close();
   }
 }
