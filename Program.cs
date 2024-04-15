@@ -181,7 +181,7 @@ void run_transaction(DB2Connection myConnection) {
      Stopwatch s = new Stopwatch(); 
      s.Start(); 
      while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) { 
-          myCommand.CommandText = "SELECT 1 from DB2ADM.TB2;";
+          myCommand.CommandText = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)";
           myCommand.ExecuteNonQuery();
       } 
      s.Stop(); 
