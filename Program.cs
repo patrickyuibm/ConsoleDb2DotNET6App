@@ -96,7 +96,7 @@ void startSelect() {
   int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]);
 
   string connString = connectDb() + ";ClientApplicationName="+thid.ToString();
-  string query = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)";
+  string query = "SELECT 1 FROM DB2ADM.TB2";
   DB2Connection conn = new DB2Connection(connString);
   DB2Command myCommand = new DB2Command(query,conn);
   conn.Open();
