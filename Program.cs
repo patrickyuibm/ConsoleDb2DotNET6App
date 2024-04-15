@@ -181,7 +181,7 @@ void run_transaction(DB2Connection myConnection) {
      Stopwatch s = new Stopwatch(); 
      s.Start(); 
      while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) { 
-          myCommand.CommandText = "SELECT * FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2;";
+          myCommand.CommandText = "SELECT 1 from DB2ADM.TB2;";
           myCommand.ExecuteNonQuery();
       } 
      s.Stop(); 
