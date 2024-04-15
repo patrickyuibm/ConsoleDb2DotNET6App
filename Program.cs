@@ -99,12 +99,8 @@ void startSelect() {
   DB2Connection conn = new DB2Connection(connString);
   conn.Open();
   try {  
-    Stopwatch s = new Stopwatch();  
-    s.Start();  
-    while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
-      run_select_queries(conn);
-      
-    } 
+    run_transaction(conn);
+  } 
     s.Stop();  
   }  catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
@@ -119,6 +115,31 @@ void startSelect() {
       conn.Close();
   }
 }
+
+void run_transaction(DB2Connection myConnection) { 
+   int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
+   DB2Command myCommand = new DB2Command(); 
+   myCommand.Connection = myConnection;  
+   DB2Transaction myTrans; 
+   myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
+   myCommand.Transaction = myTrans; 
+
+   try { 
+     Stopwatch s = new Stopwatch();  
+     s.Start();  
+     while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
+          myCommand.CommandText = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"; 
+          myCommand.ExecuteNonQuery(); 
+      }  
+     s.Stop();  
+     myTrans.Commit(); 
+   } catch(Exception e) { 
+     myTrans.Rollback(); 
+     Console.WriteLine(e.ToString()); 
+   } finally { 
+     myConnection.Close(); 
+   } 
+} 
 
 Dictionary<string, string> getProperties(String full_path) {
   Dictionary<string, string> props = new Dictionary<string, string>();
