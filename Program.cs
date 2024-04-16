@@ -109,10 +109,12 @@ void startSelect() {
        while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
          coin = rnd.Next(1,11);
          if (coin <= proportionOfSelects) {
+            Console.WriteLine('autocommit - select');
             DB2Command cmd = new DB2Command(select_statements[0], conn);
             DB2DataReader dr = cmd.ExecuteReader();
             dr.Close();
          } else {
+            Console.WriteLine('autocommit - insert');
             DB2Command cmd = new DB2Command(insert_statements[0], conn);
             DB2DataReader dr = cmd.ExecuteReader();
             dr.Close();
@@ -154,9 +156,11 @@ void run_transaction(DB2Connection myConnection) {
      s.Start();  
      while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
          coin = rnd.Next(1,11);
-         if (coin <= proportionOfSelects) {       
+         if (coin <= proportionOfSelects) {   
+            Console.WriteLine('trans - select');
             cmd1.ExecuteNonQuery(); 
          } else {         
+            Console.WriteLine('trans - insert');
             cmd2.ExecuteNonQuery();
          }
      }
