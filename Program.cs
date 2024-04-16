@@ -151,7 +151,7 @@ void run_transaction(DB2Connection myConnection) {
      Stopwatch s = new Stopwatch();  
      s.Start();  
      while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
-     `   coin = rnd.Next(1,11);
+         coin = rnd.Next(1,11);
          if (coin <= propertionOfSelects) {
             DB2Command cmd = new DB2Command(select_statements[0], conn);
             cmd.ExecuteNonQuery(); 
