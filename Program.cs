@@ -145,17 +145,16 @@ void run_transaction(DB2Connection myConnection) {
   
    DB2Transaction myTrans; 
    myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
-   myCommand.Transaction = myTrans; 
-   DB2Command cmd1 = new DB2Command(select_statements[0], conn);
+   DB2Command cmd1 = new DB2Command(select_statements[0], myConnection);
    cmd1.Transaction = myTrans;
-   DB2Command cmd2 = new DB2Command(insert_statements[0], conn);
+   DB2Command cmd2 = new DB2Command(insert_statements[0], myConnection);
    cmd2.Transaction = myTrans;  
    try { 
      Stopwatch s = new Stopwatch();  
      s.Start();  
      while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
          coin = rnd.Next(1,11);
-         if (coin <= propertionOfSelects) {       
+         if (coin <= proportionOfSelects) {       
             cmd1.ExecuteNonQuery(); 
          } else {         
             cmd2.ExecuteNonQuery();
