@@ -94,14 +94,22 @@ void main() {
 void startSelect() {
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
   int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]);
-
+  
   string connString = connectDb() + ";ClientApplicationName="+thid.ToString();
   DB2Connection conn = new DB2Connection(connString);
   conn.Open();
   try {  
-    run_transaction(conn);
-  } 
-    s.Stop();  
+    if (Test_properties["AUTOCOMMIT"].ToLower().Contains("t")) {
+       Stopwatch s = new Stopwatch();  
+       s.Start();  
+       while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
+          run_select_queries(conn);
+       }
+      s.Stop();
+    } else {
+      run_transaction(conn);
+    } 
+      
   }  catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
