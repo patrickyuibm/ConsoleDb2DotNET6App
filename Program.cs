@@ -132,9 +132,9 @@ void run_transaction(DB2Connection myConnection) {
      s.Start();  
      while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
          coin = rnd.Next(1,11);
-         if (coin <= proportionOfSelects) {  #run selects
+         if (coin <= proportionOfSelects) {  //run selects
             cmd1.ExecuteNonQuery(); 
-         } else {    #run inserts
+         } else {   //run inserts
             cmd2.ExecuteNonQuery();
          }
      }
