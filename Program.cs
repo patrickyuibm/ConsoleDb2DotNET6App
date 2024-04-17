@@ -100,32 +100,7 @@ void startSelect() {
   DB2Connection conn = new DB2Connection(connString);
   conn.Open();
   try {  
-    if (Test_properties["AUTOCOMMIT"].ToLower().Contains("t")) {
-       Stopwatch s = new Stopwatch();  
-       s.Start();  
-       int proportionOfSelects = int.Parse(Test_properties["PROPORTION_OF_SELECTS"]);
-       Random rnd = new Random();
-       int coin = 0;
-       while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
-         coin = rnd.Next(1,11);
-         if (coin <= proportionOfSelects) {
-            Console.WriteLine("autocommit - select");
-            DB2Command cmd = new DB2Command(select_statements[0], conn);
-            DB2DataReader dr = cmd.ExecuteReader();
-            dr.Close();
-         } else {
-            Console.WriteLine("autocommit - insert");
-            DB2Command cmd = new DB2Command(insert_statements[0], conn);
-            DB2DataReader dr = cmd.ExecuteReader();
-            dr.Close();
-         }
-       }
-      s.Stop();
-    } else {
-      Console.WriteLine("hitting");
       run_transaction(conn);
-    } 
-      
   }  catch (DB2Exception myException) { 
       for (int i=0; i < myException.Errors.Count; i++) { 
          Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
