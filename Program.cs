@@ -122,6 +122,7 @@ void startSelect() {
        }
       s.Stop();
     } else {
+      Console.WriteLine('hitting');
       run_transaction(conn);
     } 
       
