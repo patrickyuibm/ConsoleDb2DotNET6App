@@ -21,33 +21,14 @@ using System.Text;
 
 //***************************** GLOBAL VARIABLES *****************************
 String[] select_statements =  {"SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2",
-                               "SELECT * FROM DB2ADM.TB2", 
-                               "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*5000",
-                               "SELECT * FROM DB2ADM.TB2 WHERE C1 > RAND()*10000",
-                               "SELECT * FROM DB2ADM.TB2 WHERE C2 > RAND()*5000",
-                               "SELECT * FROM DB2ADM.TB2 WHERE C2 > RAND()*10000"}; //the first statement is deliberately computationally expensive
-String[] insert_statements =  {"INSERT INTO DB2ADM.TB2(C1, C2) VALUES(1, 2)", 
-                               "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*100000)", 
-                               "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*100000,  RAND()*10000)",
-                               "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*5000,  RAND()*10000)",
-                               "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*10000,  RAND()*5000)"};
+                               "SELECT * FROM DB2ADM.TB2"}; //the first statement is deliberately computationally expensive
+String[] insert_statements =  {"INSERT INTO DB2ADM.TB2(C1, C2) VALUES(1, 2)"};
 String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000 WHERE C1 < RAND()*20000", 
-                               "UPDATE DB2ADM.TB2 SET C1 = RAND()*20000 WHERE C2 < RAND()*20000",
-                               "UPDATE DB2ADM.TB2 SET C1 = RAND()*5000 WHERE C2 > RAND()*5000",
                                "UPDATE DB2ADM.TB2 SET C1 = RAND()*5000 WHERE C2 > RAND()*5000"};
 String[] delete_statements = {"DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 > 3000", 
                               "DELETE FROM DB2ADM.TB2 WHERE C1 > 12000", 
                               "DELETE FROM DB2ADM.TB2 WHERE C2 > 12000",
-                              "DELETE FROM DB2ADM.TB2 WHERE C1 < 12000", 
-                              "DELETE FROM DB2ADM.TB2 WHERE C2 < 12000",
-                              "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 < 3000",
-                              "DELETE FROM DB2ADM.TB2 WHERE C2 < 8000 AND C1 > 3000",
                               "DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 < 3000"};
-int selects = 0;
-int deletes = 0;
-int inserts = 0;
-int updates = 0;
-int total_records_affected = 0;
 
 Dictionary<string, string> DSConfigs_properties;
 Dictionary<string, string> WrkloadConfigs_properties;
@@ -62,9 +43,6 @@ void main() {
   Test_properties = getProperties("/etc/testprop/Test_properties.txt");
 
   connString = connectDb();
-  
-  System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
-  watch.Start();
 
   int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
   Thread[] myThreads = new Thread[numInsertThreads];
@@ -76,20 +54,6 @@ void main() {
   foreach (Thread t in myThreads) {
     t.Join();
   }
-  
-  watch.Stop();
-  
-  TimeSpan ts = watch.Elapsed;
-  // Format and display the TimeSpan value.
-  string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
-  Console.WriteLine("All threads complete"); 
-  Console.WriteLine("Time elapsed (hours:minutes:seconds:milliseconds): " + elapsedTime);
-  Console.WriteLine("Number of threads ran: " + numInsertThreads.ToString());
-  Console.WriteLine("Number of selects ran: " + selects.ToString());
-  Console.WriteLine("Number of deletes ran: " + deletes.ToString());
-  Console.WriteLine("Number of inserts ran: " + inserts.ToString());
-  Console.WriteLine("Number of updates ran: " + updates.ToString());
-  Console.WriteLine("Number of rows affected: " + total_records_affected.ToString());
 }
 
 void startSelect() {
@@ -120,7 +84,6 @@ void run_transaction(DB2Connection myConnection) {
    int proportionOfSelects = int.Parse(Test_properties["PROPORTION_OF_SELECTS"]);
    Random rnd = new Random();
    int coin = 0;
-  
    DB2Transaction myTrans; 
    myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
    DB2Command cmd1 = new DB2Command(select_statements[0], myConnection);
@@ -205,7 +168,6 @@ void run_select_queries(DB2Connection conn) {
   int index = rnd.Next(0, select_statements.Length);
   DB2Command cmd1 = new DB2Command(select_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
-  total_records_affected += dr1.RecordsAffected;
   dr1.Close();
 }
 
@@ -214,7 +176,6 @@ void run_update_queries(DB2Connection conn) {
   int index = rnd.Next(0, update_statements.Length);
   DB2Command cmd1 = new DB2Command(update_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
-  total_records_affected += dr1.RecordsAffected;
   dr1.Close();
 }
 
@@ -223,7 +184,6 @@ void run_insert_queries(DB2Connection conn) {
   int index = rnd.Next(0, insert_statements.Length);
   DB2Command cmd1 = new DB2Command(insert_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
-  total_records_affected += dr1.RecordsAffected;
   dr1.Close();
 }
 
@@ -232,7 +192,6 @@ void run_delete_queries(DB2Connection conn) {
   int index = rnd.Next(0, delete_statements.Length);
   DB2Command cmd1 = new DB2Command(delete_statements[index], conn);
   DB2DataReader dr1 = cmd1.ExecuteReader();
-  total_records_affected += dr1.RecordsAffected * -1;
   dr1.Close();
 }
 
