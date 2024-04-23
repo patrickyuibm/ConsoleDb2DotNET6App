@@ -81,25 +81,35 @@ void startSelect() {
 
 void run_transaction(DB2Connection myConnection) { 
    int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
+   DB2Command myCommand = new DB2Command(); 
+   myCommand.Connection = myConnection;  
+   DB2Transaction myTrans; 
+   myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
+   myCommand.Transaction = myTrans; 
+   myCommand.CommandText = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"; 
+  
+   /* 
    int proportionOfSelects = int.Parse(Test_properties["PROPORTION_OF_SELECTS"]);
    Random rnd = new Random();
    int coin = 0;
-   DB2Transaction myTrans; 
-   myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
    DB2Command cmd1 = new DB2Command(select_statements[0], myConnection);
    cmd1.Transaction = myTrans;
    DB2Command cmd2 = new DB2Command(insert_statements[0], myConnection);
    cmd2.Transaction = myTrans;  
+   */
    try { 
      Stopwatch s = new Stopwatch();  
      s.Start();  
      while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
+          myCommand.ExecuteNonQuery(); 
+         /*
          coin = rnd.Next(1,11);
          if (coin <= proportionOfSelects) {  //run selects
             cmd1.ExecuteNonQuery(); 
          } else {   //run inserts
             cmd2.ExecuteNonQuery();
          }
+         */
      }
      s.Stop();  
      myTrans.Commit(); 
