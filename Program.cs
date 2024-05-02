@@ -84,25 +84,27 @@ void run_transaction(DB2Connection myConnection) {
    int commit_frequency = int.Parse(Test_properties["COMMIT_FREQUENCY"]);
    DB2Command myCommand = new DB2Command(); 
    myCommand.Connection = myConnection;  
-   DB2Transaction myTrans; 
-   myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
-   myCommand.Transaction = myTrans; 
    myCommand.CommandText = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*1000, RAND()*1000)"; 
+  
    try { 
-     Stopwatch s = new Stopwatch();  
-     s.Start();  
-     DateTime start = DateTime.Now;
-     Console.WriteLine("Thread starting at " + start);
-     while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
-         myCommand.ExecuteNonQuery(); 
-         if (DateTime.Now - start >= TimeSpan.FromMinutes(commit_frequency)) {
-           Console.WriteLine("Setting save point at " + DateTime.Now + ", previous commit was at " + start);
-           myTrans.SetSavePoint(); 
-           start = DateTime.Now;
-         }
-     }
-     s.Stop();  
-     myTrans.Commit(); 
+       Stopwatch s = new Stopwatch();  
+       s.Start();  
+       DateTime start = DateTime.Now;
+       Console.WriteLine("Thread starting at " + start);
+       DB2Transaction 
+       myCommand.Transaction = myTrans; 
+     
+       while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
+          
+          while (DateTime.Now - start < TimeSpan.FromMinutes(commit_frequency)) {
+            myCommand.ExecuteNonQuery();
+          }
+          Console.WriteLine("Committing at " + DateTime.Now + ", previous commit was at " + start);
+          myTrans.Commit();
+          myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
+          start = DateTime.Now;          
+       }
+       s.Stop(); 
    } catch(Exception e) { 
      myTrans.Rollback(); 
      Console.WriteLine(e.ToString()); 
