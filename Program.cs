@@ -81,6 +81,7 @@ void startSelect() {
 
 void run_transaction(DB2Connection myConnection) { 
    int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
+   int commit_frequency = int.Parse(Test_properties["COMMIT_FREQUENCY"]);
    DB2Command myCommand = new DB2Command(); 
    myCommand.Connection = myConnection;  
    DB2Transaction myTrans; 
@@ -100,8 +101,9 @@ void run_transaction(DB2Connection myConnection) {
    try { 
      Stopwatch s = new Stopwatch();  
      s.Start();  
+     DateTime start = DateTime.Now;
      while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
-          myCommand.ExecuteNonQuery(); 
+         myCommand.ExecuteNonQuery(); 
          /*
          coin = rnd.Next(1,11);
          if (coin <= proportionOfSelects) {  //run selects
@@ -110,6 +112,10 @@ void run_transaction(DB2Connection myConnection) {
             cmd2.ExecuteNonQuery();
          }
          */
+         if (DateTime.Now - start >= TimeSpan.FromMinutes(20)) {
+           myTrans.Commit(); 
+           start = DateTime.Now;
+         }
      }
      s.Stop();  
      myTrans.Commit(); 
