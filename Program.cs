@@ -87,32 +87,15 @@ void run_transaction(DB2Connection myConnection) {
    DB2Transaction myTrans; 
    myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
    myCommand.Transaction = myTrans; 
-   myCommand.CommandText = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"; 
-  
-   /* 
-   int proportionOfSelects = int.Parse(Test_properties["PROPORTION_OF_SELECTS"]);
-   Random rnd = new Random();
-   int coin = 0;
-   DB2Command cmd1 = new DB2Command(select_statements[0], myConnection);
-   cmd1.Transaction = myTrans;
-   DB2Command cmd2 = new DB2Command(insert_statements[0], myConnection);
-   cmd2.Transaction = myTrans;  
-   */
+   myCommand.CommandText = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*1000, RAND()*1000)"; 
    try { 
      Stopwatch s = new Stopwatch();  
      s.Start();  
      DateTime start = DateTime.Now;
      while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
          myCommand.ExecuteNonQuery(); 
-         /*
-         coin = rnd.Next(1,11);
-         if (coin <= proportionOfSelects) {  //run selects
-            cmd1.ExecuteNonQuery(); 
-         } else {   //run inserts
-            cmd2.ExecuteNonQuery();
-         }
-         */
-         if (DateTime.Now - start >= TimeSpan.FromMinutes(20)) {
+         if (DateTime.Now - start >= TimeSpan.FromMinutes(commit_frequency)) {
+           Console.WriteLine("Committing at " + DateTime.Now + " previous commit was " + start);
            myTrans.Commit(); 
            start = DateTime.Now;
          }
