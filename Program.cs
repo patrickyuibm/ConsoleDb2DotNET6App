@@ -91,7 +91,7 @@ void run_transaction(DB2Connection myConnection) {
        s.Start();  
        DateTime start = DateTime.Now;
        Console.WriteLine("Thread starting at " + start);
-       DB2Transaction 
+       DB2Transaction myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
        myCommand.Transaction = myTrans; 
      
        while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
