@@ -121,7 +121,6 @@ Dictionary<string, string> getProperties(String full_path) {
         // the file is reached.
         while ((line = sr.ReadLine()) != null) {
           int equalSignIndex = line.IndexOf("=");
-          Console.WriteLine(line.Substring(0, equalSignIndex) + " ---- " + line.Substring(equalSignIndex + 1));
           props.Add(line.Substring(0, equalSignIndex), line.Substring(equalSignIndex + 1));
         }
       }
