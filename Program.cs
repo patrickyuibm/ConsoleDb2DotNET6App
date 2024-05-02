@@ -85,13 +85,13 @@ void run_transaction(DB2Connection myConnection) {
    DB2Command myCommand = new DB2Command(); 
    myCommand.Connection = myConnection;  
    myCommand.CommandText = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*1000, RAND()*1000)"; 
-  
+   DB2Transaction myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
+
    try { 
        Stopwatch s = new Stopwatch();  
        s.Start();  
        DateTime start = DateTime.Now;
        Console.WriteLine("Thread starting at " + start);
-       DB2Transaction myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
        myCommand.Transaction = myTrans; 
      
        while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
