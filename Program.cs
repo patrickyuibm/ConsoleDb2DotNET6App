@@ -80,6 +80,7 @@ void startSelect() {
 }
 
 void run_transaction(DB2Connection myConnection) { 
+   Console.WriteLine("Thread starting at " + DateTime.Now);
    int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
    int commit_frequency = int.Parse(Test_properties["COMMIT_FREQUENCY"]);
    DB2Command myCommand = new DB2Command(); 
@@ -95,7 +96,7 @@ void run_transaction(DB2Connection myConnection) {
      while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
          myCommand.ExecuteNonQuery(); 
          if (DateTime.Now - start >= TimeSpan.FromMinutes(commit_frequency)) {
-           Console.WriteLine("Committing at " + DateTime.Now + " previous commit was " + start);
+           Console.WriteLine("Committing at " + DateTime.Now + ", previous commit was at " + start);
            myTrans.Commit(); 
            start = DateTime.Now;
          }
