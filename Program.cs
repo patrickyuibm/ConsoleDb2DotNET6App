@@ -95,14 +95,14 @@ void run_transaction(DB2Connection myConnection) {
        myCommand.Transaction = myTrans; 
      
        while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
-          
-          while (DateTime.Now - start < TimeSpan.FromMinutes(commit_frequency)) {
-            myCommand.ExecuteNonQuery();
-          }
-          Console.WriteLine("Committing at " + DateTime.Now + ", previous commit was at " + start);
-          myTrans.Commit();
-          myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
-          start = DateTime.Now;          
+          myCommand.ExecuteNonQuery();
+
+         if (DateTime.Now - start >= TimeSpan.FromMinutes(commit_frequency)) {
+            Console.WriteLine("Committing at " + DateTime.Now + ", previous commit was at " + start);
+            myTrans.Commit();
+            myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
+            start = DateTime.Now;
+         }                    
        }
        s.Stop(); 
    } catch(Exception e) { 
