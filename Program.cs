@@ -103,6 +103,13 @@ void run_transaction(DB2Connection myConnection) {
             myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
             myCommand.Transaction = myTrans;
             start = DateTime.Now;
+
+            //get count of how many rows there are now after commit
+            DB2Command myCommand = new DB2Command("SELECT COUNT(*) AS CNT FROM DB2ADM.TB2", myConnection);
+            DB2DataReader myReader = myCommand.ExecuteReader();
+            while (myReader.Read()) {
+              Console.WriteLine(myReader.GetInt32(0) + " rows in table.");
+             }
          }                    
        }
        s.Stop(); 
