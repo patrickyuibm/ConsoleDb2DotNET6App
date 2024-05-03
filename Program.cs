@@ -105,8 +105,8 @@ void run_transaction(DB2Connection myConnection) {
             start = DateTime.Now;
 
             //get count of how many rows there are now after commit
-            DB2Command myCommand = new DB2Command("SELECT COUNT(*) AS CNT FROM DB2ADM.TB2", myConnection);
-            DB2DataReader myReader = myCommand.ExecuteReader();
+            DB2Command getCount = new DB2Command("SELECT COUNT(*) AS CNT FROM DB2ADM.TB2", myConnection);
+            DB2DataReader myReader = getCount.ExecuteReader();
             while (myReader.Read()) {
               Console.WriteLine(myReader.GetInt32(0) + " rows in table.");
              }
