@@ -110,6 +110,7 @@ void run_transaction(DB2Connection myConnection) {
             while (myReader.Read()) {
               Console.WriteLine(myReader.GetInt32(0) + " rows in table.");
              }
+            myReader.Close();
          }                    
        }
        s.Stop(); 
