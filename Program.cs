@@ -98,24 +98,11 @@ void run_transaction(DB2Connection myConnection) {
           myCommand.ExecuteNonQuery();
 
          if (DateTime.Now - start >= TimeSpan.FromMinutes(commit_frequency)) {
-            Console.WriteLine("Committing at " + DateTime.Now + ", previous commit was at " + start);
+            //Console.WriteLine("Committing at " + DateTime.Now + ", previous commit was at " + start);
             myTrans.Commit();
             myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
             myCommand.Transaction = myTrans;
             start = DateTime.Now;
-
-            //get count of how many rows there are now after commit
-            DB2Connection myConn2 = new DB2Connection(connString);
-            DB2Command getCount = new DB2Command("SELECT COUNT(*) AS CNT FROM DB2ADM.TB2", myConnection);
-            DB2Transaction myTrans2;
-            myTrans2 = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
-            getCount.Transaction = myTrans2;
-            DB2DataReader myReader = getCount.ExecuteReader();
-            while (myReader.Read()) {
-              Console.WriteLine(myReader.GetInt32(0) + " rows in table.");
-             }
-            myReader.Close();
-            myConn2.Close();
          }                    
        }
        s.Stop(); 
