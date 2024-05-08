@@ -57,9 +57,7 @@ void main() {
 }
 
 void startSelect() {
-  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;
-  int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]);
-  
+  int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;  
   string connString = connectDb() + ";ClientApplicationName="+thid.ToString();
   DB2Connection conn = new DB2Connection(connString);
   conn.Open();
@@ -80,8 +78,8 @@ void startSelect() {
 }
 
 void run_transaction(DB2Connection myConnection) {
-   int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
-   int commit_frequency = int.Parse(Test_properties["COMMIT_FREQUENCY"]);
+   float thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
+   float commit_frequency = int.Parse(Test_properties["COMMIT_FREQUENCY"]);
    DB2Command myCommand = new DB2Command(); 
    myCommand.Connection = myConnection;  
    myCommand.CommandText = select_statements[0]; 
