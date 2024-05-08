@@ -84,7 +84,7 @@ void run_transaction(DB2Connection myConnection) {
    int commit_frequency = int.Parse(Test_properties["COMMIT_FREQUENCY"]);
    DB2Command myCommand = new DB2Command(); 
    myCommand.Connection = myConnection;  
-   myCommand.CommandText = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(RAND()*1000, RAND()*1000)"; 
+   myCommand.CommandText = select_statements[0]; 
    DB2Transaction myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
 
    try { 
