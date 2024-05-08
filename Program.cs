@@ -96,7 +96,7 @@ void run_transaction(DB2Connection myConnection) {
           myCommand.ExecuteNonQuery();
 
          if (DateTime.Now - start >= TimeSpan.FromMinutes(commit_frequency)) {
-            Console.WriteLine("Committing at " + DateTime.Now + ", previous commit was at " + start);
+            //Console.WriteLine("Committing at " + DateTime.Now + ", previous commit was at " + start);
             myTrans.Commit();
             myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
             myCommand.Transaction = myTrans;
