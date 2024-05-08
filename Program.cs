@@ -78,8 +78,8 @@ void startSelect() {
 }
 
 void run_transaction(DB2Connection myConnection) {
-   float thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
-   float commit_frequency = int.Parse(Test_properties["COMMIT_FREQUENCY"]);
+   float thread_timespan = float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
+   float commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
    DB2Command myCommand = new DB2Command(); 
    myCommand.Connection = myConnection;  
    myCommand.CommandText = select_statements[0]; 
