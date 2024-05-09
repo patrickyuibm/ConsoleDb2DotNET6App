@@ -80,34 +80,30 @@ void startSelect() {
 void run_transaction(DB2Connection myConnection) {
    float thread_timespan = float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
    float commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
+   int repetitions = (int) (thread_timespan / commit_frequency);
+  
    DB2Command myCommand = new DB2Command(); 
    myCommand.Connection = myConnection;  
    myCommand.CommandText = select_statements[0]; 
    DB2Transaction myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
-
+   myCommand.Transaction = myTrans; 
+  
    try { 
-       Stopwatch s = new Stopwatch();  
-       s.Start();  
-       DateTime start = DateTime.Now;
-       //Console.WriteLine("Thread starting at " + start);
-       myCommand.Transaction = myTrans; 
-     
-       while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
+      Stopwatch s = new Stopwatch();  
+      for (int i = 0; i < repetitions; i++) {
+        s.Start();
+        Console.WriteLine("Running DML at {0}", DateTime.Now);
+        while (s.Elapsed < TimeSpan.FromMinutes(commit_frequency)) {  
           myCommand.ExecuteNonQuery();
-
-         if (DateTime.Now - start >= TimeSpan.FromMinutes(commit_frequency)) {
-            //Console.WriteLine("Committing at " + DateTime.Now + ", previous commit was at " + start);
-            myTrans.Commit();
-            myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
-            myCommand.Transaction = myTrans;
-            start = DateTime.Now;
-         }                    
-       }
-       s.Stop(); 
+        }
+        ConsoleWriteLine("Resetting stopwatch and committing DML at time {0}" + DateTime.Now);
+        s.Reset();
+      }       
    } catch(Exception e) { 
      myTrans.Rollback(); 
      Console.WriteLine(e.ToString()); 
    } finally { 
+     s.Stop();
      myConnection.Close(); 
    } 
 } 
@@ -115,19 +111,14 @@ void run_transaction(DB2Connection myConnection) {
 Dictionary<string, string> getProperties(String full_path) {
   Dictionary<string, string> props = new Dictionary<string, string>();
   try {
-    // Create an instance of StreamReader to read from a file.
-    // The using statement also closes the StreamReader.
     using (StreamReader sr = new StreamReader(full_path)) {
         String line;
-        // Read and display lines from the file until the end of
-        // the file is reached.
         while ((line = sr.ReadLine()) != null) {
           int equalSignIndex = line.IndexOf("=");
           props.Add(line.Substring(0, equalSignIndex), line.Substring(equalSignIndex + 1));
         }
       }
   } catch (Exception e) {
-      // Let the user know what went wrong.
       Console.WriteLine("The file could not be read:");
       Console.WriteLine(e.Message);
     }
@@ -204,8 +195,6 @@ void run_Cursor_WH_SP(DB2Connection conn) {
   DB2DataReader myReader = cmd.ExecuteReader(); 
   myReader.Close(); 
 }
-
-
 
 //***************************** RUN METHODS HERE *****************************
 main();
