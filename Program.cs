@@ -85,7 +85,8 @@ void run_transaction(DB2Connection myConnection) {
    DB2Command myCommand = new DB2Command(); 
    myCommand.Connection = myConnection;  
    myCommand.CommandText = insert_statements[0]; 
-   myCommand.Transaction = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
+   DB2Transaction myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+   myCommand.Transaction = myTrans;
   
    try { 
       Stopwatch s = new Stopwatch();  
@@ -97,7 +98,8 @@ void run_transaction(DB2Connection myConnection) {
         }
         Console.WriteLine("Resetting stopwatch and committing DML at time {0}", DateTime.Now);
         myTrans.Commit();
-        myCommand.Transaction = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
+        myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+        myCommand.Transaction = myTrans;
         s.Reset();
       }
       s.Stop();
