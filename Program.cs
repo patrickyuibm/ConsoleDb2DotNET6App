@@ -84,7 +84,7 @@ void run_transaction(DB2Connection myConnection) {
   
    DB2Command myCommand = new DB2Command(); 
    myCommand.Connection = myConnection;  
-   myCommand.CommandText = select_statements[0]; 
+   myCommand.CommandText = insert_statements[0]; 
    DB2Transaction myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
    myCommand.Transaction = myTrans; 
   
