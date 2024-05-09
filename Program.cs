@@ -96,14 +96,14 @@ void run_transaction(DB2Connection myConnection) {
         while (s.Elapsed < TimeSpan.FromMinutes(commit_frequency)) {  
           myCommand.ExecuteNonQuery();
         }
-        ConsoleWriteLine("Resetting stopwatch and committing DML at time {0}" + DateTime.Now);
+        ConsoleWriteLine("Resetting stopwatch and committing DML at time {0}", DateTime.Now);
         s.Reset();
-      }       
+      }
+      s.Stop();
    } catch(Exception e) { 
      myTrans.Rollback(); 
      Console.WriteLine(e.ToString()); 
    } finally { 
-     s.Stop();
      myConnection.Close(); 
    } 
 } 
