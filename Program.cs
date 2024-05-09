@@ -89,7 +89,7 @@ void run_transaction(DB2Connection myConnection) {
        Stopwatch s = new Stopwatch();  
        s.Start();  
        DateTime start = DateTime.Now;
-       Console.WriteLine("Thread starting at " + start);
+       //Console.WriteLine("Thread starting at " + start);
        myCommand.Transaction = myTrans; 
      
        while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
