@@ -84,7 +84,7 @@ void run_transaction(DB2Connection myConnection) {
   
    DB2Command myCommand = new DB2Command(); 
    myCommand.Connection = myConnection;  
-   myCommand.CommandText = insert_statements[0]; 
+   myCommand.CommandText = select_statements[0]; 
    DB2Transaction myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
    myCommand.Transaction = myTrans;
   
@@ -92,11 +92,11 @@ void run_transaction(DB2Connection myConnection) {
       Stopwatch s = new Stopwatch();  
       for (int i = 0; i < repetitions; i++) {
         s.Start();
-        Console.WriteLine("Running DML at {0}", DateTime.Now);
+        //Console.WriteLine("Running DML at {0}", DateTime.Now);
         while (s.Elapsed < TimeSpan.FromMinutes(commit_frequency)) {  
           myCommand.ExecuteNonQuery();
         }
-        Console.WriteLine("Resetting stopwatch and committing DML at time {0}", DateTime.Now);
+        //Console.WriteLine("Resetting stopwatch and committing DML at time {0}", DateTime.Now);
         myTrans.Commit();
         myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
         myCommand.Transaction = myTrans;
