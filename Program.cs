@@ -33,10 +33,10 @@ namespace ConsoleDb2DotNET6App
                                   "DELETE FROM DB2ADM.TB2 WHERE C2 > 12000",
                                   "DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 < 3000"};
 
-    Dictionary<string, string> DSConfigs_properties;
-    Dictionary<string, string> WrkloadConfigs_properties;
-    Dictionary<string, string> Test_properties;
-    String connString;
+    static Dictionary<string, string> DSConfigs_properties;
+    static Dictionary<string, string> WrkloadConfigs_properties;
+    static Dictionary<string, string> Test_properties;
+    static String connString;
   
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
