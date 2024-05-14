@@ -46,7 +46,7 @@ namespace ConsoleDb2DotNET6App
       Test_properties = cdb.getProperties("/etc/testprop/Test_properties.txt"); 
       connString = cdb.connectDb();
     
-      int numInsertThreads = int.Parse(cdb.WrkloadConfigs_properties["COUNT"]);
+      int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
       for (int i = 0; i < numInsertThreads; i++) {
         Thread t = new Thread(new ThreadStart(() => cdb.startSelect()));
