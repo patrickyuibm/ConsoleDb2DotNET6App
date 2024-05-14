@@ -166,15 +166,8 @@ void main() {
 void startSelect() { 
 
   int thid = System.Threading.Thread.CurrentThread.ManagedThreadId; 
-
-  int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
-
-   
-
   string connString = connectDb() + ";ClientApplicationName="+thid.ToString(); 
-
   DB2Connection conn = new DB2Connection(connString); 
-
   conn.Open(); 
 
   try {   
@@ -207,47 +200,29 @@ void startSelect() {
 
 } 
 
-  
-
-void run_transaction(DB2Connection myConnection) {  
-
-   int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]);  
-
-   DB2Transaction myTrans;  
-
-   myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);  
-
-   DB2Command cmd2 = new DB2Command(insert_statements[0], myConnection); 
-
-   cmd2.Transaction = myTrans;   
-
-   try {  
-
-     Stopwatch s = new Stopwatch();   
-
-     s.Start();   
-
-     while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {   
-        cmd2.ExecuteNonQuery();
-     } 
-
-     s.Stop();   
-
-     myTrans.Rollback();  
-
-   } catch(Exception e) {  
-
-     myTrans.Rollback();  
-
-     Console.WriteLine(e.ToString());  
-
-   } finally {  
-
-     myConnection.Close();  
-
-   }  
-
-}  
+void run_transaction(DB2Connection myConnection) { 
+   int thread_timespan = int.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
+   DB2Command myCommand = new DB2Command(); 
+   myCommand.Connection = myConnection;  
+   DB2Transaction myTrans; 
+   myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted); 
+   myCommand.Transaction = myTrans; 
+   try { 
+     Stopwatch s = new Stopwatch();  
+     s.Start();  
+     while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) {  
+          myCommand.CommandText = "INSERT INTO DB2ADM.TB2 (C1, C2) VALUES(1, 2)"; 
+          myCommand.ExecuteNonQuery(); 
+      }  
+     s.Stop();  
+     myTrans.Rollback(); 
+   } catch(Exception e) { 
+     myTrans.Rollback(); 
+     Console.WriteLine(e.ToString()); 
+   } finally { 
+     myConnection.Close(); 
+   } 
+} 
 
   
 
