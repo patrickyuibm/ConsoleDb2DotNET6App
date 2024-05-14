@@ -37,7 +37,6 @@ namespace ConsoleDb2DotNET6App
     static Dictionary<string, string> WrkloadConfigs_properties;
     static Dictionary<string, string> Test_properties;
     static String connString;
-    static ConsoleDb2DotNET6App.Syslog syslog = null;
   
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
@@ -53,7 +52,6 @@ namespace ConsoleDb2DotNET6App
                               DateTime.Now.Hour.ToString() + "-" +
                               DateTime.Now.Minute.ToString() +
                               ".log";
-      syslog = new ConsoleDb2DotNET6App.Syslog(logFile); 
     
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
