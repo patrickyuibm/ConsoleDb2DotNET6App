@@ -37,6 +37,11 @@ namespace ConsoleDb2DotNET6App
     static Dictionary<string, string> WrkloadConfigs_properties;
     static Dictionary<string, string> Test_properties;
     static String connString;
+    static String log;
+    static String logDir;
+    static String logFile;
+    static PerformanceCounter cpuCounter;
+    static PerformanceCounter ramCounter;
   
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
@@ -45,13 +50,15 @@ namespace ConsoleDb2DotNET6App
       WrkloadConfigs_properties = cdb.getProperties("/etc/wrkloadconfigs/WrkloadConfigs_properties.txt");
       Test_properties = cdb.getProperties("/etc/testprop/Test_properties.txt"); 
       connString = cdb.connectDb();
-      String logDir = "/etc/logs";
-      String logFile = logDir + "/run" + "-" + DateTime.Now.Year.ToString() + "-" +
+      logDir = "/etc/logs";
+      logFile = logDir + "/run" + "-" + DateTime.Now.Year.ToString() + "-" +
                               DateTime.Now.Month.ToString() + "-" +
                               DateTime.Now.Day.ToString() + "-" +
                               DateTime.Now.Hour.ToString() + "-" +
                               DateTime.Now.Minute.ToString() +
                               ".log";
+      cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+      ramCounter = new PerformanceCounter("Memory", "Available MBytes");
     
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
