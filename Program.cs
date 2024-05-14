@@ -32,15 +32,19 @@ namespace ConsoleDb2DotNET6App
                                   "DELETE FROM DB2ADM.TB2 WHERE C1 > 12000", 
                                   "DELETE FROM DB2ADM.TB2 WHERE C2 > 12000",
                                   "DELETE FROM DB2ADM.TB2 WHERE C2 > 8000 AND C1 < 3000"};
-        
+
+    Dictionary<string, string> DSConfigs_properties;
+    Dictionary<string, string> WrkloadConfigs_properties;
+    Dictionary<string, string> Test_properties;
+    String connString;
+  
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
       
-      Dictionary<string, string> DSConfigs_properties = cdb.getProperties("/etc/dsconfigs/DSConfigs_properties.txt");
-      Dictionary<string, string> WrkloadConfigs_properties = cdb.getProperties("/etc/wrkloadconfigs/WrkloadConfigs_properties.txt");
-      Dictionary<string, string> Test_properties = cdb.getProperties("/etc/testprop/Test_properties.txt");
-    
-      String connString = cdb.connectDb();
+      DSConfigs_properties = cdb.getProperties("/etc/dsconfigs/DSConfigs_properties.txt");
+      WrkloadConfigs_properties = cdb.getProperties("/etc/wrkloadconfigs/WrkloadConfigs_properties.txt");
+      Test_properties = cdb.getProperties("/etc/testprop/Test_properties.txt"); 
+      connString = cdb.connectDb();
     
       int numInsertThreads = int.Parse(cdb.WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
