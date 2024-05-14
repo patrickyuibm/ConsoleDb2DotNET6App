@@ -37,6 +37,7 @@ namespace ConsoleDb2DotNET6App
     static Dictionary<string, string> WrkloadConfigs_properties;
     static Dictionary<string, string> Test_properties;
     static String connString;
+    static ConsoleDb2DotNET6App.Syslog syslog = null;
   
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
