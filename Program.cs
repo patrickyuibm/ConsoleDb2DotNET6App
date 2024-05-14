@@ -217,7 +217,7 @@ void run_transaction(DB2Connection myConnection) {
      s.Stop();  
      myTrans.Rollback(); 
    } catch(Exception e) { 
-     myTrans.Rollback(); 
+     //myTrans.Rollback(); 
      Console.WriteLine(e.ToString()); 
    } finally { 
      myConnection.Close(); 
