@@ -5,43 +5,24 @@
 //***************************** IMPORT DEPENDENCIES ***************************** 
 
 using System; 
-
 using System.Data; 
-
 using System.Threading; 
-
 using System.IO; 
-
 using System.Net; 
-
 using System.Net.NetworkInformation; 
-
 using System.Runtime.InteropServices; 
-
 using IBM.Data.Db2; 
-
 using System.Configuration; 
-
 using System.Collections.Specialized; 
-
 using System.Collections; 
-
 using System.Collections.Generic; 
-
 using System.Diagnostics; 
-
 using System.Dynamic; 
-
 using System.Xml; 
-
 using IBM.Data.DB2Types; 
-
 using System.Text; 
 
-  
-
 //***************************** GLOBAL VARIABLES ***************************** 
-
 String[] select_statements =  {"SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2", 
 
                                "SELECT * FROM DB2ADM.TB2",  
@@ -122,11 +103,7 @@ void main() {
 
   Test_properties = getProperties("/etc/testprop/Test_properties.txt"); 
 
-  
-
   connString = connectDb(); 
-
-   
 
   System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch(); 
 
