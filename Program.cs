@@ -37,11 +37,13 @@ namespace ConsoleDb2DotNET6App
     static Dictionary<string, string> WrkloadConfigs_properties;
     static Dictionary<string, string> Test_properties;
     static String connString;
+    static String logLevel; //only supports 1 and 2 for now
     static String log;
     static String logDir;
     static String logFile;
     static PerformanceCounter cpuCounter;
     static PerformanceCounter ramCounter;
+    
   
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
