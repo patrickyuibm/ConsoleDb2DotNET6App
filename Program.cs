@@ -37,7 +37,7 @@ namespace ConsoleDb2DotNET6App
     static Dictionary<string, string> WrkloadConfigs_properties;
     static Dictionary<string, string> Test_properties;
     static String connString;
-    static String logLevel; //only supports 1 and 2 for now
+    static int logLevel = 1; //only supports 1 and 2 for now
     static String log;
     static String logDir;
     static String logFile;
@@ -51,6 +51,7 @@ namespace ConsoleDb2DotNET6App
       DSConfigs_properties = cdb.getProperties("/etc/dsconfigs/DSConfigs_properties.txt");
       WrkloadConfigs_properties = cdb.getProperties("/etc/wrkloadconfigs/WrkloadConfigs_properties.txt");
       Test_properties = cdb.getProperties("/etc/testprop/Test_properties.txt"); 
+      logLevel = int.Parse(WrkloadConfigs_properties["LOG_LEVEL"]);
       connString = cdb.connectDb();
       logDir = "/etc/logs";
       logFile = logDir + "/run" + "-" + DateTime.Now.Year.ToString() + "-" +
@@ -58,9 +59,10 @@ namespace ConsoleDb2DotNET6App
                               DateTime.Now.Day.ToString() + "-" +
                               DateTime.Now.Hour.ToString() + "-" +
                               DateTime.Now.Minute.ToString() +
-                              ".log";
+                              ".txt";
       cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
       ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+      StreamWriter m_log = new StreamWriter(logFile);
     
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
@@ -83,14 +85,14 @@ namespace ConsoleDb2DotNET6App
           run_transaction(conn);
       }  catch (DB2Exception myException) { 
           for (int i=0; i < myException.Errors.Count; i++) { 
-             Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
+             m_log.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
                  "Message: " + myException.Errors[i].Message + "\n" + 
                  "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
                  "Source: " + myException.Errors[i].Source + "\n" + 
                  "SQL: " + myException.Errors[i].SQLState + "\n" + 
                  "At time: " + DateTime.Now);
           }
-      } finally { 
+      } finally {
           conn.Close();
       }
     }
@@ -110,20 +112,24 @@ namespace ConsoleDb2DotNET6App
           Stopwatch s = new Stopwatch();  
           for (int i = 0; i < repetitions; i++) {
             s.Start();
-            //Console.WriteLine("Running DML at {0}", DateTime.Now);
+            //m_log("Running DML at {0}", DateTime.Now);
             while (s.Elapsed < TimeSpan.FromMinutes(commit_frequency)) {  
               myCommand.ExecuteNonQuery();
             }
-            //Console.WriteLine("Resetting stopwatch and committing DML at time {0}", DateTime.Now);
+            //m_log("Resetting stopwatch and committing DML at time {0}", DateTime.Now);
             myTrans.Commit();
             myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
             myCommand.Transaction = myTrans;
             s.Reset();
+            if (log_level == 2) {
+              m_log.WriteLine("Thread " + thid.ToString() + " committing, " + cpuCounter.NextValue()+"% CPU used");
+              m_log.WriteLine("Thread " + thid.ToString() + " committing, " + ramCounter.NextValue()+"MB used");
+            }
           }
           s.Stop();
        } catch(Exception e) { 
          myTrans.Rollback(); 
-         Console.WriteLine(e.ToString()); 
+         m_log(e.ToString()); 
        } finally { 
          myConnection.Close(); 
        } 
@@ -140,8 +146,8 @@ namespace ConsoleDb2DotNET6App
             }
           }
       } catch (Exception e) {
-          Console.WriteLine("The file could not be read:");
-          Console.WriteLine(e.Message);
+          m_log("The file could not be read:");
+          m_log(e.Message);
         }
       return props;
     }
