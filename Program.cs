@@ -42,8 +42,8 @@ namespace ConsoleDb2DotNET6App
     static String log;
     static String logDir;
     static String logFile;
-    //static PerformanceCounter cpuCounter;
-    //static PerformanceCounter ramCounter;
+    static System.Diagnostics.PerformanceCounter cpuCounter;
+    static System.Diagnostics.PerformanceCounter ramCounter;
     
   
     public static void Main(String[] args) {
@@ -58,7 +58,7 @@ namespace ConsoleDb2DotNET6App
       conn.Open();
       Console.WriteLine(conn.ServerVersion); 
       conn.Close();
-      /*
+      
       logDir = "/etc/logs";
       logFile = logDir + "/run" + "-" + DateTime.Now.Year.ToString() + "-" +
                               DateTime.Now.Month.ToString() + "-" +
@@ -80,7 +80,7 @@ namespace ConsoleDb2DotNET6App
       foreach (Thread t in myThreads) {
         t.Join();
       }
-      */
+      
     }
     
     void startSelect() {
