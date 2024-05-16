@@ -147,8 +147,8 @@ namespace ConsoleDb2DotNET6App
             }
           }
       } catch (Exception e) {
-          m_log.WriteLine("The file could not be read:");
-          m_log.WriteLine(e.Message);
+          Console.WriteLine("The file could not be read:");
+          Console.WriteLine(e.Message);
         }
       return props;
     }
