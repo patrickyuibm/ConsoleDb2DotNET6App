@@ -42,8 +42,8 @@ namespace ConsoleDb2DotNET6App
     static String log;
     static String logDir;
     static String logFile;
-    static PerformanceCounter cpuCounter;
-    static PerformanceCounter ramCounter;
+    //static PerformanceCounter cpuCounter;
+    //static PerformanceCounter ramCounter;
     
   
     public static void Main(String[] args) {
