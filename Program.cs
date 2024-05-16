@@ -115,11 +115,11 @@ namespace ConsoleDb2DotNET6App
           Stopwatch s = new Stopwatch();  
           for (int i = 0; i < repetitions; i++) {
             s.Start();
-            //m_log("Running DML at {0}", DateTime.Now);
+            //m_log.WriteLine("Running DML at {0}", DateTime.Now);
             while (s.Elapsed < TimeSpan.FromMinutes(commit_frequency)) {  
               myCommand.ExecuteNonQuery();
             }
-            //m_log("Resetting stopwatch and committing DML at time {0}", DateTime.Now);
+            //m_log.WriteLine("Resetting stopwatch and committing DML at time {0}", DateTime.Now);
             myTrans.Commit();
             myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
             myCommand.Transaction = myTrans;
@@ -128,7 +128,7 @@ namespace ConsoleDb2DotNET6App
           s.Stop();
        } catch(Exception e) { 
          myTrans.Rollback(); 
-         m_log(e.ToString()); 
+         m_log.WriteLine(e.ToString()); 
        } finally { 
          myConnection.Close(); 
        } 
@@ -145,8 +145,8 @@ namespace ConsoleDb2DotNET6App
             }
           }
       } catch (Exception e) {
-          m_log("The file could not be read:");
-          m_log(e.Message);
+          m_log.WriteLine("The file could not be read:");
+          m_log.WriteLine(e.Message);
         }
       return props;
     }
