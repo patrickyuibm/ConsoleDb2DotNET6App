@@ -1,6 +1,5 @@
 // See https://aka.ms/new-console-template for more information
-//test comment 
-// test comment 2
+
 //***************************** IMPORT DEPENDENCIES *****************************
 using System;
 using System.Data;
