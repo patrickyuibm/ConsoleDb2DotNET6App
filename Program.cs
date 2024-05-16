@@ -64,27 +64,7 @@ namespace ConsoleDb2DotNET6App
       cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
       ramCounter = new PerformanceCounter("Memory", "Available MBytes");
 
-            connString = cdb.connectDb();
-      DB2Connection conn = new DB2Connection(connString); 
-      conn.Open();
-      string functionLevelQuery = "SELECT PRODUCTID_EXT FROM SYSIBM.SYSDUMMY1";
-      Console.WriteLine(conn.ServerVersion); 
-      Console.WriteLine("DB2 Version number = " + conn.ServerVersion.Substring(0, 2));
-      Console.WriteLine("Compatible = " + (conn.ServerVersion.Substring(0, 2) == "13"));
-      DB2Command myCommand = new DB2Command(functionLevelQuery, conn);
-      DB2DataReader myReader = myCommand.ExecuteReader();
-      string functionLevel = "";
-      while (myReader.Read())
-        {
-            functionLevel = myReader.GetString(0);
-            break;
-        }
-      Console.WriteLine(conn.ServerVersion.Substring(0, 2) == "13");
-      Console.WriteLine(functionLevel.Substring(functionLevel.Length - 3, 3));
-      Console.WriteLine((conn.ServerVersion.Substring(0, 2) == "13") && (int.Parse(functionLevel.Substring(functionLevel.Length - 3, 3)) >= 506));
-      conn.Close();
-      
-
+      connString = cdb.connectDb();
     
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
