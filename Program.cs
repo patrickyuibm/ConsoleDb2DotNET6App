@@ -42,10 +42,7 @@ namespace ConsoleDb2DotNET6App
     static String log;
     static String logDir;
     static String logFile;
-    static System.Diagnostics.PerformanceCounter cpuCounter;
-    static System.Diagnostics.PerformanceCounter ramCounter;
     
-  
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
       
@@ -66,8 +63,6 @@ namespace ConsoleDb2DotNET6App
                               DateTime.Now.Hour.ToString() + "-" +
                               DateTime.Now.Minute.ToString() +
                               ".txt";
-      cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-      ramCounter = new PerformanceCounter("Memory", "Available MBytes");
       StreamWriter m_log = new StreamWriter(logFile);
     
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
@@ -128,10 +123,6 @@ namespace ConsoleDb2DotNET6App
             myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
             myCommand.Transaction = myTrans;
             s.Reset();
-            if (log_level == 2) {
-              m_log.WriteLine("Thread " + thid.ToString() + " committing, " + cpuCounter.NextValue()+"% CPU used");
-              m_log.WriteLine("Thread " + thid.ToString() + " committing, " + ramCounter.NextValue()+"MB used");
-            }
           }
           s.Stop();
        } catch(Exception e) { 
