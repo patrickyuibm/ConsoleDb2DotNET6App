@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-ConsoleDb2DotNET6App",
+      "appliesTo": "/",
+      "type": "launch"
+    }
+  ]
+}
