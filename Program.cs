@@ -46,6 +46,7 @@ namespace ConsoleDb2DotNET6App
     
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
+      m_log = new StreamWriter(logFile);
       
       DSConfigs_properties = cdb.getProperties("/etc/dsconfigs/DSConfigs_properties.txt");
       WrkloadConfigs_properties = cdb.getProperties("/etc/wrkloadconfigs/WrkloadConfigs_properties.txt");
@@ -64,7 +65,7 @@ namespace ConsoleDb2DotNET6App
                               DateTime.Now.Hour.ToString() + "-" +
                               DateTime.Now.Minute.ToString() +
                               ".txt";
-      m_log = new StreamWriter(logFile);
+      
     
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
