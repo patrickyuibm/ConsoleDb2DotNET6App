@@ -67,7 +67,7 @@ namespace ConsoleDb2DotNET6App
       Console.WriteLine(conn.ServerVersion); 
       Console.WriteLine("DB2 Version number = " + conn.ServerVersion.Substring(0, 2));
       Console.WriteLine("Compatible = " + (conn.ServerVersion.Substring(0, 2) == "13"));
-      DB2Command myCommand = new DB2Command(mySelectQuery, myConnection);
+      DB2Command myCommand = new DB2Command(functionLevelQuery, conn);
       DB2DataReader myReader = myCommand.ExecuteReader();
       string functionLevel = "";
       while (myReader.Read())
