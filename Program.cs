@@ -49,9 +49,9 @@ namespace ConsoleDb2DotNET6App
       
       DSConfigs_properties = cdb.getProperties("/etc/dsconfigs/DSConfigs_properties.txt");
       WrkloadConfigs_properties = cdb.getProperties("/etc/wrkloadconfigs/WrkloadConfigs_properties.txt");
-      Test_properties = cdb.getProperties("/etc/testprop/Test_properties.txt"); 
-      
-      logDir = "/etc/logs";
+      Test_properties = cdb.getProperties("/etc/testprop/Test_properties.txt");
+
+      logDir = "/etc";
       logFile = logDir + "/run" + "-" + DateTime.Now.Year.ToString() + "-" +
                               DateTime.Now.Month.ToString() + "-" +
                               DateTime.Now.Day.ToString() + "-" +
@@ -63,10 +63,22 @@ namespace ConsoleDb2DotNET6App
       connString = cdb.connectDb();
       DB2Connection conn = new DB2Connection(connString); 
       conn.Open();
+      string functionLevelQuery = "SELECT PRODUCTID_EXT FROM SYSIBM.SYSDUMMY1";
       Console.WriteLine(conn.ServerVersion); 
       Console.WriteLine("DB2 Version number = " + conn.ServerVersion.Substring(0, 2));
       Console.WriteLine("Compatible = " + (conn.ServerVersion.Substring(0, 2) == "13"));
-      conn.Close();
+      DB2Command myCommand = new DB2Command(mySelectQuery, myConnection);
+      DB2DataReader myReader = myCommand.ExecuteReader();
+      string functionLevel = "";
+      while (myReader.Read())
+        {
+            functionLevel = myReader.GetString(0);
+            break;
+        }
+      Console.WriteLine(con.ServerVersion.Substring(0, 2) == "13");
+            Console.WriteLine(functionLevel.Substring(functionLevel.Length - 3, 3));
+      Console.WriteLine((con.ServerVersion.Substring(0, 2) == "13") && ((int)functionLevel.Substring(functionLevel.Length - 3, 3) >= 506));
+       conn.Close();
       
 
     
