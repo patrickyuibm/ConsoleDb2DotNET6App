@@ -76,9 +76,9 @@ namespace ConsoleDb2DotNET6App
             break;
         }
       Console.WriteLine(con.ServerVersion.Substring(0, 2) == "13");
-            Console.WriteLine(functionLevel.Substring(functionLevel.Length - 3, 3));
+      Console.WriteLine(functionLevel.Substring(functionLevel.Length - 3, 3));
       Console.WriteLine((con.ServerVersion.Substring(0, 2) == "13") && ((int)functionLevel.Substring(functionLevel.Length - 3, 3) >= 506));
-       conn.Close();
+      conn.Close();
       
 
     
