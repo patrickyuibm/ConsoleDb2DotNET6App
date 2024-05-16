@@ -42,6 +42,7 @@ namespace ConsoleDb2DotNET6App
     static String log;
     static String logDir;
     static String logFile;
+    static StreamWriter m_log;
     
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
@@ -63,7 +64,7 @@ namespace ConsoleDb2DotNET6App
                               DateTime.Now.Hour.ToString() + "-" +
                               DateTime.Now.Minute.ToString() +
                               ".txt";
-      StreamWriter m_log = new StreamWriter(logFile);
+      m_log = new StreamWriter(logFile);
     
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
