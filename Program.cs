@@ -46,17 +46,10 @@ namespace ConsoleDb2DotNET6App
     
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
-      m_log = new StreamWriter(logFile);
       
       DSConfigs_properties = cdb.getProperties("/etc/dsconfigs/DSConfigs_properties.txt");
       WrkloadConfigs_properties = cdb.getProperties("/etc/wrkloadconfigs/WrkloadConfigs_properties.txt");
       Test_properties = cdb.getProperties("/etc/testprop/Test_properties.txt"); 
-      logLevel = int.Parse(WrkloadConfigs_properties["LOG_LEVEL"]);
-      connString = cdb.connectDb();
-      DB2Connection conn = new DB2Connection(connString); 
-      conn.Open();
-      Console.WriteLine(conn.ServerVersion); 
-      conn.Close();
       
       logDir = "/etc/logs";
       logFile = logDir + "/run" + "-" + DateTime.Now.Year.ToString() + "-" +
@@ -65,7 +58,15 @@ namespace ConsoleDb2DotNET6App
                               DateTime.Now.Hour.ToString() + "-" +
                               DateTime.Now.Minute.ToString() +
                               ".txt";
+      m_log = new StreamWriter(logFile);
       
+      connString = cdb.connectDb();
+      DB2Connection conn = new DB2Connection(connString); 
+      conn.Open();
+      Console.WriteLine(conn.ServerVersion); 
+      conn.Close();
+      
+
     
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
