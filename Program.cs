@@ -3,6 +3,7 @@
 //***************************** IMPORT DEPENDENCIES *****************************
 using System;
 using System.Data;
+using System.Data.Odbc;
 using System.Threading;
 using System.IO;
 using System.Net;
@@ -53,6 +54,11 @@ namespace ConsoleDb2DotNET6App
       Test_properties = cdb.getProperties("/etc/testprop/Test_properties.txt"); 
       logLevel = int.Parse(WrkloadConfigs_properties["LOG_LEVEL"]);
       connString = cdb.connectDb();
+      DB2Connection conn = new DB2Connection(connString); 
+      conn.Open();
+      Console.WriteLine(conn.ServerVersion); 
+      conn.Close();
+      /*
       logDir = "/etc/logs";
       logFile = logDir + "/run" + "-" + DateTime.Now.Year.ToString() + "-" +
                               DateTime.Now.Month.ToString() + "-" +
@@ -74,6 +80,7 @@ namespace ConsoleDb2DotNET6App
       foreach (Thread t in myThreads) {
         t.Join();
       }
+      */
     }
     
     void startSelect() {
