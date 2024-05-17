@@ -43,8 +43,6 @@ namespace ConsoleDb2DotNET6App
     static String logDir;
     static String logFile;
     static StreamWriter m_log;
-    static PerformanceCounter cpuCounter;
-    static PerformanceCounter ramCounter;
     
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
@@ -61,8 +59,6 @@ namespace ConsoleDb2DotNET6App
                               DateTime.Now.Minute.ToString() +
                               ".txt";
       m_log = new StreamWriter(logFile);
-      cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-      ramCounter = new PerformanceCounter("Memory", "Available MBytes");
 
       connString = cdb.connectDb();
     
@@ -124,7 +120,6 @@ namespace ConsoleDb2DotNET6App
             myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
             myCommand.Transaction = myTrans;
             s.Reset();
-            m_log.WriteLine("Thread committing at time " + DateTime.Now + ", CPU used: " + cpuCounter.NextValue() + "%, RAM used: " + ramCounter.NextValue() + "MB");
           }
           s.Stop();
        } catch(Exception e) { 
