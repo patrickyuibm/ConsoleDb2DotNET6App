@@ -129,11 +129,14 @@ namespace ConsoleDb2DotNET6App
             
             if (debug > 1) {
                         var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
+                        m_log.WriteLine("Thread " + threadID.ToString() + " CPU Used Ms = " + cpuUsedMs.ToString());
                         var totalMsPassed = (endTime - startTime).TotalMilliseconds;
+                        m_log.WriteLine("Thread " + threadID.ToString() + " total Ms passed = " + totalMsPassed);
+                        m_log.WriteLine("Thread " + threadID.ToString() + " processor count = " + Environment.ProcessorCount.ToString());
                         var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
-
                         var cpuUsagePercentage = cpuUsageTotal * 100;
-                        m_log.WriteLine("Thread " + threadID.ToString() + " committing, cpu used = " + cpuUsagePercentage.ToString());
+                        m_log.WriteLine("Thread " + threadID.ToString() + " committing, cpu used = " + cpuUsagePercentage.ToString() + "%");
+                        m_log.WriteLine("Thread " + threadID.ToString() + " " + Process.GetCurrentProcess().PrivateMemorySize64 + " bytes");
                     }
           }
           s.Stop();
