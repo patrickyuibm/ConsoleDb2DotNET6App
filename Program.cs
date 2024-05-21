@@ -1,6 +1,4 @@
 // See https://aka.ms/new-console-template for more information
-
-//***************************** IMPORT DEPENDENCIES *****************************
 using System;
 using System.Data;
 using System.Data.Odbc;
@@ -43,6 +41,7 @@ namespace ConsoleDb2DotNET6App
     static String logDir;
     static String logFile;
     static StreamWriter m_log;
+    static int debug; //either log level 1 or 2
     
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
@@ -59,6 +58,7 @@ namespace ConsoleDb2DotNET6App
                               DateTime.Now.Minute.ToString() +
                               ".txt";
       m_log = new StreamWriter(logFile);
+      debug = int.Parse(WrkloadConfigs_properties["LOG_LEVEL"]);
 
       connString = cdb.connectDb();
     
@@ -81,22 +81,26 @@ namespace ConsoleDb2DotNET6App
       DB2Connection conn = new DB2Connection(connString);
       conn.Open();
       try {  
-          run_transaction(conn);
-      }  catch (DB2Exception myException) { 
-          for (int i=0; i < myException.Errors.Count; i++) { 
-             m_log.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
-                 "Message: " + myException.Errors[i].Message + "\n" + 
-                 "Native: " + myException.Errors[i].NativeError.ToString() + "\n" + 
-                 "Source: " + myException.Errors[i].Source + "\n" + 
-                 "SQL: " + myException.Errors[i].SQLState + "\n" + 
-                 "At time: " + DateTime.Now);
-          }
+          run_transaction(conn, thid);
+      }  catch (DB2Exception myException) {
+                if (debug > 0)
+                {
+                    for (int i = 0; i < myException.Errors.Count; i++)
+                    {
+                        m_log.WriteLine("For Thread_" + thid.ToString() + ": \n" +
+                            "Message: " + myException.Errors[i].Message + "\n" +
+                            "Native: " + myException.Errors[i].NativeError.ToString() + "\n" +
+                            "Source: " + myException.Errors[i].Source + "\n" +
+                            "SQL: " + myException.Errors[i].SQLState + "\n" +
+                            "At time: " + DateTime.Now);
+                    }
+                }
       } finally {
           conn.Close();
       }
     }
     
-    void run_transaction(DB2Connection myConnection) {
+    void run_transaction(DB2Connection myConnection, int threadID) {
        float thread_timespan = float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
        float commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
        int repetitions = (int) (thread_timespan / commit_frequency);
@@ -111,20 +115,35 @@ namespace ConsoleDb2DotNET6App
           Stopwatch s = new Stopwatch();  
           for (int i = 0; i < repetitions; i++) {
             s.Start();
-            //m_log.WriteLine("Running DML at {0}", DateTime.Now);
+            DateTime startTime = DateTime.Now;
+            TimeSpan startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
             while (s.Elapsed < TimeSpan.FromMinutes(commit_frequency)) {  
               myCommand.ExecuteNonQuery();
             }
-            //m_log.WriteLine("Resetting stopwatch and committing DML at time {0}", DateTime.Now);
             myTrans.Commit();
             myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
             myCommand.Transaction = myTrans;
             s.Reset();
+            DateTime endTime = DateTime.Now;
+            TimeSpan endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
+            
+            if (debug > 1) {
+                        var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
+                        var totalMsPassed = (endTime - startTime).TotalMilliseconds;
+                        var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
+
+                        var cpuUsagePercentage = cpuUsageTotal * 100;
+                        m_log.WriteLine("Thread " + threadID.ToString() + " committing, cpu used = " + cpuUsagePercentage.ToString());
+                    }
           }
           s.Stop();
        } catch(Exception e) { 
-         myTrans.Rollback(); 
-         m_log.WriteLine(e.ToString()); 
+         myTrans.Rollback();
+                if (debug > 0)
+                {
+                    m_log.WriteLine("Exception for Thread " + threadID.ToString());
+                    m_log.WriteLine(e.ToString());
+                }
        } finally { 
          myConnection.Close(); 
        } 
