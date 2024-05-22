@@ -135,7 +135,7 @@ namespace ConsoleDb2DotNET6App
             }
             else {
                 s.Start();
-                while (s.Elapsed < TimeSpan.FromSeconds(commit_frequency)) 
+                while (s.Elapsed < TimeSpan.FromSeconds(thread_timespan)) 
                 {
                     myCommand.ExecuteNonQuery();
                     myTrans.Commit();
