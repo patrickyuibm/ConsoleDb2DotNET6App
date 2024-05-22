@@ -127,7 +127,6 @@ namespace ConsoleDb2DotNET6App
                         myCommand.ExecuteNonQuery();
                     }
                     myTrans.Commit();
-                    myTrans.Dispose();
                     myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
                     myCommand.Transaction = myTrans;
                     s.Reset();
@@ -142,7 +141,6 @@ namespace ConsoleDb2DotNET6App
                     myCommand.ExecuteNonQuery();
                     myTrans.Commit();
                 }
-                myTrans.Dispose();
                 s.Stop();   
             }
             DateTime endTime = DateTime.Now;
@@ -159,14 +157,16 @@ namespace ConsoleDb2DotNET6App
             }
           
        } catch(Exception e) { 
-         myTrans.Rollback();
+            myTrans.Rollback();
                 if (debug > 0)
                 {
                     m_log.WriteLine("Exception for Thread " + threadID.ToString());
                     m_log.WriteLine(e.ToString());
                 }
-       } finally { 
-         myConnection.Close(); 
+       } finally {
+            myTrans.Dispose();
+            myConnection.Close();
+                
        } 
     } 
     
