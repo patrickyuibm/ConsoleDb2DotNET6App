@@ -118,6 +118,7 @@ namespace ConsoleDb2DotNET6App
             TimeSpan startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
             if (repetitions > 0)
             {
+                if (debug > 1) { m_log.WriteLine("Thread " + threadID.ToString() + " running transactions with commits every " + commit_frequency.ToString() + "seconds"); }
                 for (int i = 0; i < repetitions; i++)
                 {
                     s.Start();
@@ -134,6 +135,7 @@ namespace ConsoleDb2DotNET6App
                 s.Stop();
             }
             else {
+                if (debug > 1) { m_log.WriteLine("Thread " + threadID.ToString() + "running transactions with instant commits"); }
                 s.Start();
                 while (s.Elapsed < TimeSpan.FromSeconds(thread_timespan)) 
                 {
