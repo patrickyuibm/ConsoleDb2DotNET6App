@@ -156,7 +156,8 @@ namespace ConsoleDb2DotNET6App
                 m_log.WriteLine("Thread " + threadID.ToString() + " " + Process.GetCurrentProcess().PrivateMemorySize64 + " bytes");
             }
           
-       } catch(Exception e) { 
+       } catch(Exception e) {
+            m_log.WriteLine("Exception caught for Thread " + threadID.ToString());
             myTrans.Rollback();
                 if (debug > 0)
                 {
@@ -164,6 +165,7 @@ namespace ConsoleDb2DotNET6App
                     m_log.WriteLine(e.ToString());
                 }
        } finally {
+            if (debug > 1) { m_log.WriteLine("Disposing transaction and connection for Thread " + threadID.ToString()); }
             myTrans.Dispose();
             myConnection.Close();
                 
