@@ -103,8 +103,9 @@ namespace ConsoleDb2DotNET6App
     void run_transaction(DB2Connection myConnection, int threadID) {
        float thread_timespan = float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
        float commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
-       int repetitions = (int) (thread_timespan / commit_frequency);
-      
+       //in K8s Secret, either specify the commit frequency in seconds or 0 for instant commits
+       int repetitions = commit_frequency > 0 ? (int) (thread_timespan / commit_frequency) : 0;
+    
        DB2Command myCommand = new DB2Command(); 
        myCommand.Connection = myConnection;  
        myCommand.CommandText = select_statements[0]; 
@@ -112,34 +113,49 @@ namespace ConsoleDb2DotNET6App
        myCommand.Transaction = myTrans;
       
        try { 
-          Stopwatch s = new Stopwatch();  
-          for (int i = 0; i < repetitions; i++) {
-            s.Start();
+            Stopwatch s = new Stopwatch();
             DateTime startTime = DateTime.Now;
             TimeSpan startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            while (s.Elapsed < TimeSpan.FromMinutes(commit_frequency)) {  
-              myCommand.ExecuteNonQuery();
+            if (repetitions > 0)
+            {
+                for (int i = 0; i < repetitions; i++)
+                {
+                    s.Start();
+                    while (s.Elapsed < TimeSpan.FromSeconds(commit_frequency))
+                    {
+                        myCommand.ExecuteNonQuery();
+                    }
+                    myTrans.Commit();
+                    myTrans.Dispose();
+                    myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    myCommand.Transaction = myTrans;
+                    s.Reset();
+                }
+                s.Stop();
             }
-            myTrans.Commit();
-            myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
-            myCommand.Transaction = myTrans;
-            s.Reset();
+            else {
+                s.Start();
+                while (s.Elapsed < TimeSpan.FromSeconds(commit_frequency)) 
+                {
+                    myCommand.ExecuteNonQuery();
+                    myTrans.Commit();
+                }
+                myTrans.Dispose();
+                s.Stop();   
+            }
             DateTime endTime = DateTime.Now;
             TimeSpan endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            
             if (debug > 1) {
-                        var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
-                        m_log.WriteLine("Thread " + threadID.ToString() + " CPU Used Ms = " + cpuUsedMs.ToString());
-                        var totalMsPassed = (endTime - startTime).TotalMilliseconds;
-                        m_log.WriteLine("Thread " + threadID.ToString() + " total Ms passed = " + totalMsPassed);
-                        m_log.WriteLine("Thread " + threadID.ToString() + " processor count = " + Environment.ProcessorCount.ToString());
-                        var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
-                        var cpuUsagePercentage = cpuUsageTotal * 100;
-                        m_log.WriteLine("Thread " + threadID.ToString() + " committing, cpu used = " + cpuUsagePercentage.ToString() + "%");
-                        m_log.WriteLine("Thread " + threadID.ToString() + " " + Process.GetCurrentProcess().PrivateMemorySize64 + " bytes");
-                    }
-          }
-          s.Stop();
+                var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
+                m_log.WriteLine("Thread " + threadID.ToString() + " CPU Used Ms = " + cpuUsedMs.ToString());
+                var totalMsPassed = (endTime - startTime).TotalMilliseconds;
+                m_log.WriteLine("Thread " + threadID.ToString() + " total Ms passed = " + totalMsPassed);
+                var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed); //processor count is 16
+                var cpuUsagePercentage = cpuUsageTotal * 100;
+                m_log.WriteLine("Thread " + threadID.ToString() + " committing, cpu used = " + cpuUsagePercentage.ToString("0.00") + "%");
+                m_log.WriteLine("Thread " + threadID.ToString() + " " + Process.GetCurrentProcess().PrivateMemorySize64 + " bytes");
+            }
+          
        } catch(Exception e) { 
          myTrans.Rollback();
                 if (debug > 0)
@@ -171,7 +187,6 @@ namespace ConsoleDb2DotNET6App
     
     String connectDb() {
       DB2ConnectionStringBuilder connb = new DB2ConnectionStringBuilder();
-      
       //Server credentials
       connb.Database = DSConfigs_properties["DS_DATABASE_NAME"];
       connb.UserID = DSConfigs_properties["DS_USER"];
@@ -186,16 +201,13 @@ namespace ConsoleDb2DotNET6App
       } else {
         connb.Server = DSConfigs_properties["DS_SERVER_NAME"];
       }
-      
       //Pooling
       connb.Pooling = true;
       connb.MinPoolSize = 0;
       connb.MaxPoolSize = int.Parse(WrkloadConfigs_properties["COUNT"]);
-    
       //Timeout management
       //connb.Connect_Timeout = 60;
       connb.ConnectionLifeTime = int.Parse(Test_properties["CONN_LIFETIME"]);
-      
       return connb.ConnectionString;
     }
     
