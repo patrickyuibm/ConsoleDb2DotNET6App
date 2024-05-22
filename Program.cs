@@ -136,7 +136,7 @@ namespace ConsoleDb2DotNET6App
             else {
                 if (debug > 1) { m_log.WriteLine("Thread " + threadID.ToString() + "running transactions with instant commits"); }
                 s.Start();
-                while (s.Elapsed < TimeSpan.FromSeconds(thread_timespan)) 
+                while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) 
                 {
                     myCommand.ExecuteNonQuery();
                     myTrans.Commit();
