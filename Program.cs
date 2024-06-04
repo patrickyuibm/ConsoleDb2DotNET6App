@@ -36,7 +36,7 @@ namespace ConsoleDb2DotNET6App
     static Dictionary<string, string> WrkloadConfigs_properties;
     static Dictionary<string, string> Test_properties;
     static String connString;
-    static int logLevel = 1; //only supports 1 and 2 for now
+    static int logLevel = 1; //only supports 1 and 2 for now, if you want no logging at all, set to 0 or any integer less
     static String log;
     static String logDir;
     static String logFile;
