@@ -131,6 +131,7 @@ namespace ConsoleDb2DotNET6App
                         myCommand.ExecuteNonQuery();
                     }
                     //myTrans.Commit();
+                    myTrans.Rollback();
                     myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
                     myCommand.Transaction = myTrans;
                     s.Reset();
