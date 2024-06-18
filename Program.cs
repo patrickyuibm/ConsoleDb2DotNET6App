@@ -160,8 +160,8 @@ namespace ConsoleDb2DotNET6App
           
        } catch(Exception e) {
             m_log.WriteLine("Exception caught for Thread " + threadID.ToString());
-            myTrans.Rollback();
-                if (debug > 0)
+            if (myTrans != null) { myTrans.Rollback(); }
+            if (debug > 0)
                 {
                     m_log.WriteLine("Exception for Thread " + threadID.ToString());
                     m_log.WriteLine(e.ToString());
