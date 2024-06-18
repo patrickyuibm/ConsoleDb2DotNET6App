@@ -105,6 +105,10 @@ namespace ConsoleDb2DotNET6App
        float commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
        //in K8s Secret, either specify the commit frequency in seconds or 0 for instant commits
        int repetitions = commit_frequency > 0 ? (int) (thread_timespan / commit_frequency) : 0;
+       if (!myConnection.IsOpen) { 
+                myConnection.Open();
+                if (debug > 0) { m_log.WriteLine("Connection for Thread #" + threadID + " died, going to new connection"); }
+       }
     
        DB2Command myCommand = new DB2Command(); 
        myCommand.Connection = myConnection;  
