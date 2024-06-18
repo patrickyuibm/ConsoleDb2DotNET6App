@@ -168,7 +168,7 @@ namespace ConsoleDb2DotNET6App
             if (debug > 0)
                 {
                     m_log.WriteLine("Exception for Thread " + threadID.ToString());
-                    m_log.WriteLine(e.ToString());
+                    //m_log.WriteLine(e.ToString());
                 }
        } finally {
             if (debug > 1) { m_log.WriteLine("Disposing transaction and connection for Thread " + threadID.ToString()); }
