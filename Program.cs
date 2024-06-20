@@ -151,6 +151,7 @@ namespace ConsoleDb2DotNET6App
             else {
                 if (debug > 1) { m_log.WriteLine("Thread " + threadID.ToString() + " running transactions with instant commits"); }
                 s.Start();
+                Console.WriteLine("stop watch started for repetitions <= 0");
                 while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) 
                 {
                     myCommand.ExecuteNonQuery();
