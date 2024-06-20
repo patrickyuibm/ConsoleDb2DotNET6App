@@ -118,7 +118,7 @@ namespace ConsoleDb2DotNET6App
     
        DB2Command myCommand = new DB2Command(); 
        myCommand.Connection = myConnection;  
-       myCommand.CommandText = insert_statements[0]; 
+       myCommand.CommandText = select_statements[0]; 
        DB2Transaction myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
        myCommand.Transaction = myTrans;
       
