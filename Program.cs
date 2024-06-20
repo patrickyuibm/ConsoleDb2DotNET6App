@@ -61,8 +61,11 @@ namespace ConsoleDb2DotNET6App
       debug = int.Parse(WrkloadConfigs_properties["LOG_LEVEL"]);
 
       connString = cdb.connectDb();
-    
-      int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
+      DateTime start = DateTime.Now;
+      m_log.WriteLine("Beginning run at " + start);
+      Console.WriteLine("Beginning run at " + start);
+
+            int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
       for (int i = 0; i < numInsertThreads; i++) {
         Thread t = new Thread(new ThreadStart(() => cdb.startSelect()));
@@ -72,8 +75,11 @@ namespace ConsoleDb2DotNET6App
       foreach (Thread t in myThreads) {
         t.Join();
       }
-      
-    }
+      DateTime end = DateTime.Now;
+      m_log.WriteLine("Ending run at " + end);
+      Console.WriteLine("Ending run at " + end);
+
+        }
     
     void startSelect() {
       int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;  
@@ -130,8 +136,8 @@ namespace ConsoleDb2DotNET6App
                     {
                         myCommand.ExecuteNonQuery();
                     }
-                    //myTrans.Commit();
-                    myTrans.Rollback();
+                    myTrans.Commit();
+                    //myTrans.Rollback();
                     myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
                     myCommand.Transaction = myTrans;
                     s.Reset();
@@ -144,10 +150,13 @@ namespace ConsoleDb2DotNET6App
                 while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) 
                 {
                     myCommand.ExecuteNonQuery();
+                    
                     myTrans.Commit();
                     myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
                     myCommand.Transaction = myTrans;
+                    
                 }
+                myTrans.Rollback();
                 s.Stop();   
             }
             DateTime endTime = DateTime.Now;
@@ -165,7 +174,7 @@ namespace ConsoleDb2DotNET6App
           
        } catch(Exception e) {
             m_log.WriteLine("Exception caught for Thread " + threadID.ToString());
-            //if (myTrans != null) { myTrans.Rollback(); }
+            if (myTrans != null) { myTrans.Rollback(); }
             if (debug > 0)
                 {
                     m_log.WriteLine("Exception for Thread " + threadID.ToString());
