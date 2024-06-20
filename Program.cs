@@ -61,9 +61,9 @@ namespace ConsoleDb2DotNET6App
       debug = int.Parse(WrkloadConfigs_properties["LOG_LEVEL"]);
 
       connString = cdb.connectDb();
-      DateTime start = DateTime.Now;
-      m_log.WriteLine("Beginning run at " + start);
-      Console.WriteLine("Beginning run at " + start);
+      //DateTime start = DateTime.Now;
+      //m_log.WriteLine("Beginning run at " + start);
+      //Console.WriteLine("Beginning run at " + start);
 
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
@@ -108,13 +108,12 @@ namespace ConsoleDb2DotNET6App
     
     void run_transaction(DB2Connection myConnection, int threadID) {
        float thread_timespan = float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
+       Console.WriteLine("thread minutes timespan = " + thread_timespan);
        float commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
+       Console.WriteLine("commit freq = " + commit_frequency);
        //in K8s Secret, either specify the commit frequency in seconds or 0 for instant commits
        int repetitions = commit_frequency > 0 ? (int) (thread_timespan / commit_frequency) : 0;
-       if (!myConnection.IsOpen) { 
-                myConnection.Open();
-                if (debug > 0) { m_log.WriteLine("Connection for Thread #" + threadID + " died, going to new connection"); }
-       }
+       Console.WriteLine("repetitions = " + repetitions");
     
        DB2Command myCommand = new DB2Command(); 
        myCommand.Connection = myConnection;  
