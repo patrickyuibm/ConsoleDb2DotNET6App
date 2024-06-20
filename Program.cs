@@ -108,12 +108,10 @@ namespace ConsoleDb2DotNET6App
     
     void run_transaction(DB2Connection myConnection, int threadID) {
        float thread_timespan = float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
-       Console.WriteLine("thread minutes timespan = " + thread_timespan);
+       Console.WriteLine("running transactoin");
        float commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
-       Console.WriteLine("commit freq = " + commit_frequency);
        //in K8s Secret, either specify the commit frequency in seconds or 0 for instant commits
        int repetitions = commit_frequency > 0 ? (int) (thread_timespan / commit_frequency) : 0;
-       Console.WriteLine("repetitions = " + repetitions");
     
        DB2Command myCommand = new DB2Command(); 
        myCommand.Connection = myConnection;  
