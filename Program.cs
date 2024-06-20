@@ -60,9 +60,9 @@ namespace ConsoleDb2DotNET6App
       debug = int.Parse(WrkloadConfigs_properties["LOG_LEVEL"]);
 
       connString = cdb.connectDb();
-      DateTime start = DateTime.Now;
-      m_log.WriteLine("Beginning run at " + start);
-      Console.WriteLine("Beginning run at " + start);
+      //DateTime start = DateTime.Now;
+      //m_log.WriteLine("Beginning run at " + start);
+      //Console.WriteLine("Beginning run at " + start);
 
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
@@ -106,33 +106,37 @@ namespace ConsoleDb2DotNET6App
     }
     
     void run_transaction(DB2Connection myConnection, int threadID) {
+       DB2Transaction myTrans = null;
+       DB2Command myCommand = null;
+      
        float thread_timespan = float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
+       Console.WriteLine("running transaction");
        float commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
        //in K8s Secret, either specify the commit frequency in seconds or 0 for instant commits
        int repetitions = commit_frequency > 0 ? (int) (thread_timespan / commit_frequency) : 0;
-       if (!myConnection.IsOpen) { 
-                myConnection.Open();
-                if (debug > 0) { m_log.WriteLine("Connection for Thread #" + threadID + " died, going to new connection"); }
-       }
-    
-       DB2Command myCommand = new DB2Command(); 
+       Console.WriteLine(thread_timespan);
+       Console.WriteLine(commit_frequency);
+      
+       myCommand = new DB2Command(); 
        myCommand.Connection = myConnection;  
        myCommand.CommandText = select_statements[0]; 
-       DB2Transaction myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+       myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
        myCommand.Transaction = myTrans;
-      
+       if (myTrans == null) {Console.WriteLine("transaction null");} else {Console.WriteLine("transaction not null");}
        try { 
             Stopwatch s = new Stopwatch();
             DateTime startTime = DateTime.Now;
             TimeSpan startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
             if (repetitions > 0)
             {
+                
                 if (debug > 1) { m_log.WriteLine("Thread " + threadID.ToString() + " running transactions with commits every " + commit_frequency.ToString() + " seconds"); }
                 for (int i = 0; i < repetitions; i++)
                 {
                     s.Start();
                     while (s.Elapsed < TimeSpan.FromSeconds(commit_frequency))
                     {
+                        Console.WriteLine("executing query with reps");
                         myCommand.ExecuteNonQuery();
                     }
                     myTrans.Commit();
@@ -146,10 +150,12 @@ namespace ConsoleDb2DotNET6App
             else {
                 if (debug > 1) { m_log.WriteLine("Thread " + threadID.ToString() + " running transactions with instant commits"); }
                 s.Start();
+                Console.WriteLine("stop watch started for repetitions <= 0");
                 while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) 
-                {
+                {  
+                    Console.WriteLine("stop watch running rn for repetitions <= 0"); 
                     myCommand.ExecuteNonQuery();
-                    
+                    Console.WriteLine("executing query wo reps");
                     myTrans.Commit();
                     myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
                     myCommand.Transaction = myTrans;
