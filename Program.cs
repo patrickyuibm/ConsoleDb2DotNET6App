@@ -65,7 +65,7 @@ namespace ConsoleDb2DotNET6App
       m_log.WriteLine("Beginning run at " + start);
       Console.WriteLine("Beginning run at " + start);
 
-            int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
+      int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
       for (int i = 0; i < numInsertThreads; i++) {
         Thread t = new Thread(new ThreadStart(() => cdb.startSelect()));
@@ -75,11 +75,11 @@ namespace ConsoleDb2DotNET6App
       foreach (Thread t in myThreads) {
         t.Join();
       }
-      DateTime end = DateTime.Now;
-      m_log.WriteLine("Ending run at " + end);
-      Console.WriteLine("Ending run at " + end);
+      //DateTime end = DateTime.Now;
+      //m_log.WriteLine("Ending run at " + end);
+      //Console.WriteLine("Ending run at " + end);
 
-        }
+    }
     
     void startSelect() {
       int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;  
