@@ -153,7 +153,8 @@ namespace ConsoleDb2DotNET6App
                 s.Start();
                 Console.WriteLine("stop watch started for repetitions <= 0");
                 while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) 
-                {
+                {  
+                    Console.WriteLine("stop watch running rn for repetitions <= 0"); 
                     myCommand.ExecuteNonQuery();
                     Console.WriteLine("executing query wo reps");
                     myTrans.Commit();
