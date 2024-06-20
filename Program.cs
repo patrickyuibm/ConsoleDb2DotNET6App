@@ -125,12 +125,14 @@ namespace ConsoleDb2DotNET6App
             TimeSpan startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
             if (repetitions > 0)
             {
+                
                 if (debug > 1) { m_log.WriteLine("Thread " + threadID.ToString() + " running transactions with commits every " + commit_frequency.ToString() + " seconds"); }
                 for (int i = 0; i < repetitions; i++)
                 {
                     s.Start();
                     while (s.Elapsed < TimeSpan.FromSeconds(commit_frequency))
                     {
+                        Console.WriteLine("executing query with reps");
                         myCommand.ExecuteNonQuery();
                     }
                     myTrans.Commit();
@@ -147,7 +149,7 @@ namespace ConsoleDb2DotNET6App
                 while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) 
                 {
                     myCommand.ExecuteNonQuery();
-                    
+                    Console.WriteLine("executing query wo reps");
                     myTrans.Commit();
                     myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
                     myCommand.Transaction = myTrans;
