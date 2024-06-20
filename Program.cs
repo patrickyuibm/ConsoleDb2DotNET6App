@@ -22,8 +22,7 @@ namespace ConsoleDb2DotNET6App
 {
   class ConsoleDb2DotNET6App {
     
-    String[] select_statements =  {"SELECT MAX(T1.P_SIZE) FROM TPCHSC01.PART T1, TPCHSC05.SUPPLIER T2",
-                                   "SELECT * FROM DB2ADM.TB2"}; //the first statement is deliberately computationally expensive
+    String[] select_statements =  {"SELECT MAX(T1.C1) FROM DB2ADM.TB2 T1 JOIN DB2ADM.TB2 T2", "SELECT * FROM DB2ADM.TB2"}; //the first statement is deliberately computationally expensive
     String[] insert_statements =  {"INSERT INTO DB2ADM.TB2(C1, C2) VALUES(1, 2)"};
     String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000 WHERE C1 < RAND()*20000", 
                                    "UPDATE DB2ADM.TB2 SET C1 = RAND()*5000 WHERE C2 > RAND()*5000"};
@@ -75,9 +74,9 @@ namespace ConsoleDb2DotNET6App
       foreach (Thread t in myThreads) {
         t.Join();
       }
-      //DateTime end = DateTime.Now;
-      //m_log.WriteLine("Ending run at " + end);
-      //Console.WriteLine("Ending run at " + end);
+      DateTime end = DateTime.Now;
+      m_log.WriteLine("Ending run at " + end);
+      Console.WriteLine("Ending run at " + end);
 
     }
     
