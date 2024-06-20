@@ -60,9 +60,9 @@ namespace ConsoleDb2DotNET6App
       debug = int.Parse(WrkloadConfigs_properties["LOG_LEVEL"]);
 
       connString = cdb.connectDb();
-      //DateTime start = DateTime.Now;
-      //m_log.WriteLine("Beginning run at " + start);
-      //Console.WriteLine("Beginning run at " + start);
+      DateTime start = DateTime.Now;
+      m_log.WriteLine("Beginning run at " + start);
+      Console.WriteLine("Beginning run at " + start);
 
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
