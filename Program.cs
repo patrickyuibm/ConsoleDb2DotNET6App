@@ -110,7 +110,6 @@ namespace ConsoleDb2DotNET6App
        DB2Command myCommand = null;
       
        float thread_timespan = float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]); 
-       Console.WriteLine("running transaction");
        float commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
        //in K8s Secret, either specify the commit frequency in seconds or 0 for instant commits
        int repetitions = commit_frequency > 0 ? (int) (thread_timespan / commit_frequency) : 0;
@@ -136,7 +135,6 @@ namespace ConsoleDb2DotNET6App
                     s.Start();
                     while (s.Elapsed < TimeSpan.FromSeconds(commit_frequency))
                     {
-                        Console.WriteLine("executing query with reps");
                         myCommand.ExecuteNonQuery();
                     }
                     myTrans.Commit();
@@ -150,7 +148,6 @@ namespace ConsoleDb2DotNET6App
             else {
                 if (debug > 1) { m_log.WriteLine("Thread " + threadID.ToString() + " running transactions with instant commits"); }
                 s.Start();
-                Console.WriteLine("stop watch started for repetitions <= 0");
                 while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan)) 
                 {  
                     Console.WriteLine("stop watch running rn for repetitions <= 0"); 
