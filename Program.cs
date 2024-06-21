@@ -161,7 +161,6 @@ namespace ConsoleDb2DotNET6App
             Console.WriteLine(e.ToString());
         }
         finally {
-            if (debug > 1) { Console.WriteLine("Disposing transaction and connection for Thread " + threadID.ToString()); }
             myTrans.Dispose();
             myConnection.Close();
         } 
