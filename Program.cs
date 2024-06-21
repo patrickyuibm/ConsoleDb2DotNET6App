@@ -35,13 +35,11 @@ namespace ConsoleDb2DotNET6App
     static Dictionary<string, string> WrkloadConfigs_properties;
     static Dictionary<string, string> Test_properties;
     static String connString;
-    static int logLevel = 1; //only supports 1 and 2 for now, if you want no logging at all, set to 0 or any integer less
-    static String log;
-    static String logDir;
-    static String logFile;
-    //static StreamWriter m_log;
-    static int debug; //either log level 1 or 2
-    
+    static float thread_timespan;
+    static float commit_frequency;
+    static int repetitions;
+
+
     public static void Main(String[] args) {
       ConsoleDb2DotNET6App cdb = new ConsoleDb2DotNET6App(); 
       
@@ -49,27 +47,19 @@ namespace ConsoleDb2DotNET6App
       WrkloadConfigs_properties = cdb.getProperties("/etc/wrkloadconfigs/WrkloadConfigs_properties.txt");
       Test_properties = cdb.getProperties("/etc/testprop/Test_properties.txt");
 
-      logDir = "/etc";
-      logFile = logDir + "/run" + "-" + DateTime.Now.Year.ToString() + "-" +
-                              DateTime.Now.Month.ToString() + "-" +
-                              DateTime.Now.Day.ToString() + "-" +
-                              DateTime.Now.Hour.ToString() + "-" +
-                              DateTime.Now.Minute.ToString() +
-                              ".txt";
-      //m_log = new StreamWriter(logFile);
-      debug = int.Parse(WrkloadConfigs_properties["LOG_LEVEL"]);
-
       connString = cdb.connectDb();
-      //m_log.WriteLine("DEBUG = " + debug);
-      Console.WriteLine("DEBUG = " + debug);
-      //m_log.WriteLine("CONNECTING AS  = " + connString);
       Console.WriteLine("CONNECTING AS = " + connString);
 
-
+      //in K8s Secret, either specify the commit frequency in seconds or 0 for instant commits
+      thread_timespan = float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]);
+      commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
+      repetitions = commit_frequency > 0 ? (int)(thread_timespan / commit_frequency) : 0;
+      Console.WriteLine("THREAD TIMESPAN = " + thread_timespan);
+      Console.WriteLine("COMMIT FREQUENCY = " + commit_frequency);
+      Console.WriteLine("REPEITIONS = " + repetitions);
 
       DateTime start = DateTime.Now;
-      DateTime end = start.AddMinutes(float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]));
-      //m_log.WriteLine("Beginning run at " + start + ", ending at " + end);
+      DateTime end = start.AddMinutes(thread_timespan);
       Console.WriteLine("Beginning run at " + start + ", ending at " + end);
       
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
@@ -83,33 +73,29 @@ namespace ConsoleDb2DotNET6App
         t.Join();
       }
       end = DateTime.Now;
-      //m_log.WriteLine("Ending run at " + end);
-      Console.WriteLine("Ending run at " + end);
-
+      Console.WriteLine("Ended run at " + end);
     }
     
     void startSelect() {
       int thid = System.Threading.Thread.CurrentThread.ManagedThreadId;  
-      string connString = connectDb() + ";ClientApplicationName="+thid.ToString();
-      DB2Connection conn = new DB2Connection(connString);
+      string threadConnString = connString + ";ClientApplicationName="+thid.ToString();
+      DB2Connection conn = new DB2Connection(threadConnString);
       conn.Open();
       try {  
-          run_transaction(conn, thid);
-      }  catch (DB2Exception myException) {
-                if (debug > 0)
-                {
-                    for (int i = 0; i < myException.Errors.Count; i++)
-                    {   //m_log not working
-                        Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
-                        "Message: " + myException.Errors[i].Message + "\n" +
-                            "Native: " + myException.Errors[i].NativeError.ToString() + "\n" +
-                            "Source: " + myException.Errors[i].Source + "\n" +
-                            "SQL: " + myException.Errors[i].SQLState + "\n" +
-                            "At time: " + DateTime.Now);
-                    }
-                }
-      } finally {
-          conn.Close();
+        run_transaction(conn, thid);
+      }  
+      catch (DB2Exception myException) {
+        for (int i = 0; i < myException.Errors.Count; i++) {   
+                Console.WriteLine("For Thread_" + thid.ToString() + ": \n" + 
+                "Message: " + myException.Errors[i].Message + "\n" +
+                    "Native: " + myException.Errors[i].NativeError.ToString() + "\n" +
+                    "Source: " + myException.Errors[i].Source + "\n" +
+                    "SQL: " + myException.Errors[i].SQLState + "\n" +
+                    "At time: " + DateTime.Now);          
+        }
+      } 
+      finally {
+         conn.Close();
       }
     }
 
@@ -117,19 +103,12 @@ namespace ConsoleDb2DotNET6App
         DB2Transaction myTrans = null;
         DB2Command myCommand = null;
 
-        float thread_timespan = float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]);
-        float commit_frequency = float.Parse(Test_properties["COMMIT_FREQUENCY"]);
-        //in K8s Secret, either specify the commit frequency in seconds or 0 for instant commits
-        int repetitions = commit_frequency > 0 ? (int)(thread_timespan / commit_frequency) : 0;
-        //Console.WriteLine(thread_timespan);
-        //Console.WriteLine(commit_frequency);
-
         myCommand = new DB2Command();
         myCommand.Connection = myConnection;
         myCommand.CommandText = select_statements[0];
         myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
         myCommand.Transaction = myTrans;
-        //if (myTrans == null) {Console.WriteLine("transaction null");} else {Console.WriteLine("transaction not null");}
+
         try {
             Stopwatch s = new Stopwatch();
             DateTime startTime = DateTime.Now;
@@ -165,25 +144,23 @@ namespace ConsoleDb2DotNET6App
             }
             DateTime endTime = DateTime.Now;
             TimeSpan endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            if (debug > 1) {
-                var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
-                //m_log.WriteLine("Thread " + threadID.ToString() + " CPU Used Ms = " + cpuUsedMs.ToString());
-                var totalMsPassed = (endTime - startTime).TotalMilliseconds;
-                //m_log.WriteLine("Thread " + threadID.ToString() + " total Ms passed = " + totalMsPassed);
-                var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed); //processor count is 16
-                var cpuUsagePercentage = cpuUsageTotal * 100;
-                //m_log.WriteLine("Thread " + threadID.ToString() + " committing, cpu used = " + cpuUsagePercentage.ToString("0.00") + "%");
-                //m_log.WriteLine("Thread " + threadID.ToString() + " " + Process.GetCurrentProcess().PrivateMemorySize64 + " bytes");
-            }
-        } catch (Exception e) {
-            //m_log.WriteLine("Exception caught for Thread " + threadID.ToString());
+
+            var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
+            //Console.WriteLine("Thread " + threadID.ToString() + " CPU Used Ms = " + cpuUsedMs.ToString());
+            var totalMsPassed = (endTime - startTime).TotalMilliseconds;
+            //Console.WriteLine("Thread " + threadID.ToString() + " total Ms passed = " + totalMsPassed);
+            var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed); //processor count is 16
+            var cpuUsagePercentage = cpuUsageTotal * 100;
+            //Console.WriteLine("Thread " + threadID.ToString() + " committing, cpu used = " + cpuUsagePercentage.ToString("0.00") + "%");
+            //Console.WriteLine("Thread " + threadID.ToString() + " " + Process.GetCurrentProcess().PrivateMemorySize64 + " bytes");
+
+        }
+        catch (Exception e) {
             if (myTrans != null) { myTrans.Rollback(); }
-            if (debug > 0)
-            {
-                //m_log.WriteLine("Exception for Thread " + threadID.ToString());
-                //m_log.WriteLine(e.ToString());
-            }
-        } finally {
+            Console.WriteLine("Exception for Thread " + threadID.ToString());
+            Console.WriteLine(e.ToString());
+        }
+        finally {
             if (debug > 1) { Console.WriteLine("Disposing transaction and connection for Thread " + threadID.ToString()); }
             myTrans.Dispose();
             myConnection.Close();
