@@ -60,6 +60,13 @@ namespace ConsoleDb2DotNET6App
       debug = int.Parse(WrkloadConfigs_properties["LOG_LEVEL"]);
 
       connString = cdb.connectDb();
+      m_log.WriteLine("DEBUG = " + debug);
+      Console.WriteLine("DEBUG = " + debug);
+      m_log.WriteLine("CONNECTING AS  = " + connString);
+      Console.WriteLine("CONNECTING AS = " + connString);
+
+
+
       DateTime start = DateTime.Now;
       DateTime end = start.AddMinutes(float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]));   
       m_log.WriteLine("Beginning run at " + start + ", ending at " + end);
