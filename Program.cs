@@ -61,9 +61,10 @@ namespace ConsoleDb2DotNET6App
 
       connString = cdb.connectDb();
       DateTime start = DateTime.Now;
-      m_log.WriteLine("Beginning run at " + start);
-      Console.WriteLine("Beginning run at " + start);
-
+      DateTime end = start.AddMinutes(float.Parse(Test_properties["THREAD_MINUTES_TIMESPAN"]));   
+      m_log.WriteLine("Beginning run at " + start + ", ending at " + end);
+      Console.WriteLine("Beginning run at " + start + ", ending at " + end);
+      
       int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
       for (int i = 0; i < numInsertThreads; i++) {
@@ -74,7 +75,7 @@ namespace ConsoleDb2DotNET6App
       foreach (Thread t in myThreads) {
         t.Join();
       }
-      DateTime end = DateTime.Now;
+      end = DateTime.Now;
       m_log.WriteLine("Ending run at " + end);
       Console.WriteLine("Ending run at " + end);
 
@@ -121,7 +122,7 @@ namespace ConsoleDb2DotNET6App
        myCommand.CommandText = insert_statements[0]; 
        myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
        myCommand.Transaction = myTrans;
-       if (myTrans == null) {Console.WriteLine("transaction null");} else {Console.WriteLine("transaction not null");}
+       //if (myTrans == null) {Console.WriteLine("transaction null");} else {Console.WriteLine("transaction not null");}
        try { 
             Stopwatch s = new Stopwatch();
             DateTime startTime = DateTime.Now;
