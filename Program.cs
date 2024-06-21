@@ -135,64 +135,59 @@ namespace ConsoleDb2DotNET6App
             DateTime startTime = DateTime.Now;
             TimeSpan startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
             if (repetitions > 0) {
-                if (debug > 1) { 
-                    //m_log.WriteLine("Thread " + threadID.ToString() + " running transactions with commits every " + commit_frequency.ToString() + " seconds"); }
-                    for (int i = 0; i < repetitions; i++) {
-                        s.Start();
-                        while (s.Elapsed < TimeSpan.FromSeconds(commit_frequency))
-                        {
-                            myCommand.ExecuteNonQuery();
-                        }
-                        myTrans.Commit();
-                        //myTrans.Rollback();
-                        myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
-                        myCommand.Transaction = myTrans;
-                        s.Reset();
-                    }
-                    s.Stop();
-            }
-            else {
-                if (debug > 1)
-                { //.WriteLine("Thread " + threadID.ToString() + " running transactions with instant commits"); }
+                for (int i = 0; i < repetitions; i++) {
                     s.Start();
-                    while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan))
+                    while (s.Elapsed < TimeSpan.FromSeconds(commit_frequency))
                     {
-                        //Console.WriteLine("stop watch running rn for repetitions <= 0"); 
                         myCommand.ExecuteNonQuery();
-                        //Console.WriteLine("executing query wo reps");
-                        myTrans.Commit();
-                        myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
-                        myCommand.Transaction = myTrans;
-
                     }
-                    myTrans.Rollback();
-                    s.Stop();
+                    myTrans.Commit();
+                    //myTrans.Rollback();
+                    myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    myCommand.Transaction = myTrans;
+                    s.Reset();
                 }
-                DateTime endTime = DateTime.Now;
-                TimeSpan endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-                if (debug > 1) {
-                    var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
-                    //m_log.WriteLine("Thread " + threadID.ToString() + " CPU Used Ms = " + cpuUsedMs.ToString());
-                    var totalMsPassed = (endTime - startTime).TotalMilliseconds;
-                    //m_log.WriteLine("Thread " + threadID.ToString() + " total Ms passed = " + totalMsPassed);
-                    var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed); //processor count is 16
-                    var cpuUsagePercentage = cpuUsageTotal * 100;
-                    //m_log.WriteLine("Thread " + threadID.ToString() + " committing, cpu used = " + cpuUsagePercentage.ToString("0.00") + "%");
-                    //m_log.WriteLine("Thread " + threadID.ToString() + " " + Process.GetCurrentProcess().PrivateMemorySize64 + " bytes");
-                }
-        } catch (Exception e) {
-                //m_log.WriteLine("Exception caught for Thread " + threadID.ToString());
-                if (myTrans != null) { myTrans.Rollback(); }
-                if (debug > 0)
+                s.Stop();
+            }  else {
+                s.Start();
+                while (s.Elapsed < TimeSpan.FromMinutes(thread_timespan))
                 {
-                    //m_log.WriteLine("Exception for Thread " + threadID.ToString());
-                    //m_log.WriteLine(e.ToString());
+                    //Console.WriteLine("stop watch running rn for repetitions <= 0"); 
+                    myCommand.ExecuteNonQuery();
+                    //Console.WriteLine("executing query wo reps");
+                    myTrans.Commit();
+                    myTrans = myConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    myCommand.Transaction = myTrans;
+
                 }
+                myTrans.Rollback();
+                s.Stop();
+            }
+            DateTime endTime = DateTime.Now;
+            TimeSpan endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
+            if (debug > 1) {
+                var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
+                //m_log.WriteLine("Thread " + threadID.ToString() + " CPU Used Ms = " + cpuUsedMs.ToString());
+                var totalMsPassed = (endTime - startTime).TotalMilliseconds;
+                //m_log.WriteLine("Thread " + threadID.ToString() + " total Ms passed = " + totalMsPassed);
+                var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed); //processor count is 16
+                var cpuUsagePercentage = cpuUsageTotal * 100;
+                //m_log.WriteLine("Thread " + threadID.ToString() + " committing, cpu used = " + cpuUsagePercentage.ToString("0.00") + "%");
+                //m_log.WriteLine("Thread " + threadID.ToString() + " " + Process.GetCurrentProcess().PrivateMemorySize64 + " bytes");
+            }
+        } catch (Exception e) {
+            //m_log.WriteLine("Exception caught for Thread " + threadID.ToString());
+            if (myTrans != null) { myTrans.Rollback(); }
+            if (debug > 0)
+            {
+                //m_log.WriteLine("Exception for Thread " + threadID.ToString());
+                //m_log.WriteLine(e.ToString());
+            }
         } finally {
-                if (debug > 1) { Console.WriteLine("Disposing transaction and connection for Thread " + threadID.ToString()); }
-                myTrans.Dispose();
-                myConnection.Close();
-                } 
+            if (debug > 1) { Console.WriteLine("Disposing transaction and connection for Thread " + threadID.ToString()); }
+            myTrans.Dispose();
+            myConnection.Close();
+        } 
     } 
     
     Dictionary<string, string> getProperties(String full_path) {
