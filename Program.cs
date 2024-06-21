@@ -22,7 +22,7 @@ namespace ConsoleDb2DotNET6App
 {
   class ConsoleDb2DotNET6App {
     
-    String[] select_statements =  {"SELECT MAX(T1.C1) FROM DB2ADM.TB2 T1 JOIN DB2ADM.TB2 T2", "SELECT * FROM DB2ADM.TB2"}; //the first statement is deliberately computationally expensive
+    String[] select_statements =  {"SELECT MAX(t1.c1) FROM DB2ADM.TB2 t1 CROSS JOIN DB2ADM.TB2 t2", "SELECT * FROM DB2ADM.TB2"}; //the first statement is deliberately computationally expensive
     String[] insert_statements =  {"INSERT INTO DB2ADM.TB2(C1, C2) VALUES(1, 2)"};
     String[] update_statements =  {"UPDATE DB2ADM.TB2 SET C2 = RAND()*20000 WHERE C1 < RAND()*20000", 
                                    "UPDATE DB2ADM.TB2 SET C1 = RAND()*5000 WHERE C2 > RAND()*5000"};
