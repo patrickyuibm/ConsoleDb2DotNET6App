@@ -57,12 +57,13 @@ namespace ConsoleDb2DotNET6App
       Console.WriteLine("THREAD TIMESPAN = " + thread_timespan);
       Console.WriteLine("COMMIT FREQUENCY = " + commit_frequency);
       Console.WriteLine("REPEITIONS = " + repetitions);
+      int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
+      Console.WriteLine("THREADS = " + numInsertThreads);
 
       DateTime start = DateTime.Now;
       DateTime end = start.AddMinutes(thread_timespan);
       Console.WriteLine("Beginning run at " + start + ", ending at " + end);
       
-      int numInsertThreads = int.Parse(WrkloadConfigs_properties["COUNT"]);
       Thread[] myThreads = new Thread[numInsertThreads];
       for (int i = 0; i < numInsertThreads; i++) {
         Thread t = new Thread(new ThreadStart(() => cdb.startSelect()));
